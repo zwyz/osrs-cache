@@ -1,0 +1,151 @@
+// Misc 1
+3100 [command,mes](string $x1)
+3101 [command,anim](seq $x1, int $x2)
+3102 [command,mes_typed](chattype $x1, string $x2)
+3103 [command,if_close]
+3104 [command,resume_countdialog](string $x1)
+3105 [command,resume_namedialog](string $x1)
+3106 [command,resume_stringdialog](string $x1)
+3107 [command,opplayer](int $x1, string $x2)
+3108 [command,if_dragpickup](component $x1, int $x2, int $x3)
+3109 [command,cc_dragpickup](int $x1, int $x2)
+3110 [command,setmousecam](boolean $x1)
+3111 [command,getremoveroofs]()(boolean)
+3112 [command,setremoveroofs](boolean $x1)
+3113 [command,openurl](string $x1, boolean $x2)
+3114 (gap)
+3115 [command,resume_objdialog](obj $x1)
+3116 [command,bug_report](int $x1, string $x2, string $x3)
+3117 [command,setshiftclickdrop](boolean $x1)
+3118 [command,setshowmouseovertext](boolean $x1)
+3119 [command,renderself](boolean $x1)
+3120 [command,setdrawplayernames_friends](boolean $x1)
+3121 [command,setdrawplayernames_clanmates](boolean $x1)
+3122 [command,setdrawplayernames_others](boolean $x1)
+3123 [command,setdrawplayernames_self](boolean $x1)
+3124 [command,resetdrawplayernames]
+3125 [command,setshowmousecross](boolean $x1)
+3126 [command,setshowloadingmessages](boolean $x1)
+3127 [command,settaptodrop](boolean $x1)
+3128 [command,gettaptodrop]()(boolean)
+3129 [command,unknown_command_3129](int $x1, int $x2)
+3130 [command,setclickgraphic](graphic $graphic, boolean $transparency)
+3131 [command,unknown_command_3131](boolean $x1)
+3132 [command,getcanvassize]()(int, int)
+3133 [command,mobile_setfps](int $x1)
+3134 [command,shop_open]
+3135 [command,shop_opencategories](int $x1, boolean $x2)
+3136 [command,setkeyinputmode_component](boolean $x1)
+3137 [command,setkeyinputmode_interface](boolean $x1)
+3138 [command,setkeyinputmode_all]
+3139 [command,setkeyinputmode_none]
+3140 [command,setkeyinputmode_activecomponent]
+3141 [command,sethideusername](boolean $x1)
+3142 [command,gethideusername]()(boolean)
+3143 [command,setrememberusername](boolean $x1)
+3144 [command,getrememberusername]()(boolean)
+3145 [command,show_ios_review]
+3146 [command,setmutetitlescreen]todo
+3147 [command,getmutetitlescreen]todo
+3148 [command,settermsandprivacy]todo
+3149 [command,gettermsandprivacy]todo
+3150 [command,unknown_command_3150]todo
+3151 [command,unknown_command_3151]todo
+3152 [command,unknown_command_3152]todo
+3153 [command,unknown_command_3153]todo
+3154 [command,unknown_command_3154]todo
+3155 [command,shop_purchaseitem]todo
+3156 [command,shop_requestdata]todo
+3157 [command,unknown_command_3157](int $x1, int $x2)
+3158 [command,shop_purchaseitemstatus]todo
+3159 [command,shop_requestdatastatus]todo
+3160 [command,shop_getcategorycount]todo
+3161 [command,shop_getcategoryid]todo
+3162 [command,shop_getindexforcategoryid]todo
+3163 [command,shop_getindexforcategoryname]todo
+3164 [command,shop_getcategorydescription]todo
+3165 [command,shop_getproductcount]todo
+3166 [command,shop_isproductavailable]todo
+3167 [command,shop_isproductrecommended]todo
+3168 [command,shop_getproductdetails]todo
+3169 [command,unknown_command_3169]todo
+3170 [command,notifications_sendlocal](string $x1, string $x2, int $x3, int $x4)(int)
+3171 [command,notifications_sendgroupedlocal]todo
+3172 [command,notifications_cancellocal]todo
+3173 [command,notifications_islocalscheduled]todo
+3174 [command,unknown_command_3174]todo
+3175 [command,notifications_getenabled]todo
+3176 [command,unknown_command_3176]todo
+3177 [command,marketing_initanalytics]
+3178 [command,marketing_sendanalyticsevent](string $x1)
+3179 [command,marketing_initattribution]
+3180 [command,marketing_sendattributionevent](string $x1)
+3181 [command,setbrightness](int $x1)
+3182 [command,getbrightness]()(int)
+3183 [command,setantidrag](boolean $x1)
+3184 [command,getantidrag]()(boolean)
+3185 [command,setdrawdistance](int $x1)
+3186 [command,getdrawdistance]()(int)
+3187 [command,unknown_command_3187]todo
+3188 [command,unknown_command_3188]todo
+3189 [command,seq_prefetch](seq $x1)
+
+// Misc 2
+3200 [command,sound_synth](synth $x1, int $x2, int $x3)
+3201 [command,sound_song](midi $x1)
+3202 [command,sound_jingle](midi $x1, int $x2)
+3203 [command,setvolumemusic](int $x1)
+3204 [command,getvolumemusic]()(int)
+3205 [command,setvolumesounds](int $x1)
+3206 [command,getvolumesounds]()(int)
+3207 [command,setvolumeareasounds](int $x1)
+3208 [command,getvolumeareasounds]()(int)
+3209 [command,clientoption_set](int $x1, int $x2)
+3210 [command,clientoption_get](int $x1)(int)
+3211 [command,unknown_command_3211]
+3212 [command,deviceoption_set](deviceoption $x1, int $x2)
+3213 [command,gameoption_set](gameoption $x1, int $x2)
+3214 [command,deviceoption_get](deviceoption $x1)(int)
+3215 [command,gameoption_get](gameoption $x1)(int)
+3216 [command,deviceoption_exists](deviceoption $x1)(boolean)
+3217 [command,deviceoption_getrange](deviceoption $x1)(int, int)
+3218 [command,gameoption_exists](gameoption $x1)(boolean)
+3219 [command,gameoption_getrange](gameoption $x1)(int, int)
+3220 [command,midi_stop](int $fade_out_delay, int $fade_out_speed)
+3221 [command,midi_song_withsecondary](midi $song, midi $secondary, int $fade_out_delay, int $fade_out_speed, int $fade_in_delay)
+3222 [command,midi_song](midi $song, int $fade_out_delay, int $fade_out_speed, int $fade_in_delay)
+
+// Misc 3
+3300 [command,clientclock]()(int)
+3301 [command,inv_getobj](inv $x1, int $x2)(obj)
+3302 [command,inv_getnum](inv $x1, int $x2)(int)
+3303 [command,inv_total](inv $x1, obj $x2)(int)
+3304 [command,inv_size](inv $x1)(int)
+3305 [command,stat](stat $x1)(int)
+3306 [command,stat_base](stat $x1)(int)
+3307 [command,stat_xp](stat $x1)(int)
+3308 [command,coord]()(coord)
+3309 [command,coordx](coord $x1)(int)
+3310 [command,coordy](coord $x1)(int)
+3311 [command,coordz](coord $x1)(int)
+3312 [command,map_members]()(int)
+3313 [command,invother_getobj](inv $x1, int $x2)(obj)
+3314 [command,invother_getnum](inv $x1, int $x2)(int)
+3315 [command,invother_total](inv $x1, obj $x2)(int)
+3316 [command,staffmodlevel]()(int)
+3317 [command,reboottimer]()(int)
+3318 [command,map_world]()(int)
+3319 (gap)
+3320 (gap)
+3321 [command,runenergy_visible]()(int)
+3322 [command,runweight_visible]()(int)
+3323 [command,playermod]()(boolean)
+3324 [command,worldflags]()(int)
+3325 [command,movecoord](coord $x1, int $x2, int $x3, int $x4)(coord)
+3326 [command,mouse_getx]()(int)
+3327 [command,mouse_gety]()(int)
+3328 [command,idletimer_get]()(int)
+3329 [command,idletimer_reset]
+3330 [command,destinationcoord]()(coord)
+3331 [command,runenergy]
+3332 [command,stat_unknown](stat $x1)(int)

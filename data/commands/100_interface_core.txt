@@ -1,0 +1,10 @@
+100 [command,cc_create](component $component, iftype $type, int $subid)
+101 [command,cc_delete]
+102 [command,cc_deleteall](component $component)
+103 [command,cc_create_entityoverlay](entityoverlay $overlay, iftype $type, int $subid)
+104 [command,cc_deleteall_entityoverlay](entityoverlay $overlay)
+
+200 [command,cc_find](component $component, int $subid)(intbool)
+201 [command,if_find](component $component)(intbool)
+202 [command,if_find_entityoverlay](entityoverlay $overlay)(intbool)
+203 [command,cc_find_entityoverlay](entityoverlay $overlay, int $subid)(intbool)

@@ -1,0 +1,3 @@
+1826 [command,deeplink_get](int $index)(int)
+1827 [command,deeplink_count]()(int)
+1828 [command,deeplink_clear_index](int $index)

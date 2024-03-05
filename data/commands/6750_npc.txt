@@ -1,0 +1,16 @@
+6750 [command,npc_name]()(string)
+6751 [command,npc_uid]()(npc_uid)
+6752 [command,npc_spawncycle]()(int)
+6753 [command,npc_type]()(npc)
+6754 [command,nc_name](npc $x1)(string)
+6755 [command,unknown_command_6755]()(int)
+6756 [command,unknown_command_6756](int $x1)(coord)
+6757 [command,unknown_command_6757](int $x1)
+6758 [command,npc_finduid](npc_uid $x1)(boolean)
+6759 [command,unknown_command_6759]todo
+6760 [command,unknown_command_6760]todo
+6761 [command,nc_minimenuname](npc $x1, boolean $x2, boolean $x3)(string)
+6762 [command,nc_minimenuop](npc $x1, int $x2, boolean $x3)(string)
+6763 [command,unknown_command_6763]todo
+6764 [command,unknown_command_6764]todo
+6765 [command,unknown_command_6765]todo

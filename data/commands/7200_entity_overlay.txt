@@ -1,0 +1,17 @@
+7200 [command,entityoverlay_create_npc](int $slot, int $unknown1, int $x, int $y, int $unknown2)(entityoverlay)
+7201 [command,entityoverlay_create_loc](int $slot, int $unknown1, int $x, int $y, int $unknown2)(entityoverlay)
+7202 (gap)
+7203 [command,entityoverlay_create_player](int $slot, int $unknown1, int $x, int $y, int $unknown2)(entityoverlay)
+7204 [command,entityoverlay_create_coord](coord $coord, int $slot, int $unknown1, int $x, int $y, int $unknown2)(entityoverlay)
+
+7205 [command,entityoverlay_get_npc](int $slot)(entityoverlay)
+7206 [command,entityoverlay_get_loc](int $slot)(entityoverlay)
+7207 (gap)
+7208 [command,entityoverlay_get_player](int $slot)(entityoverlay)
+7209 [command,entityoverlay_get_coord](coord $coord, int $slot)(entityoverlay)
+
+7210 [command,entityoverlay_delete_npc](int $slot)
+7211 [command,entityoverlay_delete_loc](int $slot)
+7212 (gap)
+7213 [command,entityoverlay_delete_player](int $slot)
+7214 [command,entityoverlay_delete_coord](coord $coord, int $slot)

@@ -1,0 +1,31 @@
+6500 [command,worldlist_fetch]()(boolean)
+6501 [command,worldlist_start]()(int, int, string, int, int, string)
+6502 [command,worldlist_next]()(int, int, string, int, int, string)
+6503 (gap)
+6504 (gap)
+6505 (gap)
+6506 [command,worldlist_specific](int $x1)(int, int, string, int, int, string)
+6507 [command,worldlist_sort](int $x1, boolean $x2, int $x3, boolean $x4)
+6508 (gap)
+6509 (gap)
+6510 (gap)
+6511 [command,unknown_command_6511](int $x1)(int, int, string, int, int, string)
+6512 [command,setfolloweropslowpriority](boolean $x1)
+6513 [command,nc_param]todo
+6514 [command,lc_param]todo
+6515 [command,oc_param]todo
+6516 [command,struct_param]todo
+6517 (gap)
+6518 [command,on_mobile]()(boolean)
+6519 [command,clienttype]()(clienttype)
+6520 [command,mobile_keyboardshow]
+6521 [command,mobile_keyboardhide]
+6522 [command,mobile_keyboardshowstring](string $x1, int $x2)
+6523 [command,mobile_keyboardshowinteger](string $x1, int $x2)
+6524 [command,mobile_batterylevel]()(int)
+6525 [command,mobile_batterycharging]()(boolean)
+6526 [command,mobile_wifiavailable]()(boolean)
+6527 [command,platformtype]()(platformtype)
+6528 (gap)
+6529 (gap)
+6530 [command,unknown_command_6530](int)

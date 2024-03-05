@@ -1,0 +1,6 @@
+6200 [command,viewport_setfov](int $x1, int $x2)
+6201 [command,viewport_setzoom](int $x1, int $x2)
+6202 [command,viewport_clampfov](int $x1, int $x2, int $x3, int $x4)
+6203 [command,viewport_geteffectivesize]()(int, int)
+6204 [command,viewport_getzoom]()(int, int)
+6205 [command,viewport_getfov]()(int, int)

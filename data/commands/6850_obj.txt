@@ -1,0 +1,14 @@
+6850 [command,obj_name]()(string)
+6851 [command,obj_coord]()(coord)
+6852 [command,obj_type]()(obj)
+6853 [command,unknown_command_6853]()(int)
+6854 [command,obj_find](coord $x1, obj $x2)(boolean)
+6855 [command,unknown_command_6855]todo
+6856 [command,unknown_command_6856]todo
+6857 [command,oc_minimenuname](obj $x1, boolean $x2)(string)
+6858 [command,oc_minimenuop](obj $x1, int $x2, boolean $x3)(string)
+6859 [command,obj_findbyindex](coord $x1, int $x2)(boolean)
+6860 [command,obj_despawntime]()(int)
+6861 [command,obj_revealtime]()(int)
+6862 [command,obj_revealed]()(boolean)
+6863 [command,obj_owner]()(objowner)

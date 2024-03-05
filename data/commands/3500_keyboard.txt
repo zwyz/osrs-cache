@@ -1,0 +1,3 @@
+3500 [command,keyheld](key $x1)(boolean)
+3501 [command,keypressed](key $x1)(boolean)
+3502 [command,keyreleased](key $x1)(boolean)

@@ -1,0 +1,7 @@
+unpacked/
+unpacked_old/
+target/
+.idea/
+
+# Project exclude paths
+/out/

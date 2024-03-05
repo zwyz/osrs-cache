@@ -1,0 +1,4 @@
+6220 [command,safearea_getminx]()(int)
+6221 [command,safearea_getminy]()(int)
+6222 [command,safearea_getmaxx]()(int)
+6223 [command,safearea_getmaxy]()(int)

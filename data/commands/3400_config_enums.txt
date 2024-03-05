@@ -1,0 +1,3 @@
+3400 [command,enum_string](enum $x1, int $x2)(string)
+3408 [command,enum]todo
+3411 [command,enum_getoutputcount](enum $x1)(int)

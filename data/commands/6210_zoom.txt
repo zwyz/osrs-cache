@@ -1,0 +1,4 @@
+6210 [command,uizoom_set](int $x1)
+6211 [command,uizoom_get]()(int)
+6212 [command,uizoom_reset]
+6213 [command,unknown_command_6213](int $x1)

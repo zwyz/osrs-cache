@@ -1,0 +1,3 @@
+7120 [command,objstack_size](coord $coord)(int)
+7121 [command,objstack_obj](coord $coord, int $index)(obj)
+7122 [command,objstack_count](coord $coord, int $index)(int)

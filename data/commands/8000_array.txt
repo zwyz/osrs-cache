@@ -1,0 +1,2 @@
+8000 [command,array_sort]()
+8001 [command,array_shuffle]
