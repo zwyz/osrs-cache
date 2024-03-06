@@ -33,6 +33,9 @@ public class Unpack {
 
     public static void main(String[] args) throws IOException {
         Files.createDirectories(Path.of("unpacked"));
+        Files.createDirectories(Path.of("unpacked/config"));
+        Files.createDirectories(Path.of("unpacked/script"));
+        Files.createDirectories(Path.of("unpacked/interface"));
 
         // load names
         generateNames();
@@ -40,60 +43,60 @@ public class Unpack {
         loadGroupNames(JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
 
         // things stuff depends on
-        unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, "unpacked/dump.varbit");
-        unpackConfigGroup(VARPLAYER, VarPlayerUnpacker::unpack, "unpacked/dump.varp");
-        unpackConfigGroup(VARCLIENT, VarClientUnpacker::unpack, "unpacked/dump.varc");
-        unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, "unpacked/dump.varobj"); // increased with treasure trail expansion
-        unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, "unpacked/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
-        unpackConfigGroup(VARNPC, VarNpcUnpacker::unpack, "unpacked/dump.varn");
-        unpackConfigGroup(VARNPCBIT, VarNpcBitUnpacker::unpack, "unpacked/dump.varnbit");
-        unpackConfigGroup(VARGLOBAL, VarGlobalUnpacker::unpack, "unpacked/dump.varg"); // matches leaderboards
-        unpackConfigGroup(VARCONTROLLER, VarControllerUnpacker::unpack, "unpacked/dump.varcon"); // https://twitter.com/JagexAsh/status/1600154097742553088
-        unpackConfigGroup(VARCONTROLLERBIT, VarControllerBitUnpacker::unpack, "unpacked/dump.varconbit"); // https://twitter.com/JagexAsh/status/1600154097742553088
-        unpackConfigGroup(VAR_CLAN, VarClanUnpacker::unpack, "unpacked/dump.varclan");
-        unpackConfigGroup(VAR_CLAN_SETTING, VarClanSettingUnpacker::unpack, "unpacked/dump.varclansetting");
-        unpackConfigGroup(PARAMTYPE, ParamUnpacker::unpack, "unpacked/dump.param");
+        unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, "unpacked/config/dump.varbit");
+        unpackConfigGroup(VARPLAYER, VarPlayerUnpacker::unpack, "unpacked/config/dump.varp");
+        unpackConfigGroup(VARCLIENT, VarClientUnpacker::unpack, "unpacked/config/dump.varc");
+        unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, "unpacked/config/dump.varobj"); // increased with treasure trail expansion
+        unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, "unpacked/config/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
+        unpackConfigGroup(VARNPC, VarNpcUnpacker::unpack, "unpacked/config/dump.varn");
+        unpackConfigGroup(VARNPCBIT, VarNpcBitUnpacker::unpack, "unpacked/config/dump.varnbit");
+        unpackConfigGroup(VARGLOBAL, VarGlobalUnpacker::unpack, "unpacked/config/dump.varg"); // matches leaderboards
+        unpackConfigGroup(VARCONTROLLER, VarControllerUnpacker::unpack, "unpacked/config/dump.varcon"); // https://twitter.com/JagexAsh/status/1600154097742553088
+        unpackConfigGroup(VARCONTROLLERBIT, VarControllerBitUnpacker::unpack, "unpacked/config/dump.varconbit"); // https://twitter.com/JagexAsh/status/1600154097742553088
+        unpackConfigGroup(VAR_CLAN, VarClanUnpacker::unpack, "unpacked/config/dump.varclan");
+        unpackConfigGroup(VAR_CLAN_SETTING, VarClanSettingUnpacker::unpack, "unpacked/config/dump.varclansetting");
+        unpackConfigGroup(PARAMTYPE, ParamUnpacker::unpack, "unpacked/config/dump.param");
 
         // regular configs
-        unpackConfigGroup(FLUTYPE, FloorUnderlayUnpacker::unpack, "unpacked/dump.flu");
-        unpackConfigGroup(HUNTTYPE, HuntUnpacker::unpack, "unpacked/dump.hunt"); // https://youtu.be/5pvoMQUCla4?si=-BvlpFgRrAo0UrXb&t=4070
-        unpackConfigGroup(IDKTYPE, IDKUnpacker::unpack, "unpacked/dump.idk");
-        unpackConfigGroup(FLOTYPE, FloorOverlayUnpacker::unpack, "unpacked/dump.flo");
-        unpackConfigGroup(INVTYPE, InvUnpacker::unpack, "unpacked/dump.inv");
-        unpackConfigGroup(LOCTYPE, LocUnpacker::unpack, "unpacked/dump.loc");
-        unpackConfigGroup(MESANIMTYPE, MesAnimUnpacker::unpack, "unpacked/dump.mesanim"); // todo: source?
-        unpackConfigGroup(ENUMTYPE, EnumUnpacker::unpack, "unpacked/dump.enum");
-        unpackConfigGroup(NPCTYPE, NpcUnpacker::unpack, "unpacked/dump.npc");
-        unpackConfigGroup(OBJTYPE, ObjUnpacker::unpack, "unpacked/dump.obj");
-        unpackConfigGroup(SEQTYPE, SeqUnpacker::unpack, "unpacked/dump.seq");
-        unpackConfigGroup(SPOTTYPE, EffectAnimUnpacker::unpack, "unpacked/dump.spot");
-        unpackConfigGroup(AREATYPE, AreaUnpacker::unpack, "unpacked/dump.area");
-        unpackConfigGroup(ITEMCODETYPE, ItemCodeUnpacker::unpack, "unpacked/dump.itemcode"); // https://twitter.com/JagexAsh/status/1663851152310452225
-        unpackConfigGroup(CONTROLLERTYPE, ControllerUnpacker::unpack, "unpacked/dump.controller"); // https://twitter.com/JagexAsh/status/1600154097742553088
-        unpackConfigGroup(UNKNOWN_31, Config31Unpacker::unpack, "unpacked/dump.unknown31");
-        unpackConfigGroup(HITMARKTYPE, HitmarkUnpacker::unpack, "unpacked/dump.hitmark");
-        unpackConfigGroup(HEADBARTYPE, HeadbarUnpacker::unpack, "unpacked/dump.headbar");
-        unpackConfigGroup(STRUCTTYPE, StructUnpacker::unpack, "unpacked/dump.struct");
-        unpackConfigGroup(MELTYPE, MapElementUnpacker::unpack, "unpacked/dump.mel");
-        unpackConfigGroup(STRINGVECTORTYPE, StringVectorUnpacker::unpack, "unpacked/dump.stringvector"); // https://twitter.com/JagexAsh/status/1656354577057185792
-        unpackConfigGroup(DBROWTYPE, DBRowUnpacker::unpack, "unpacked/dump.dbrow");
-        unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, "unpacked/dump.dbtable");
-        unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, "unpacked/dump.gamelogevent"); // tfu
+        unpackConfigGroup(FLUTYPE, FloorUnderlayUnpacker::unpack, "unpacked/config/dump.flu");
+        unpackConfigGroup(HUNTTYPE, HuntUnpacker::unpack, "unpacked/config/dump.hunt"); // https://youtu.be/5pvoMQUCla4?si=-BvlpFgRrAo0UrXb&t=4070
+        unpackConfigGroup(IDKTYPE, IDKUnpacker::unpack, "unpacked/config/dump.idk");
+        unpackConfigGroup(FLOTYPE, FloorOverlayUnpacker::unpack, "unpacked/config/dump.flo");
+        unpackConfigGroup(INVTYPE, InvUnpacker::unpack, "unpacked/config/dump.inv");
+        unpackConfigGroup(LOCTYPE, LocUnpacker::unpack, "unpacked/config/dump.loc");
+        unpackConfigGroup(MESANIMTYPE, MesAnimUnpacker::unpack, "unpacked/config/dump.mesanim"); // todo: source?
+        unpackConfigGroup(ENUMTYPE, EnumUnpacker::unpack, "unpacked/config/dump.enum");
+        unpackConfigGroup(NPCTYPE, NpcUnpacker::unpack, "unpacked/config/dump.npc");
+        unpackConfigGroup(OBJTYPE, ObjUnpacker::unpack, "unpacked/config/dump.obj");
+        unpackConfigGroup(SEQTYPE, SeqUnpacker::unpack, "unpacked/config/dump.seq");
+        unpackConfigGroup(SPOTTYPE, EffectAnimUnpacker::unpack, "unpacked/config/dump.spot");
+        unpackConfigGroup(AREATYPE, AreaUnpacker::unpack, "unpacked/config/dump.area");
+        unpackConfigGroup(ITEMCODETYPE, ItemCodeUnpacker::unpack, "unpacked/config/dump.itemcode"); // https://twitter.com/JagexAsh/status/1663851152310452225
+        unpackConfigGroup(CONTROLLERTYPE, ControllerUnpacker::unpack, "unpacked/config/dump.controller"); // https://twitter.com/JagexAsh/status/1600154097742553088
+        unpackConfigGroup(UNKNOWN_31, Config31Unpacker::unpack, "unpacked/config/dump.unknown31");
+        unpackConfigGroup(HITMARKTYPE, HitmarkUnpacker::unpack, "unpacked/config/dump.hitmark");
+        unpackConfigGroup(HEADBARTYPE, HeadbarUnpacker::unpack, "unpacked/config/dump.headbar");
+        unpackConfigGroup(STRUCTTYPE, StructUnpacker::unpack, "unpacked/config/dump.struct");
+        unpackConfigGroup(MELTYPE, MapElementUnpacker::unpack, "unpacked/config/dump.mel");
+        unpackConfigGroup(STRINGVECTORTYPE, StringVectorUnpacker::unpack, "unpacked/config/dump.stringvector"); // https://twitter.com/JagexAsh/status/1656354577057185792
+        unpackConfigGroup(DBROWTYPE, DBRowUnpacker::unpack, "unpacked/config/dump.dbrow");
+        unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, "unpacked/config/dump.dbtable");
+        unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, "unpacked/config/dump.gamelogevent"); // tfu
 
         // world map
-        unpackWorldMapGroup(DETAILS, "unpacked/dump.wma");
+        unpackWorldMapGroup(DETAILS, "unpacked/config/dump.wma");
 
         // defaults
-        unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, "unpacked/graphics.defaults");
+        unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, "unpacked/config/graphics.defaults");
 
         // scripts
-        unpackScripts(Path.of("unpacked/dump.cs2"));
+        unpackScripts(Path.of("unpacked/script"));
 
         // interface
-        unpackConfigArchive(JS5_INTERFACES, 16, InterfaceUnpacker::unpack, Path.of("unpacked/dump.if3"));
+        unpackInterfaces(JS5_INTERFACES, InterfaceUnpacker::unpack, Path.of("unpacked/interface"));
 
         // materials
-        unpackConfigArchive(JS5_MATERIALS, 0, MaterialUnpacker::unpack, Path.of("unpacked/dump.material"));
+        unpackConfigArchive(JS5_MATERIALS, 0, MaterialUnpacker::unpack, Path.of("unpacked/config/dump.material"));
 
         // maps
         unpackMaps();
@@ -219,7 +222,7 @@ public class Unpack {
                 .flatMap(Collection::stream)
                 .toList();
 
-        Files.write(Path.of("unpacked/dump.worldarea"), waLines);
+        Files.write(Path.of("unpacked/config/dump.worldarea"), waLines);
 
         var rgbData = new DataBufferInt(image, image.length);
         var raster = Raster.createPackedRaster(rgbData, width, height, width, new int[]{0xff0000, 0xff00, 0xff}, null);
@@ -273,14 +276,9 @@ public class Unpack {
 
         ScriptUnpacker.decompile();
 
-        var lines = new ArrayList<String>();
-
         for (var group : archiveIndex.groupId) {
-            lines.addAll(ScriptUnpacker.unpack(group));
-            lines.add("");
+            Files.write(path.resolve(Unpacker.getScriptName(group) + ".cs2"), ScriptUnpacker.unpack(group));
         }
-
-        Files.write(path, lines);
     }
 
     private static void iterateArchiveNamed(Js5Archive archive, BiConsumer<Integer, byte[]> unpack) throws IOException {
@@ -318,6 +316,22 @@ public class Unpack {
         }
 
         Files.write(result, lines);
+    }
+
+    private static void unpackInterfaces(Js5Archive archive, BiFunction<Integer, byte[], List<String>> unpack, Path result) throws IOException {
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
+
+        for (var group : archiveIndex.groupId) {
+            var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive.id + "/" + group + ".dat")));
+            var lines = new ArrayList<String>();
+
+            for (var file : files.keySet()) {
+                lines.addAll(unpack.apply(file, files.get(file)));
+                lines.add("");
+            }
+
+            Files.write(result.resolve(Unpacker.format(Type.INTERFACE, group) + ".if3"), lines);
+        }
     }
 
     private static void unpackDefaultsGroup(Js5DefaultsGroup group, BiFunction<Integer, byte[], List<String>> unpack, String result) throws IOException {

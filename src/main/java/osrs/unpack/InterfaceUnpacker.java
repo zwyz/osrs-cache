@@ -12,7 +12,7 @@ public class InterfaceUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.COMPONENT, id) + "]");
+        lines.add("[" + id + "]");
 
         var version = packet.g1();
 
