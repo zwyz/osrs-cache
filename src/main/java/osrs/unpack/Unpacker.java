@@ -1,11 +1,8 @@
 package osrs.unpack;
 
+import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Tuple2;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.*;
 
 public class Unpacker {
@@ -18,51 +15,6 @@ public class Unpacker {
     public static final Map<Integer, Type> ENUM_OUTPUT_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLAN_SETTING_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLAN_TYPE = new HashMap<>();
-
-    static {
-        readNamesTSV(Path.of("data/names/clientscript.tsv"), SCRIPT_NAMES);
-        readNamesTSV(Path.of("data/names/graphic.tsv"), GRAPHIC_NAMES);
-
-        for (var key : SCRIPT_NAMES.keySet()) {
-            var name = SCRIPT_NAMES.get(key);
-
-            try {
-                var n = Integer.parseInt(name);
-                var t = n + 512;
-
-                if (t >= 0 && t <= 255) {
-                    var trigger = ScriptTrigger.byID(n & 0xff);
-                    name = "[" + trigger.name().toLowerCase(Locale.ROOT) + ",_]";
-                } else {
-                    var c = Math.abs((n >> 8) + 3);
-                    t = (c << 8) + n + 768;
-
-                    if (t >= 0 && t <= 255) {
-                        var trigger = ScriptTrigger.byID(t);
-                        name = "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + format(Type.CATEGORY, c) + "]";
-                    } else {
-                        var trigger = ScriptTrigger.byID(n & 0xff);
-                        name = "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + format(trigger.type, n >> 8) + "]";
-                    }
-                }
-
-                SCRIPT_NAMES.put(key, name);
-            } catch (NumberFormatException ignored) {
-
-            }
-        }
-    }
-
-    private static void readNamesTSV(Path path, Map<Integer, String> result) {
-        try {
-            for (var line : Files.readAllLines(path)) {
-                var parts = line.split("\t");
-                result.put(Integer.parseInt(parts[0]), parts[1]);
-            }
-        } catch (IOException e) {
-            throw new UncheckedIOException(e);
-        }
-    }
 
     public static String format(Type type, int value) {
         return switch (type) {
@@ -212,12 +164,7 @@ public class Unpacker {
                     yield "null";
                 }
 
-                var name = SCRIPT_NAMES.get(value);
-
-                if (name == null) {
-                    yield "script" + value;
-                }
-
+                var name = getScriptName(value);
                 name = name.substring(1, name.length() - 1);
                 name = name.split(",")[1];
                 yield name;
@@ -694,5 +641,39 @@ public class Unpacker {
             case 13 -> "quiver";
             default -> throw new IllegalArgumentException("wearpos " + slot);
         };
+    }
+
+    public static String getScriptName(int id) {
+        var name = "[" + (ScriptUnpacker.CLIENTSCRIPT.contains(id) ? "clientscript" : "proc") + ",script" + id + "]";
+
+        if (SCRIPT_NAMES.containsKey(id)) {
+            name = SCRIPT_NAMES.get(id);
+
+            try {
+                var n = Integer.parseInt(name);
+                var t = n + 512;
+
+                if (t >= 0 && t <= 255) {
+                    var trigger = ScriptTrigger.byID(n & 0xff);
+                    name = "[" + trigger.name().toLowerCase(Locale.ROOT) + ",_]";
+                } else {
+                    var c = Math.abs((n >> 8) + 3);
+                    t = (c << 8) + n + 768;
+
+                    if (t >= 0 && t <= 255) {
+                        var trigger = ScriptTrigger.byID(t);
+                        name = "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + format(Type.CATEGORY, c) + "]";
+                    } else {
+                        var trigger = ScriptTrigger.byID(n & 0xff);
+                        name = "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + format(trigger.type, n >> 8) + "]";
+                    }
+                }
+
+            } catch (NumberFormatException ignored) {
+
+            }
+        }
+
+        return name;
     }
 }

@@ -101,12 +101,6 @@ public class ScriptUnpacker {
             return List.of();
         }
 
-        var name = "[" + (CLIENTSCRIPT.contains(id) ? "clientscript" : "proc") + ",script" + id + "]";
-
-        if (Unpacker.SCRIPT_NAMES.containsKey(id)) {
-            name = Unpacker.SCRIPT_NAMES.get(id);
-        }
-
-        return CodeFormatter.formatScript(name, SCRIPT_PARAMETERS.get(id), SCRIPT_RETURNS.get(id), script).lines().toList();
+        return CodeFormatter.formatScript(Unpacker.getScriptName(id), SCRIPT_PARAMETERS.get(id), SCRIPT_RETURNS.get(id), script).lines().toList();
     }
 }

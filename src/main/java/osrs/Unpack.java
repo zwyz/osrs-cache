@@ -29,9 +29,15 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 // todo: clean this up
 public class Unpack {
     private static final Path BASE_PATH = Path.of(System.getProperty("user.home") + "/.rscache/osrs");
+    private static final Map<Integer, String> NAMES = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         Files.createDirectories(Path.of("unpacked"));
+
+        // load names
+        generateNames();
+        loadGroupNames(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES::put);
+        loadGroupNames(JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
 
         // things stuff depends on
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, "unpacked/dump.varbit");
@@ -91,6 +97,26 @@ public class Unpack {
 
         // maps
         unpackMaps();
+    }
+
+    private static void generateNames() throws IOException {
+        for (var name : Files.readAllLines(Path.of("data/names.txt"))) {
+            generateNames(name);
+        }
+    }
+
+    private static void generateNames(String name) {
+        if (name.indexOf('#') != -1) {
+            var index = name.indexOf('#');
+            var a = name.substring(0, index);
+            var b = name.substring(index + 1);
+
+            for (var i = 0; i < 500; i++) {
+                generateNames(a + i + b);
+            }
+        } else {
+            NAMES.put(name.hashCode(), name);
+        }
     }
 
     private static void unpackMaps() throws IOException {
@@ -314,5 +340,17 @@ public class Unpack {
         }
 
         Files.write(Path.of(result), lines);
+    }
+
+    private static void loadGroupNames(Js5Archive archive, BiConsumer<Integer, String> consumer) throws IOException {
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
+
+        for (var group : archiveIndex.groupId) {
+            var hash = archiveIndex.groupNameHash[group];
+
+            if (NAMES.containsKey(hash)) {
+                consumer.accept(group, NAMES.get(hash));
+            }
+        }
     }
 }
