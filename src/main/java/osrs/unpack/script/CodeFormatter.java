@@ -102,6 +102,7 @@ public class CodeFormatter {
                             case VarPlayerReference var -> left.add(formatVarPlayer(var));
                             case VarPlayerBitReference var -> left.add(formatVarPlayerBit(var));
                             case VarClientReference var -> left.add(formatVarClient(var));
+                            case VarClientStringReference var -> left.add(formatVarClientString(var));
                             case VarClanSettingReference var -> left.add(formatVarClanSetting(var));
                             case VarClanReference var -> left.add(formatVarClan(var));
                             case null -> left.add("$_");
@@ -285,6 +286,7 @@ public class CodeFormatter {
             case VarPlayerReference var -> formatVarPlayer(var);
             case VarPlayerBitReference var -> formatVarPlayerBit(var);
             case VarClientReference var -> formatVarClient(var);
+            case VarClientStringReference var -> formatVarClientString(var);
             case VarClanSettingReference var -> formatVarClanSetting(var);
             case VarClanReference var -> formatVarClan(var);
             default -> throw new IllegalStateException("invalid load target type");
@@ -403,6 +405,10 @@ public class CodeFormatter {
 
     private static String formatVarClient(VarClientReference var) {
         return "%" + Unpacker.format(Type.VAR_CLIENT, var.var());
+    }
+
+    private static String formatVarClientString(VarClientStringReference var) {
+        return "%" + Unpacker.format(Type.VAR_CLIENT_STRING, var.var());
     }
 
     private static String formatVarClanSetting(VarClanSettingReference var) {

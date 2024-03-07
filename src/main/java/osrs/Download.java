@@ -1,9 +1,6 @@
 package osrs;
 
-import osrs.js5.Js5ArchiveIndex;
-import osrs.js5.Js5MasterIndex;
-import osrs.js5.Js5Util;
-import osrs.js5.TcpJs5ResourceProvider;
+import osrs.js5.*;
 import osrs.util.CRC32;
 
 import java.io.IOException;
@@ -20,6 +17,7 @@ public class Download {
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
         try (var js5 = TcpJs5ResourceProvider.create("oldschool1.runescape.com", 43594, 220)) {
+//        try (var js5 = new OpenRS2Js5ResourceProvider("runescape", 659)) {
             var masterIndex = new Js5MasterIndex(Js5Util.decompress(js5.get(255, 255, true)));
 
             try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
@@ -46,7 +44,7 @@ public class Download {
         System.out.println("done");
     }
 
-    private static void downloadArchive(TcpJs5ResourceProvider js5, int archive) throws IOException, InterruptedException, ExecutionException {
+    private static void downloadArchive(Js5ResourceProvider js5, int archive) throws IOException, InterruptedException, ExecutionException {
         var archiveIndexData = js5.get(255, archive, true);
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(archiveIndexData));
         write(BASE_PATH.resolve(255 + "/" + archive + ".dat"), archiveIndexData);
@@ -77,7 +75,7 @@ public class Download {
         }
     }
 
-    private static void downloadGroup(TcpJs5ResourceProvider js5, int archive, int group, Js5ArchiveIndex archiveIndex) throws IOException {
+    private static void downloadGroup(Js5ResourceProvider js5, int archive, int group, Js5ArchiveIndex archiveIndex) throws IOException {
         var path = BASE_PATH.resolve(archive + "/" + group + ".dat");
 
         if (Files.exists(path) && archiveIndex.groupChecksum[group] == CRC32.crc(Files.readAllBytes(path))) {

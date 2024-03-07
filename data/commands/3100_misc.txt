@@ -139,7 +139,7 @@
 3320 (gap)
 3321 [command,runenergy_visible]()(int)
 3322 [command,runweight_visible]()(int)
-3323 [command,playermod]()(boolean)
+3323 [command,playermod]()(int)
 3324 [command,worldflags]()(int)
 3325 [command,movecoord](coord $x1, int $x2, int $x3, int $x4)(coord)
 3326 [command,mouse_getx]()(int)

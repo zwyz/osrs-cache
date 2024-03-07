@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 
 import java.io.IOException;
@@ -71,7 +72,7 @@ public class Command {
     public static final Command FLOW_POSTDEC = defineCommand("flow_postdec"); // $x--
 
     // load normal commands
-    private static final Pattern COMMAND_PATTERN = Pattern.compile("(?<opcode>\\d+) \\[command,(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?");
+    private static final Pattern COMMAND_PATTERN = Pattern.compile("(?<opcode>\\d+) \\[command,(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
 
     static {
         try {
@@ -94,6 +95,14 @@ public class Command {
 
                         if (!matcher.matches()) {
                             throw new IllegalStateException("invalid line " + line);
+                        }
+                    }
+
+                    if (matcher.group("version") != null) {
+                        var version = Integer.parseInt(matcher.group("version"));
+
+                        if (version > Unpack.VERSION) {
+                            continue; // overrides for higher versions
                         }
                     }
 
@@ -222,6 +231,10 @@ public class Command {
 
     // todo: refactor pops handling to get rid of string boolean
     public record VarClientReference(int var, boolean string) {
+
+    }
+
+    public record VarClientStringReference(int var) {
 
     }
 

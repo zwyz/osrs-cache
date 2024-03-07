@@ -79,6 +79,11 @@ public class SyntaxBuilder {
             return;
         }
 
+        if (command == POP_VARC_STRING_OLD) {
+            pops.add(new VarClientStringReference((int) operand));
+            return;
+        }
+
         if (command == POP_VARC_STRING) {
             pops.add(new VarClientReference((int) operand, true));
             return;
@@ -92,6 +97,7 @@ public class SyntaxBuilder {
                     case VarPlayerReference(var var) -> argumentTypes.add(Type.UNKNOWN_INT);
                     case VarPlayerBitReference(var var) -> argumentTypes.add(Type.INT_INT);
                     case VarClientReference(var var, var string) -> argumentTypes.add(string ? Type.STRING : Type.UNKNOWN_INT);
+                    case VarClientStringReference(var var) -> argumentTypes.add(Type.STRING);
 
                     case LocalReference local -> argumentTypes.add(switch (local.domain()) {
                         case INTEGER -> Type.UNKNOWN_INT;
@@ -141,6 +147,13 @@ public class SyntaxBuilder {
             var var = (int) operand;
             var type = Type.UNKNOWN_INT;
             buildCommand(code, index, FLOW_LOAD, new VarClientReference(var, false), List.of(), List.of(type));
+            return;
+        }
+
+        if (command == PUSH_VARC_STRING_OLD) {
+            var var = (int) operand;
+            var type = Type.STRING;
+            buildCommand(code, index, FLOW_LOAD, new VarClientStringReference(var), List.of(), List.of(type));
             return;
         }
 

@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
@@ -77,6 +78,7 @@ public class LocUnpacker {
                 }
             }
 
+            case 60 -> lines.add("mapfunction=" + packet.g2());
             case 61 -> lines.add("category=" + Unpacker.format(Type.CATEGORY, packet.g2()));
             case 62 -> lines.add("mirror=yes");
             case 64 -> lines.add("shadow=no"); // https://www.youtube.com/watch?v=vZ7oG1IDz1w
@@ -132,17 +134,34 @@ public class LocUnpacker {
                 }
             }
 
-            case 78 -> lines.add("bgsound=" + packet.g2() + "," + packet.g1() + "," + packet.g1()); // https://twitter.com/JagexAsh/status/1651904693671546881
+            case 78 -> { // https://twitter.com/JagexAsh/status/1651904693671546881
+                if (Unpack.VERSION < 220) {
+                    lines.add("bgsound=" + packet.g2() + "," + packet.g1());
+                } else {
+                    lines.add("bgsound=" + packet.g2() + "," + packet.g1() + "," + packet.g1());
+                }
+            }
 
             case 79 -> { // https://twitter.com/JagexAsh/status/1651904693671546881
-                var line = "randomsound=" + packet.g2() + "," + packet.g2() + "," + packet.g1() + "," + packet.g1();
-                var count = packet.g1();
+                if (Unpack.VERSION < 220) {
+                    var line = "randomsound=" + packet.g2() + "," + packet.g2() + "," + packet.g1();
+                    var count = packet.g1();
 
-                for (var i = 0; i < count; ++i) {
-                    line += "," + Unpacker.format(Type.SYNTH, packet.g2());
+                    for (var i = 0; i < count; ++i) {
+                        line += "," + Unpacker.format(Type.SYNTH, packet.g2());
+                    }
+
+                    lines.add(line);
+                } else {
+                    var line = "randomsound=" + packet.g2() + "," + packet.g2() + "," + packet.g1() + "," + packet.g1();
+                    var count = packet.g1();
+
+                    for (var i = 0; i < count; ++i) {
+                        line += "," + Unpacker.format(Type.SYNTH, packet.g2());
+                    }
+
+                    lines.add(line);
                 }
-
-                lines.add(line);
             }
 
             case 81 -> lines.add("treeskew=" + packet.g1()); // todo: unused

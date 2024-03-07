@@ -28,6 +28,7 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 
 // todo: clean this up
 public class Unpack {
+    public static final int VERSION = 220;
     private static final Path BASE_PATH = Path.of(System.getProperty("user.home") + "/.rscache/osrs");
     private static final Map<Integer, String> NAMES = new HashMap<>();
 
@@ -46,8 +47,10 @@ public class Unpack {
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, "unpacked/config/dump.varbit");
         unpackConfigGroup(VARPLAYER, VarPlayerUnpacker::unpack, "unpacked/config/dump.varp");
         unpackConfigGroup(VARCLIENT, VarClientUnpacker::unpack, "unpacked/config/dump.varc");
+        unpackConfigGroup(VARCLIENTSTR, VarClientStringUnpacker::unpack, "unpacked/config/dump.varcstr");
         unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, "unpacked/config/dump.varobj"); // increased with treasure trail expansion
         unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, "unpacked/config/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
+        unpackConfigGroup(VARSHAREDSTR, VarSharedStringUnpacker::unpack, "unpacked/config/dump.vars");
         unpackConfigGroup(VARNPC, VarNpcUnpacker::unpack, "unpacked/config/dump.varn");
         unpackConfigGroup(VARNPCBIT, VarNpcBitUnpacker::unpack, "unpacked/config/dump.varnbit");
         unpackConfigGroup(VARGLOBAL, VarGlobalUnpacker::unpack, "unpacked/config/dump.varg"); // matches leaderboards
@@ -345,6 +348,10 @@ public class Unpack {
     private static void unpackGroup(Js5Archive archive, int group, BiFunction<Integer, byte[], List<String>> unpack, String result) throws IOException {
         var lines = new ArrayList<String>();
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
+
+        if (!Files.exists(BASE_PATH.resolve(archive.id + "/" + group + ".dat"))) {
+            return; // empty groups don't get packed
+        }
 
         var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive.id + "/" + group + ".dat")));
 

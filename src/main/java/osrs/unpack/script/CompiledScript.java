@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.Unpack;
 import osrs.util.Packet;
 
 import java.util.ArrayList;
@@ -16,10 +17,14 @@ public class CompiledScript {
 
     public static CompiledScript decode(byte[] data) {
         var packet = new Packet(data);
+        var headerSize = 12;
 
-        packet.pos = packet.arr.length - 2;
-        var headerSize = packet.g2();
-        var headerPos = packet.arr.length - 2 - headerSize - 12;
+        if (Unpack.VERSION >= 140) {
+            packet.pos = packet.arr.length - 2;
+            headerSize += 2 + packet.g2();
+        }
+
+        var headerPos = packet.arr.length - headerSize;
         packet.pos = headerPos;
         var script = new CompiledScript();
 
@@ -31,18 +36,23 @@ public class CompiledScript {
         script.argumentCountInt = packet.g2();
         script.argumentCountObject = packet.g2();
 
-        var switchCount = packet.g1();
-        var switchValue = new int[switchCount][];
-        var switchOffset = new int[switchCount][];
+        int[][] switchValue = null;
+        int[][] switchOffset = null;
 
-        for (var i = 0; i < switchCount; i++) {
-            var caseCount = packet.g2();
-            switchValue[i] = new int[caseCount];
-            switchOffset[i] = new int[caseCount];
+        if (Unpack.VERSION >= 140) {
+            var switchCount = packet.g1();
+            switchValue = new int[switchCount][];
+            switchOffset = new int[switchCount][];
 
-            for (var j = 0; j < caseCount; j++) {
-                switchValue[i][j] = packet.g4s();
-                switchOffset[i][j] = packet.g4s();
+            for (var i = 0; i < switchCount; i++) {
+                var caseCount = packet.g2();
+                switchValue[i] = new int[caseCount];
+                switchOffset[i] = new int[caseCount];
+
+                for (var j = 0; j < caseCount; j++) {
+                    switchValue[i][j] = packet.g4s();
+                    switchOffset[i][j] = packet.g4s();
+                }
             }
         }
 
@@ -66,7 +76,7 @@ public class CompiledScript {
             return packet.g4s(); // varplayer
         } else if (command == PUSH_VARBIT || command == POP_VARBIT) {
             return packet.g4s(); // varplayerbit
-        } else if (command == PUSH_VARC_INT || command == POP_VARC_INT||command == PUSH_VARC_STRING || command == POP_VARC_STRING) {
+        } else if (command == PUSH_VARC_INT || command == POP_VARC_INT || command == PUSH_VARC_STRING || command == POP_VARC_STRING) {
             return packet.g4s(); // varclient
         } else if (command == PUSH_VARC_STRING_OLD || command == POP_VARC_STRING_OLD) {
             return packet.g4s(); // varclientstring

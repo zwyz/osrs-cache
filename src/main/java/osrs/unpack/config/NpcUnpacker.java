@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
@@ -79,11 +80,15 @@ public class NpcUnpacker {
             case 101 -> lines.add("contrast=" + packet.g1s());
 
             case 102 -> {
-                var filter = packet.g1();
+                if (Unpack.VERSION < 210) {
+                    lines.add("headicon=" + Unpacker.format(Type.GRAPHIC, packet.g2()));
+                } else {
+                    var filter = packet.g1();
 
-                for (var i = 0; i < 31; i++) {
-                    if ((filter & (1 << i)) != 0) {
-                        lines.add("headicon" + (i + 1) + "=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null()) + "," + packet.gSmart1or2null());
+                    for (var i = 0; i < 31; i++) {
+                        if ((filter & (1 << i)) != 0) {
+                            lines.add("headicon" + (i + 1) + "=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null()) + "," + packet.gSmart1or2null());
+                        }
                     }
                 }
             }
@@ -116,6 +121,8 @@ public class NpcUnpacker {
 
             case 107 -> lines.add("active=no");
             case 109 -> lines.add("walksmoothing=no");
+            case 111 -> lines.add("follower=no");
+            case 112 -> lines.add("hitbarsegments=" + packet.g1());
             case 114 -> lines.add("runanim=" + Unpacker.format(Type.SEQ, packet.g2()));
             case 115 -> lines.add("runanim=" + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()));
             case 116 -> lines.add("crawlanim=" + Unpacker.format(Type.SEQ, packet.g2()));

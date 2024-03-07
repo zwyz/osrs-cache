@@ -1,5 +1,6 @@
 package osrs.unpack;
 
+import osrs.Unpack;
 import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Packet;
 
@@ -31,12 +32,18 @@ public class InterfaceUnpacker {
         line(lines, "y=", packet.g2s(), 0); // if_gety
         line(lines, "width=", packet.g2(), 0); // if_getwidth
         line(lines, "height=", (type == 9 ? packet.g2s() : packet.g2()), 0); // if_getheight
-        var widthmode = packet.g1s();
-        var heightmode = packet.g1s();
-        line(lines, "widthmode=", decodeSizeMode(widthmode), "abs");
-        line(lines, "heightmode=", decodeSizeMode(heightmode), "abs");
-        line(lines, "xmode=", decodeXMode(packet.g1s()), "abs_left");
-        line(lines, "ymode=", decodeYMode(packet.g1s()), "abs_top");
+        var widthmode = 0;
+        var heightmode = 0;
+
+        if (Unpack.VERSION >= 79) {
+            widthmode = packet.g1s();
+            heightmode = packet.g1s();
+            line(lines, "widthmode=", decodeSizeMode(widthmode), "abs");
+            line(lines, "heightmode=", decodeSizeMode(heightmode), "abs");
+            line(lines, "xmode=", decodeXMode(packet.g1s()), "abs_left");
+            line(lines, "ymode=", decodeYMode(packet.g1s()), "abs_top");
+        }
+
         line(lines, "layer=", packet.g2null(), -1); // if_getlayer
         line(lines, "hide=", packet.g1() == 1 ? "yes" : "no", "no"); // if_sethide
 
@@ -171,7 +178,10 @@ public class InterfaceUnpacker {
     private static void decodeLayer(ArrayList<String> lines, Packet packet, int version) {
         line(lines, "scrollwidth=", packet.g2(), 0); // if_getscrollwidth
         line(lines, "scrollheight=", packet.g2(), 0); // if_getscrollheight
-        line(lines, "noclickthrough=", ((packet.g1() == 1) ? "yes" : "no"), "no"); // if_setnoclickthrough
+
+        if (Unpack.VERSION >= 79) {
+            line(lines, "noclickthrough=", ((packet.g1() == 1) ? "yes" : "no"), "no"); // if_setnoclickthrough
+        }
     }
 
     private static void decodeGraphic(ArrayList<String> lines, Packet packet, int version) {
@@ -185,9 +195,8 @@ public class InterfaceUnpacker {
         line(lines, "hflip=", (packet.g1() == 1 ? "yes" : "no"), "no"); // if_sethflip
     }
 
-    private static void decodeModel(ArrayList<String> lines, Packet packet, int version, byte widthmode, byte heightmode) {
+    private static void decodeModel(ArrayList<String> lines, Packet packet, int version, int widthmode, int heightmode) {
         line(lines, "model=", Unpacker.format(Type.MODEL, packet.g2null()));
-
         line(lines, "modelorigin_x=", packet.g2s()); // if_setmodelorigin
         line(lines, "modelorigin_y=", packet.g2s()); // if_setmodelorigin
         line(lines, "modelangle_x=", packet.g2()); // if_getmodelangle_x
@@ -196,11 +205,14 @@ public class InterfaceUnpacker {
         line(lines, "modelzoom=", packet.g2()); // if_setmodelzoom
         line(lines, "modelanim=", Unpacker.format(Type.SEQ, packet.g2null()), "null"); // if_setmodelanim
         line(lines, "modelorthog=", packet.g1() == 1 ? "yes" : "no"); // if_setmodelzoom
-        line(lines, "unknown1=", packet.g2(), 0); // todo
 
-        if (widthmode != 0 || heightmode != 0) { // todo: client has bug in decoding
-            line(lines, "modelobjwidth=", packet.g2());
-            line(lines, "modelobjheight=", packet.g2());
+        if (Unpack.VERSION >= 79) {
+            line(lines, "unknown1=", packet.g2(), 0); // todo: ???
+
+            if (widthmode != 0 || heightmode != 0) { // todo: client has bug in decoding
+                line(lines, "modelobjwidth=", packet.g2());
+                line(lines, "modelobjheight=", packet.g2());
+            }
         }
     }
 
@@ -223,7 +235,10 @@ public class InterfaceUnpacker {
     private static void decodeLine(ArrayList<String> lines, Packet packet, int version) {
         line(lines, "linewid=", packet.g1(), 1); // if_setlinewid
         line(lines, "colour=", Unpacker.formatColour(packet.g4s())); // if_setcolour
-        line(lines, "linedirection=", (packet.g1() == 1 ? "yes" : "no"), "no"); // if_setlinedirection
+
+        if (Unpack.VERSION >= 79) {
+            line(lines, "linedirection=", (packet.g1() == 1 ? "yes" : "no"), "no"); // if_setlinedirection
+        }
     }
 
     public static String decodeSizeMode(int widthmode) {

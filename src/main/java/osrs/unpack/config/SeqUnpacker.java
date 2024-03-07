@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
@@ -83,16 +84,31 @@ public class SeqUnpacker {
             }
 
             case 13 -> {
-                var count = packet.g1();
+                if (Unpack.VERSION < 220) {
+                    var count = packet.g1();
 
-                for (var i = 0; i < count; i++) {
-                    var type = packet.g2();
-                    var loops = packet.g1();
-                    var range = packet.g1();
-                    var size = packet.g1();
+                    for (var i = 0; i < count; i++) {
+                        var value = packet.g3();
 
-                    if (type != 0 || loops != 0 || range != 0 || size != 0) {
-                        lines.add("sound" + i + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size);
+                        if (value != 0) {
+                            var type = value >> 8;
+                            var loops = value >> 4 & 7;
+                            var range = value & 15;
+                            lines.add("sound" + i + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range);
+                        }
+                    }
+                } else {
+                    var count = packet.g1();
+
+                    for (var i = 0; i < count; i++) {
+                        var type = packet.g2();
+                        var loops = packet.g1();
+                        var range = packet.g1();
+                        var size = packet.g1();
+
+                        if (type != 0 || loops != 0 || range != 0 || size != 0) {
+                            lines.add("sound" + i + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size);
+                        }
                     }
                 }
             }
@@ -102,10 +118,23 @@ public class SeqUnpacker {
             }
 
             case 15 -> {
-                var count = packet.g2();
+                if (Unpack.VERSION < 220) {
+                    var count = packet.g2();
 
-                for (var i = 0; i < count; i++) {
-                    lines.add("keyframesound" + packet.g2() + "=" + Unpacker.format(Type.SYNTH, packet.g2null()) + "," + packet.g1() + "," + packet.g1() + "," + packet.g1());
+                    for (var i = 0; i < count; i++) {
+                        var index = packet.g2();
+                        var value = packet.g3();
+                        var type = value >> 8;
+                        var loops = value >> 4 & 7;
+                        var range = value & 15;
+                        lines.add("keyframesound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range);
+                    }
+                } else {
+                    var count = packet.g2();
+
+                    for (var i = 0; i < count; i++) {
+                        lines.add("keyframesound" + packet.g2() + "=" + Unpacker.format(Type.SYNTH, packet.g2null()) + "," + packet.g1() + "," + packet.g1() + "," + packet.g1());
+                    }
                 }
             }
 

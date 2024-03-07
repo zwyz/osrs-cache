@@ -43,6 +43,7 @@ public class Unpacker {
             case VAR_PLAYER -> "varplayer" + value;
             case VAR_PLAYER_BIT -> "varplayerbit" + value;
             case VAR_CLIENT -> "varclient" + value;
+            case VAR_CLIENT_STRING -> "varclientstring" + value;
             case VAR_CLAN_SETTING -> "varclansetting" + getVarClanSettingType(value).name + value;
             case VAR_CLAN -> "varclan" + getVarClanType(value).name + value;
             case VAR_CONTROLLER -> "varcontroller" + value;

@@ -1,5 +1,6 @@
 3600 [command,friend_count]()(int)
-3601 [command,friend_getname](int $x1)(string, string)
+3601 [command,friend_getname](int $x1)(string)
+3601 [command,friend_getname](int $x1)(string, string) 53
 3602 [command,friend_getworld](int $x1)(int)
 3603 [command,friend_getrank](int $x1)(int)
 3604 [command,friend_setrank](string $x1, int $x2)
@@ -20,7 +21,8 @@
 3619 [command,clan_joinchat](string $x1)
 3620 [command,clan_leavechat]
 3621 [command,ignore_count]()(int)
-3622 [command,ignore_getname](int $x1)(string, string)
+3622 [command,ignore_getname](int $x1)(string)
+3622 [command,ignore_getname](int $x1)(string, string) 53
 3623 [command,ignore_test](string $x1)(boolean)
 3624 [command,clan_isself](int $x1)(boolean)
 3625 [command,clan_getchatownername]()(string)

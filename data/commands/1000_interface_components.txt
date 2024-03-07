@@ -1,5 +1,7 @@
-1000 [command,cc_setposition](int $x, int $y, setposh $modeh, setposv $modev)
-1001 [command,cc_setsize](int $width, int $height, setsize $modeh, setsize $modev)
+1000 [command,cc_setposition](int $x, int $y)
+1000 [command,cc_setposition](int $x, int $y, setposh $modeh, setposv $modev) 79
+1001 [command,cc_setsize](int $width, int $height)
+1001 [command,cc_setsize](int $width, int $height, setsize $modeh, setsize $modev) 79
 1002 (gap)
 1003 [command,cc_sethide](boolean $x1)
 1004 (gap)
@@ -222,8 +224,10 @@
 1927 [command,cc_callonresize](boolean $x1)
 1928 [command,cc_triggerop](int $x1)
 
-2000 [command,if_setposition](int $x, int $y, setposh $modeh, setposv $modev, component $component)
-2001 [command,if_setsize](int $width, int $height, setsize $modeh, setsize $modev, component $x5)
+2000 [command,if_setposition](int $x, int $y, component $component)
+2000 [command,if_setposition](int $x, int $y, setposh $modeh, setposv $modev, component $component) 79
+2001 [command,if_setsize](int $width, int $height, component $x5)
+2001 [command,if_setsize](int $width, int $height, setsize $modeh, setsize $modev, component $x5) 79
 2002 (gap)
 2003 [command,if_sethide](boolean $x1, component $x2)
 2004 (gap)

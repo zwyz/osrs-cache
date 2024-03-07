@@ -1,21 +1,31 @@
 5000 [command,chat_getfilter_public]()(chatfilter)
 5001 [command,chat_setfilter](chatfilter $x1, chatfilter $x2, chatfilter $x3)
 5002 [command,chat_sendabusereport](string $x1, int $x2, int $x3)
-5003 [command,chat_gethistory_bytypeandline_old](chattype $x1, int $x2)(int, int, string, string, string, int)
-5004 [command,chat_gethistory_byuid_old](int $x1)(chattype, int, string, string, string, int)
+5003 [command,chat_gethistorymessage](int $x1)(string)
+5003 [command,chat_gethistory_bytypeandline](chattype $x1, int $x2)(int, int, string, string, string) 47
+5003 [command,chat_gethistory_bytypeandline](chattype $x1, int $x2)(int, int, string, string, string, int) 162
+5030 [command,chat_gethistory_bytypeandline](chattype $x1, int $x2)(int, int, string, string, string, int, string, int) 195
+5004 [command,chat_gethistorytype](int $x1)(chattype)
+5004 [command,chat_gethistory_byuid](int $x1)(chattype, int, string, string, string) 47
+5004 [command,chat_gethistory_byuid](int $x1)(chattype, int, string, string, string, int) 162
+5031 [command,chat_gethistory_byuid](int $x1)(chattype, int, string, string, string, int, string, int) 195
 5005 [command,chat_getfilter_private]()(chatfilter)
 5006 (gap)
 5007 (gap)
-5008 [command,chat_sendpublic](string $x1, int $x2)
+5008 [command,chat_sendpublic](string $x1)
+5008 [command,chat_sendpublic](string $x1, int $x2) 47
 5009 [command,chat_sendprivate](string $x1, string $x2)
-5010 [command,chat_sendclan](string $x1, int $x2, int $x3)
-5011 (gap)
+5010 [command,chat_gethistoryname](int $x1)(string)
+5010 (gap) 47
+5010 [command,chat_sendclan](string $x1, int $x2, int $x3) 195
+5011 [command,chat_gethistoryclan](int $x1)(string)
 5012 (gap)
 5013 (gap)
 5014 (gap)
 5015 [command,chat_playername]()(string)
 5016 [command,chat_getfilter_trade]()(chatfilter)
-5017 [command,chat_gethistorylength](chattype $x1)(int)
+5017 [command,chat_gethistorylength]()(int)
+5017 [command,chat_gethistorylength](chattype $x1)(int) 47
 5018 [command,chat_getnextuid](int $x1)(int)
 5019 [command,chat_getprevuid](int $x1)(int)
 5020 [command,docheat](string $x1)
@@ -28,5 +38,3 @@
 5027 (gap)
 5028 (gap)
 5029 (gap)
-5030 [command,chat_gethistory_bytypeandline](chattype $x1, int $x2)(int, int, string, string, string, int, string, int)
-5031 [command,chat_gethistory_byuid](int $x1)(chattype, int, string, string, string, int, string, int)

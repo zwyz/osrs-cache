@@ -209,6 +209,7 @@ public enum Type {
     VAR_PLAYER(-1, 0, BaseVarType.INTEGER),
     VAR_PLAYER_BIT(-1, 0, BaseVarType.INTEGER),
     VAR_CLIENT(-1, 0, BaseVarType.INTEGER),
+    VAR_CLIENT_STRING(-1, 0, BaseVarType.INTEGER),
     VAR_CLAN_SETTING(-1, 0, BaseVarType.INTEGER),
     VAR_CLAN(-1, 0, BaseVarType.INTEGER),
     VAR_CONTROLLER(-1, 0, BaseVarType.INTEGER),
@@ -218,6 +219,7 @@ public enum Type {
     VAR_NPC_BIT(-1, 0, BaseVarType.INTEGER),
     VAR_OBJ(-1, 0, BaseVarType.INTEGER),
     VAR_SHARED(-1, 0, BaseVarType.INTEGER),
+    VAR_SHARED_STRING(-1, 0, BaseVarType.INTEGER),
 
     // split the int type into fake subtypes
     INT_INT(-1, 0, BaseVarType.INTEGER, Type.INT, "int"),
