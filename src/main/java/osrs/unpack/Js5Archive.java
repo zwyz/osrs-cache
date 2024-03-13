@@ -10,7 +10,7 @@ public enum Js5Archive {
     JS5_SONGS(6), // midi
     JS5_MODELS(7),
     JS5_SPRITES(8),
-    JS5_MATERIALS(9), // ok
+    JS5_TEXTURES(9), // ok
     JS5_BINARY(10),
     JS5_JINGLES(11), // midi
     JS5_CLIENTSCRIPTS(12),

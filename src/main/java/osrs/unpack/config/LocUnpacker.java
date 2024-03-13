@@ -103,9 +103,9 @@ public class LocUnpacker {
                 lines.add("forceapproach=" + String.join(",", result));
             }
 
-            case 70 -> lines.add("translatex=" + packet.g2s());
-            case 71 -> lines.add("translatey=" + packet.g2s());
-            case 72 -> lines.add("translatez=" + packet.g2s());
+            case 70 -> lines.add("offsetx=" + packet.g2s());
+            case 71 -> lines.add("offsety=" + packet.g2s());
+            case 72 -> lines.add("offsetz=" + packet.g2s());
             case 73 -> lines.add("forcedecor=yes");
             case 74 -> lines.add("breakroutefinding=yes"); // https://twitter.com/JagexAsh/status/1443150721734660096
             case 75 -> lines.add("raiseobject=" + Unpacker.getBooleanName(packet.g1())); // https://twitter.com/JagexAsh/status/1641051532010434560
@@ -136,9 +136,9 @@ public class LocUnpacker {
 
             case 78 -> { // https://twitter.com/JagexAsh/status/1651904693671546881
                 if (Unpack.VERSION < 220) {
-                    lines.add("bgsound=" + packet.g2() + "," + packet.g1());
+                    lines.add("bgsound=" + Unpacker.format(Type.SYNTH, packet.g2()) + "," + packet.g1());
                 } else {
-                    lines.add("bgsound=" + packet.g2() + "," + packet.g1() + "," + packet.g1());
+                    lines.add("bgsound=" + Unpacker.format(Type.SYNTH, packet.g2()) + "," + packet.g1() + "," + packet.g1());
                 }
             }
 

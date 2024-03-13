@@ -51,15 +51,16 @@ public class Unpacker {
             case VAR_GLOBAL -> "varglobal" + value;
             case VAR_NPC -> "varnpc" + value;
             case VAR_NPC_BIT -> "varnpcbit" + value;
-            case VAR_OBJ -> "varobj" + value;
-            case VAR_SHARED -> "varshared" + value;
+            case VAR_OBJ -> "varobject" + value;
+            case VAR_SHARED -> "varworld" + value;
+            case VAR_SHARED_STRING -> "varworldstring" + value;
 
             case COMPONENT -> {
                 if (value == -1) {
                     yield "null";
                 }
 
-                yield "interface_" + (value >> 16) + ":" + (value & 0xffff);
+                yield "interface_" + (value >> 16) + ":com" + (value & 0xffff);
             }
 
             case DBCOLUMN -> {
@@ -404,10 +405,10 @@ public class Unpacker {
                 default -> "^settextalignv_" + value;
             };
 
-            case INT_WINDOWMODE -> switch (value) {
+            case INT_WINDOWMODE -> switch (value) { // tfu
                 case -1 -> "null";
                 case 0 -> "0";
-                case 1 -> "^windowmode_fixed";
+                case 1 -> "^windowmode_small";
                 case 2 -> "^windowmode_resizable";
                 default -> "^windowmode_" + value;
             };

@@ -17,6 +17,7 @@ public enum Js5ConfigGroup {
     VARBIT(14),
     VARCLIENTSTR(15),
     VARPLAYER(16),
+    CATEGORY(17),
     AREATYPE(18),
     VARCLIENT(19),
     VAROBJ(20),

@@ -13,7 +13,7 @@ public class InterfaceUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + id + "]");
+        lines.add("[com" + id + "]");
 
         var version = packet.g1();
 
@@ -44,7 +44,7 @@ public class InterfaceUnpacker {
             line(lines, "ymode=", decodeYMode(packet.g1s()), "abs_top");
         }
 
-        line(lines, "layer=", packet.g2null(), -1); // if_getlayer
+        line(lines, "layer=com", packet.g2null(), -1); // if_getlayer
         line(lines, "hide=", packet.g1() == 1 ? "yes" : "no", "no"); // if_sethide
 
         switch (type) {
@@ -204,7 +204,7 @@ public class InterfaceUnpacker {
         line(lines, "modelangle_z=", packet.g2()); // if_getmodelangle_z
         line(lines, "modelzoom=", packet.g2()); // if_setmodelzoom
         line(lines, "modelanim=", Unpacker.format(Type.SEQ, packet.g2null()), "null"); // if_setmodelanim
-        line(lines, "modelorthog=", packet.g1() == 1 ? "yes" : "no"); // if_setmodelzoom
+        line(lines, "modelorthog=", packet.g1() == 1 ? "yes" : "no", "no"); // if_setmodelorthog
 
         if (Unpack.VERSION >= 79) {
             line(lines, "unknown1=", packet.g2(), 0); // todo: ???

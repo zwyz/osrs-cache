@@ -35,7 +35,7 @@ public class ObjUnpacker {
             case 7 -> lines.add("2dxof=" + packet.g2s());
             case 8 -> lines.add("2dyof=" + packet.g2s());
             case 9 -> lines.add("unknown9=" + packet.gjstr()); // todo: unused
-            case 11 -> lines.add("stackable=yes");
+            case 11 -> lines.add("stackable=yes"); // https://twitter.com/JagexAsh/status/1626564052901060609
             case 12 -> lines.add("cost=" + packet.g4s());
             case 13 -> lines.add("wearpos=" + Unpacker.formatWearPos(packet.g1())); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 14 -> lines.add("wearpos2=" + Unpacker.formatWearPos(packet.g1()));

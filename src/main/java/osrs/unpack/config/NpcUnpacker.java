@@ -75,13 +75,13 @@ public class NpcUnpacker {
             case 95 -> lines.add("vislevel=" + packet.g2());
             case 97 -> lines.add("resizeh=" + packet.g2());
             case 98 -> lines.add("resizev=" + packet.g2());
-            case 99 -> lines.add("drawpriority=yes");
+            case 99 -> lines.add("drawabove=yes");
             case 100 -> lines.add("ambient=" + packet.g1s());
             case 101 -> lines.add("contrast=" + packet.g1s());
 
             case 102 -> {
                 if (Unpack.VERSION < 210) {
-                    lines.add("headicon=" + Unpacker.format(Type.GRAPHIC, packet.g2()));
+                    lines.add("headicon=" + packet.g2());
                 } else {
                     var filter = packet.g1();
 

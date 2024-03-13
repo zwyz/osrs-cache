@@ -30,7 +30,6 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 public class Unpack {
     public static final int VERSION = 220;
     private static final Path BASE_PATH = Path.of(System.getProperty("user.home") + "/.rscache/osrs");
-    private static final Map<Integer, String> NAMES = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         Files.createDirectories(Path.of("unpacked"));
@@ -39,9 +38,8 @@ public class Unpack {
         Files.createDirectories(Path.of("unpacked/interface"));
 
         // load names
-        generateNames();
-        loadGroupNames(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES::put);
-        loadGroupNames(JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
+        loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES::put);
+        loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
 
         // things stuff depends on
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, "unpacked/config/dump.varbit");
@@ -50,7 +48,7 @@ public class Unpack {
         unpackConfigGroup(VARCLIENTSTR, VarClientStringUnpacker::unpack, "unpacked/config/dump.varcstr");
         unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, "unpacked/config/dump.varobj"); // increased with treasure trail expansion
         unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, "unpacked/config/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
-        unpackConfigGroup(VARSHAREDSTR, VarSharedStringUnpacker::unpack, "unpacked/config/dump.vars");
+        unpackConfigGroup(VARSHAREDSTR, VarSharedStringUnpacker::unpack, "unpacked/config/dump.varsstr");
         unpackConfigGroup(VARNPC, VarNpcUnpacker::unpack, "unpacked/config/dump.varn");
         unpackConfigGroup(VARNPCBIT, VarNpcBitUnpacker::unpack, "unpacked/config/dump.varnbit");
         unpackConfigGroup(VARGLOBAL, VarGlobalUnpacker::unpack, "unpacked/config/dump.varg"); // matches leaderboards
@@ -99,29 +97,32 @@ public class Unpack {
         unpackInterfaces(JS5_INTERFACES, InterfaceUnpacker::unpack, Path.of("unpacked/interface"));
 
         // materials
-        unpackConfigArchive(JS5_MATERIALS, 0, MaterialUnpacker::unpack, Path.of("unpacked/config/dump.material"));
+        unpackConfigArchive(JS5_TEXTURES, 0, TextureUnpacker::unpack, Path.of("unpacked/config/dump.texture"));
+
+        // other
+        unpackArchive(10, Path.of("unpacked/binary"), ".dat");
 
         // maps
         unpackMaps();
     }
 
-    private static void generateNames() throws IOException {
-        for (var name : Files.readAllLines(Path.of("data/names.txt"))) {
-            generateNames(name);
+    private static void generateNames(Path path, Map<Integer, String> names) throws IOException {
+        for (var name : Files.readAllLines(path)) {
+            generateNames(name, names);
         }
     }
 
-    private static void generateNames(String name) {
-        if (name.indexOf('#') != -1) {
-            var index = name.indexOf('#');
-            var a = name.substring(0, index);
-            var b = name.substring(index + 1);
+    private static void generateNames(String unhash, Map<Integer, String> names) {
+        if (unhash.indexOf('#') != -1) {
+            var index = unhash.indexOf('#');
+            var a = unhash.substring(0, index);
+            var b = unhash.substring(index + 1);
 
             for (var i = 0; i < 500; i++) {
-                generateNames(a + i + b);
+                generateNames(a + i + b, names);
             }
         } else {
-            NAMES.put(name.hashCode(), name);
+            names.put(unhash.hashCode(), unhash);
         }
     }
 
@@ -280,7 +281,9 @@ public class Unpack {
         ScriptUnpacker.decompile();
 
         for (var group : archiveIndex.groupId) {
-            Files.write(path.resolve(Unpacker.getScriptName(group) + ".cs2"), ScriptUnpacker.unpack(group));
+            var lines = new ArrayList<>(ScriptUnpacker.unpack(group));
+            lines.addFirst("// " + group);
+            Files.write(path.resolve(Unpacker.getScriptName(group) + ".cs2"), lines);
         }
     }
 
@@ -347,6 +350,11 @@ public class Unpack {
 
     private static void unpackGroup(Js5Archive archive, int group, BiFunction<Integer, byte[], List<String>> unpack, String result) throws IOException {
         var lines = new ArrayList<String>();
+
+        if (!Files.exists(BASE_PATH.resolve(archive.id + "/" + archive.id + ".dat"))) {
+            return; // empty groups don't get packed
+        }
+
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
 
         if (!Files.exists(BASE_PATH.resolve(archive.id + "/" + group + ".dat"))) {
@@ -363,15 +371,42 @@ public class Unpack {
         Files.write(Path.of(result), lines);
     }
 
-    private static void loadGroupNames(Js5Archive archive, BiConsumer<Integer, String> consumer) throws IOException {
+    private static void loadGroupNames(Path path, Js5Archive archive, BiConsumer<Integer, String> consumer) throws IOException {
+        var unhash = new HashMap<Integer, String>();
+        generateNames(path, unhash);
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
 
         for (var group : archiveIndex.groupId) {
             var hash = archiveIndex.groupNameHash[group];
 
-            if (NAMES.containsKey(hash)) {
-                consumer.accept(group, NAMES.get(hash));
+            if (unhash.containsKey(hash)) {
+                consumer.accept(group, unhash.get(hash));
             }
         }
     }
+
+    private static void unpackArchive(int archive, Path path, String extension) throws IOException {
+        if (!Files.exists(BASE_PATH.resolve("255/" + archive + ".dat"))) {
+            return;
+        }
+
+        Files.createDirectories(path);
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive + ".dat"))));
+
+        for (var group : archiveIndex.groupId) {
+            var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive + "/" + group + ".dat")));
+
+            if (files.size() == 1 && files.containsKey(0)) {
+                Files.write(path.resolve(group + extension), files.get(0));
+            } else {
+                var groupDirectory = path.resolve(String.valueOf(group));
+                Files.createDirectories(groupDirectory);
+
+                for (var file : files.keySet()) {
+                    Files.write(groupDirectory.resolve(file + extension), files.get(file));
+                }
+            }
+        }
+    }
+
 }
