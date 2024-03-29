@@ -32,7 +32,7 @@ public class Unpacker {
                     yield "null";
                 }
 
-                var level = value >> 28;
+                var level = value >>> 28;
                 var x = value >>> 14 & 16383;
                 var z = value & 16383;
                 yield level + "_" + (x / 64) + "_" + (z / 64) + "_" + (x % 64) + "_" + (z % 64);
@@ -40,20 +40,20 @@ public class Unpacker {
 
             case TYPE -> Type.byChar(value).name;
 
-            case VAR_PLAYER -> "varplayer" + value;
-            case VAR_PLAYER_BIT -> "varplayerbit" + value;
-            case VAR_CLIENT -> "varclient" + value;
-            case VAR_CLIENT_STRING -> "varclientstring" + value;
-            case VAR_CLAN_SETTING -> "varclansetting" + getVarClanSettingType(value).name + value;
-            case VAR_CLAN -> "varclan" + getVarClanType(value).name + value;
-            case VAR_CONTROLLER -> "varcontroller" + value;
-            case VAR_CONTROLLER_BIT -> "varcontrollerbit" + value;
-            case VAR_GLOBAL -> "varglobal" + value;
-            case VAR_NPC -> "varnpc" + value;
-            case VAR_NPC_BIT -> "varnpcbit" + value;
-            case VAR_OBJ -> "varobject" + value;
-            case VAR_SHARED -> "varworld" + value;
-            case VAR_SHARED_STRING -> "varworldstring" + value;
+            case VAR_PLAYER -> "varplayer_" + value;
+            case VAR_PLAYER_BIT -> "varplayerbit_" + value;
+            case VAR_CLIENT -> "varclient_" + value;
+            case VAR_CLIENT_STRING -> "varclientstring_" + value;
+            case VAR_CLAN_SETTING -> "varclansetting" + getVarClanSettingType(value).name + "_" + value;
+            case VAR_CLAN -> "varclan" + getVarClanType(value).name + "_" + value;
+            case VAR_CONTROLLER -> "varcontroller_" + value;
+            case VAR_CONTROLLER_BIT -> "varcontrollerbit_" + value;
+            case VAR_GLOBAL -> "varglobal_" + value;
+            case VAR_NPC -> "varnpc_" + value;
+            case VAR_NPC_BIT -> "varnpcbit_" + value;
+            case VAR_OBJ -> "varobject_" + value;
+            case VAR_SHARED -> "varworld_" + value;
+            case VAR_SHARED_STRING -> "varworldstring_" + value;
 
             case COMPONENT -> {
                 if (value == -1) {
@@ -69,9 +69,9 @@ public class Unpacker {
                 var tuple = (value & 15) - 1;
 
                 if (tuple == -1) {
-                    yield format(Type.DBTABLE, table) + ":" + column;
+                    yield format(Type.DBTABLE, table) + ":col" + column;
                 } else {
-                    yield format(Type.DBTABLE, table) + ":" + column + ":" + tuple;
+                    yield format(Type.DBTABLE, table) + ":col" + column + ":" + tuple;
                 }
             }
 

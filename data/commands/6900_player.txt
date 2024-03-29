@@ -1,8 +1,8 @@
 6900 [command,player_name]()(string)
-6901 [command,unknown_command_6901]()(boolean)
+6901 [command,player_findself]()(boolean)
 6902 [command,player_route_length]()(int)
 6903 [command,player_route_get](int $x1)(coord)
 6904 [command,uid]()(player_uid)
 6905 [command,selfplayer_uid]()(player_uid)
-6906 [command,unknown_command_6906]todo
-6907 [command,unknown_command_6907]todo
+6906 [command,player_say](string $text,int $duration)
+6907 [command,player_minimenuop](int $x1,boolean $x2)(string)

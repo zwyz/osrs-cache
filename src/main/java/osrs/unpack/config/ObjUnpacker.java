@@ -29,6 +29,7 @@ public class ObjUnpacker {
 
             case 1 -> lines.add("model=" + Unpacker.format(Type.MODEL, packet.g2()));
             case 2 -> lines.add("name=" + packet.gjstr());
+            case 3 -> lines.add("desc=" + packet.gjstr());
             case 4 -> lines.add("2dzoom=" + packet.g2()); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 5 -> lines.add("2dxan=" + packet.g2()); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 6 -> lines.add("2dyan=" + packet.g2()); // https://discord.com/channels/@me/698790755363323904/1057485711214923888

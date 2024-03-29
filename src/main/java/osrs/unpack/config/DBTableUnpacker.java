@@ -37,13 +37,13 @@ public class DBTableUnpacker {
                     }
 
                     Unpacker.setDBColumnType(id, column, types);
-                    lines.add("column=dbcolumn_" + column + "," + types.stream().map(t -> t.name).collect(Collectors.joining(",")));
+                    lines.add("column=col" + column + "," + types.stream().map(t -> t.name).collect(Collectors.joining(",")));
 
                     if (hasdefault) {
                         var defaultCount = packet.gSmart1or2();
 
                         for (var entry = 0; entry < defaultCount; entry++) {
-                            var sb = new StringBuilder("default=dbcolumn_" + column);
+                            var sb = new StringBuilder("default=col" + column);
 
                             for (var type : types) {
                                 sb.append(",").append(switch (type.baseType) {

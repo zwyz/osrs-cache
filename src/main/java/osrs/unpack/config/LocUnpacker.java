@@ -166,7 +166,8 @@ public class LocUnpacker {
 
             case 81 -> lines.add("treeskew=" + packet.g1()); // todo: unused
             case 82 -> lines.add("mapicon=" + Unpacker.format(Type.MAPELEMENT, packet.g2()));
-            case 89 -> lines.add("randseq=no");
+            case 89 -> lines.add("randomanimframe=no"); // https://twitter.com/JagexAsh/status/1773322757041766706
+            case 90 -> lines.add("unknown90=yes");
 
             case 92 -> {
                 var multivarbit = packet.g2null();

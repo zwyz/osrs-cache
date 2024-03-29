@@ -223,7 +223,13 @@ public class TypePropagator {
 
     private void bound(Node parameter, Type type) {
         var set = find(parameter);
-        set.setType(Type.meet(set.type, type));
+        var meet = Type.meet(set.type, type);
+
+        if (meet == null) {
+            throw new IllegalStateException("type mismatch during propagation, " + set.type + " and " + type + " have no common subtype, set " + set.set + " and explicit " + type);
+        }
+
+        set.setType(meet);
     }
 
     private VariableSet find(Node a) {

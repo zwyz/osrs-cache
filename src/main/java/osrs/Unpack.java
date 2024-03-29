@@ -135,6 +135,8 @@ public class Unpack {
                 names.add("l" + x + "_" + z);
                 names.add("e" + x + "_" + z);
                 names.add("wm" + x + "_" + z);
+                names.add("t" + x + "_" + z);
+                names.add("w" + x + "_" + z);
             }
         }
 
@@ -177,25 +179,45 @@ public class Unpack {
                 var parts = name.substring(1).split("_");
                 var squareX = Integer.parseInt(parts[0]);
                 var squareZ = Integer.parseInt(parts[1]);
-
                 var packet = new Packet(data);
-                var lines = new ArrayList<String>();
-                lines.add("coloura=" + packet.g1() + "," + packet.g1() + "," + packet.g1());
-                lines.add("unknown4a=" + packet.g1());
-                lines.add("unknown5=" + packet.g1());
 
-                if (packet.g1() == 0) {
-                    lines.add("colourb=" + packet.g1() + "," + packet.g1() + "," + packet.g1());
-                    lines.add("unknown4b=" + packet.g1());
+                if (data.length > 0) {
+                    System.out.println();
                 }
 
-                var count = packet.gSmart2or4s();
+//                var lines = new ArrayList<String>();
+//                lines.add("coloura=" + packet.g1() + "," + packet.g1() + "," + packet.g1());
+//                lines.add("foga=" + packet.g1());
+//                lines.add("unknown5=" + packet.g1());
+//
+//                if (packet.g1() == 0) {
+//                    lines.add("colourb=" + packet.g1() + "," + packet.g1() + "," + packet.g1());
+//                    lines.add("fogb=" + packet.g1());
+//                }
+//
+//                var count = packet.gSmart2or4s();
+//
+//                if (packet.pos != packet.arr.length) {
+//                    throw new IllegalStateException("end of file not reached");
+//                }
+//
+////                    System.out.println(lines);
+            } else if (name.startsWith("t")) {
+                var parts = name.substring(1).split("_");
+                var squareX = Integer.parseInt(parts[0]);
+                var squareZ = Integer.parseInt(parts[1]);
 
-                if (packet.pos != packet.arr.length) {
-                    throw new IllegalStateException("end of file not reached");
+                if (data.length > 0) {
+                    System.out.println();
                 }
+            } else if (name.startsWith("w") && !name.startsWith("wm") && !name.startsWith("wa")) {
+                var parts = name.substring(1).split("_");
+                var squareX = Integer.parseInt(parts[0]);
+                var squareZ = Integer.parseInt(parts[1]);
 
-//                    System.out.println(lines);
+                if (data.length > 0) {
+                    System.out.println();
+                }
             } else if (name.startsWith("wm")) {
                 var parts = name.substring(2).split("_");
                 var squareX = Integer.parseInt(parts[0]);

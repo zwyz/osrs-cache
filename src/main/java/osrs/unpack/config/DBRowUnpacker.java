@@ -38,7 +38,7 @@ public class DBRowUnpacker {
                     var something = packet.gSmart1or2();
 
                     for (var i = 0; i < something; i++) {
-                        var sb = new StringBuilder("data=dbcolumn_" + column);
+                        var sb = new StringBuilder("data=col" + column);
 
                         for (var type : types) {
                             sb.append(",").append(switch (type.baseType) {

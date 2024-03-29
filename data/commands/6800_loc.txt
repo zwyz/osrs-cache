@@ -2,10 +2,11 @@
 6801 [command,loc_coord]()(coord)
 6802 [command,loc_type]()(loc)
 6803 [command,loc_find](coord $x1, loc $x2)(boolean)
-6804 [command,unknown_command_6804]todo
-6805 [command,unknown_command_6805]todo
+6804 [command,loc_minimenuname](boolean $x1)(string)
+6805 [command,loc_minimenuop](int $x1, boolean $x2)(string)
 6806 [command,lc_minimenuname](loc $x1, boolean $x2)(string)
 6807 [command,lc_minimenuop](loc $x1, int $x2, boolean $x3)(string)
+6808 [command,lc_multiloc](loc $x1, int $x2)(loc)
 6809 [command,lc_name](loc $x1)(string)
-6810 [command,unknown_command_6810]todo
-6811 [command,unknown_command_6811]todo
+6810 [command,loc_width]()(int)
+6811 [command,loc_length]()(int)
