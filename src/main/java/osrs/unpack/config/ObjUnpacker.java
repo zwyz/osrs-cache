@@ -1,13 +1,12 @@
 package osrs.unpack.config;
 
+import osrs.unpack.ColourConversion;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ObjUnpacker {
     private static final long OZ_A = 28_349_523_125L; // https://en.wikipedia.org/wiki/Ounce
@@ -61,8 +60,8 @@ public class ObjUnpacker {
                 var count = packet.g1();
 
                 for (var i = 0; i < count; ++i) {
-                    lines.add("recol" + (i + 1) + "s=" + packet.g2());
-                    lines.add("recol" + (i + 1) + "d=" + packet.g2());
+                    lines.add("recol" + (i + 1) + "s=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
+                    lines.add("recol" + (i + 1) + "d=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
                 }
             }
 

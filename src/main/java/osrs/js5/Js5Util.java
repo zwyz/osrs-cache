@@ -2,6 +2,7 @@ package osrs.js5;
 
 import org.apache.commons.compress.compressors.bzip2.BZip2CompressorInputStream;
 import org.tukaani.xz.LZMAInputStream;
+import osrs.util.Packet;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,6 +14,15 @@ import java.util.zip.GZIPInputStream;
 
 public class Js5Util {
     public static HashMap<Integer, byte[]> unpackGroup(Js5ArchiveIndex index, int group, byte[] data) {
+        return unpackGroup(index, group, data, null);
+    }
+
+    public static HashMap<Integer, byte[]> unpackGroup(Js5ArchiveIndex index, int group, byte[] data, int[] key) {
+        if (key != null && (key[0] != 0 || key[1] != 0 || key[2] != 0 || key[3] != 0)) {
+            var packet = new Packet(data);
+            packet.tinyKeyDecrypt(key, 5, packet.arr.length);
+        }
+
         var groupData = decompress(data);
         var fileCount = index.groupSize[group];
         var fileIds = index.groupFileIds[group];

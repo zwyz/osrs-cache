@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.unpack.ColourConversion;
 import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
@@ -34,10 +35,10 @@ public class NpcUnpacker {
             case 2 -> lines.add("name=" + packet.gjstr()); // https://discord.com/channels/@me/698790755363323904/1203639168836833340
             case 12 -> lines.add("size=" + packet.g1()); // https://discord.com/channels/@me/698790755363323904/1203639168836833340
             case 13 -> lines.add("readyanim=" + Unpacker.format(Type.SEQ, packet.g2()));
-            case 14 -> lines.add("walkanim=" + Unpacker.format(Type.SEQ, packet.g2()));
+            case 14 -> lines.add("walkanim=" + Unpacker.format(Type.SEQ, packet.g2())); // https://twitter.com/JagexAsh/status/1782360089321447453
             case 15 -> lines.add("turnleftanim=" + Unpacker.format(Type.SEQ, packet.g2()));
             case 16 -> lines.add("turnrightanim=" + Unpacker.format(Type.SEQ, packet.g2()));
-            case 17 -> lines.add("walkanim=" + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()));
+            case 17 -> lines.add("walkanim=" + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2())); // https://twitter.com/JagexAsh/status/1782360089321447453
             case 18 -> lines.add("category=" + Unpacker.format(Type.CATEGORY, packet.g2())); // https://discord.com/channels/@me/698790755363323904/1203639168836833340
             case 30 -> lines.add("op1=" + packet.gjstr()); // https://discord.com/channels/@me/698790755363323904/1203639168836833340
             case 31 -> lines.add("op2=" + packet.gjstr()); // https://discord.com/channels/@me/698790755363323904/1203639168836833340
@@ -49,8 +50,8 @@ public class NpcUnpacker {
                 var length = packet.g1();
 
                 for (var i = 0; i < length; ++i) {
-                    lines.add("recol" + (i + 1) + "s=" + packet.g2());
-                    lines.add("recol" + (i + 1) + "d=" + packet.g2());
+                    lines.add("recol" + (i + 1) + "s=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
+                    lines.add("recol" + (i + 1) + "d=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
                 }
             }
 
@@ -75,7 +76,7 @@ public class NpcUnpacker {
             case 95 -> lines.add("vislevel=" + packet.g2());
             case 97 -> lines.add("resizeh=" + packet.g2());
             case 98 -> lines.add("resizev=" + packet.g2());
-            case 99 -> lines.add("drawabove=yes");
+            case 99 -> lines.add("alwaysontop=yes"); // https://twitter.com/JagexAsh/status/1690998554347610112
             case 100 -> lines.add("ambient=" + packet.g1s());
             case 101 -> lines.add("contrast=" + packet.g1s());
 

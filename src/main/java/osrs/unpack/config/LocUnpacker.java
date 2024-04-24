@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.unpack.ColourConversion;
 import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
@@ -64,8 +65,8 @@ public class LocUnpacker {
                 var count = packet.g1();
 
                 for (var i = 0; i < count; ++i) {
-                    lines.add("recol" + (i + 1) + "s=" + packet.g2());
-                    lines.add("recol" + (i + 1) + "d=" + packet.g2());
+                    lines.add("recol" + (i + 1) + "s=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
+                    lines.add("recol" + (i + 1) + "d=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
                 }
             }
 
