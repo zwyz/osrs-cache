@@ -46,7 +46,7 @@ public enum ScriptTrigger {
     OPOBJ(79),
     OPNPC(80),
     OPPLAYER(81),
-    TRIGGER_82(82),
+    MINIMENU_OPENED(82),
     TRIGGER_83(83),
     ;
 

@@ -5,7 +5,7 @@ import java.util.Locale;
 public enum Type {
     INT(0, 'i', BaseVarType.INTEGER),
     BOOLEAN(1, '1', BaseVarType.INTEGER),
-    TYPE_2(2, '2', BaseVarType.INTEGER),
+    TYPE2(2, '2', BaseVarType.INTEGER),
     QUEST(3, ':', BaseVarType.INTEGER),
     QUESTHELP(4, ';', BaseVarType.INTEGER),
     CURSOR(5, '@', BaseVarType.INTEGER),
@@ -18,7 +18,7 @@ public enum Type {
     NPC_MODE(12, 'N', BaseVarType.INTEGER),
     NAMEDOBJ(13, 'O', BaseVarType.INTEGER),
     SYNTH(14, 'P', BaseVarType.INTEGER),
-    TYPE_15(15, 'Q', BaseVarType.INTEGER),
+    TYPE15(15, 'Q', BaseVarType.INTEGER),
     AREA(16, 'R', BaseVarType.INTEGER),
     STAT(17, 'S', BaseVarType.INTEGER),
     NPC_STAT(18, 'T', BaseVarType.INTEGER),
@@ -30,7 +30,7 @@ public enum Type {
     CHATPHRASE(24, 'e', BaseVarType.INTEGER),
     FONTMETRICS(25, 'f', BaseVarType.INTEGER),
     ENUM(26, 'g', BaseVarType.INTEGER),
-    TYPE_27(27, 'h', BaseVarType.INTEGER),
+    TYPE27(27, 'h', BaseVarType.INTEGER),
     JINGLE(28, 'j', BaseVarType.INTEGER),
     CHATCAT(29, 'k', BaseVarType.INTEGER),
     LOC(30, 'l', BaseVarType.INTEGER),
@@ -38,7 +38,7 @@ public enum Type {
     NPC(32, 'n', BaseVarType.INTEGER),
     OBJ(33, 'o', BaseVarType.INTEGER), // namedobj
     PLAYER_UID(34, 'p', BaseVarType.INTEGER),
-    TYPE_35(35, 'r', BaseVarType.LONG), // todo: this integer in osrs java client
+    TYPE35(35, 'r', BaseVarType.LONG), // todo: this integer in osrs java client
     STRING(36, 's', BaseVarType.STRING),
     SPOTANIM(37, 't', BaseVarType.INTEGER),
     NPC_UID(38, 'u', BaseVarType.INTEGER),
@@ -48,14 +48,14 @@ public enum Type {
     CHAR(42, 'z', BaseVarType.INTEGER),
     LASER(43, '|', BaseVarType.INTEGER),
     BAS(44, '€', BaseVarType.INTEGER),
-    TYPE_45(45, 'ƒ', BaseVarType.INTEGER),
+    TYPE45(45, 'ƒ', BaseVarType.INTEGER),
     COLLISION_GEOMETRY(46, '‡', BaseVarType.INTEGER),
     PHYSICS_MODEL(47, '‰', BaseVarType.INTEGER),
     PHYSICS_CONTROL_MODIFIER(48, 'Š', BaseVarType.INTEGER),
     CLANHASH(49, 'Œ', BaseVarType.LONG),
     CUTSCENE(51, 'š', BaseVarType.INTEGER),
     ITEMCODE(53, '¡', BaseVarType.INTEGER),
-    TYPE_54(54, '¢', BaseVarType.INTEGER),
+    TYPE54(54, '¢', BaseVarType.INTEGER),
     MAPSCENEICON(55, '£', BaseVarType.INTEGER, "msi"),
     CLANFORUMQFC(56, '§', BaseVarType.LONG),
     VORBIS(57, '«', BaseVarType.INTEGER),
@@ -66,7 +66,7 @@ public enum Type {
     HITMARK(62, '×', BaseVarType.INTEGER),
     PACKAGE(63, 'Þ', BaseVarType.INTEGER),
     PARTICLE_EFFECTOR(64, 'á', BaseVarType.INTEGER, "pef"),
-    TYPE_65(65, 'æ', BaseVarType.INTEGER),
+    TYPE65(65, 'æ', BaseVarType.INTEGER),
     PARTICLE_EMITTER(66, 'é', BaseVarType.INTEGER, "pem"),
     PLOGTYPE(67, 'í', BaseVarType.INTEGER, "plog"),
     UNSIGNED_INT(68, 'î', BaseVarType.INTEGER),
@@ -76,24 +76,24 @@ public enum Type {
     INPUTTYPE(72, 'Î', BaseVarType.INTEGER),
     STRUCT(73, 'J', BaseVarType.INTEGER),
     DBROW(74, 'Ð', BaseVarType.INTEGER),
-    TYPE_75(75, '¤', BaseVarType.INTEGER),
-    TYPE_76(76, '¥', BaseVarType.INTEGER),
-    TYPE_77(77, 'è', BaseVarType.INTEGER),
-    TYPE_78(78, '¹', BaseVarType.INTEGER),
-    TYPE_79(79, '°', BaseVarType.INTEGER),
-    TYPE_80(80, 'ì', BaseVarType.INTEGER, "region_visibility"),
-    TYPE_81(81, 'ë', BaseVarType.INTEGER),
-    TYPE_83(83, 'þ', BaseVarType.INTEGER),
-    TYPE_84(84, 'ý', BaseVarType.INTEGER),
-    TYPE_85(85, 'ÿ', BaseVarType.INTEGER),
-    TYPE_86(86, 'õ', BaseVarType.INTEGER),
-    TYPE_87(87, 'ô', BaseVarType.INTEGER),
-    TYPE_88(88, 'ö', BaseVarType.INTEGER),
+    TYPE75(75, '¤', BaseVarType.INTEGER),
+    TYPE76(76, '¥', BaseVarType.INTEGER),
+    TYPE77(77, 'è', BaseVarType.INTEGER),
+    TYPE78(78, '¹', BaseVarType.INTEGER),
+    TYPE79(79, '°', BaseVarType.INTEGER),
+    TYPE80(80, 'ì', BaseVarType.INTEGER, "region_visibility"),
+    TYPE81(81, 'ë', BaseVarType.INTEGER),
+    TYPE83(83, 'þ', BaseVarType.INTEGER),
+    TYPE84(84, 'ý', BaseVarType.INTEGER),
+    TYPE85(85, 'ÿ', BaseVarType.INTEGER),
+    TYPE86(86, 'õ', BaseVarType.INTEGER),
+    TYPE87(87, 'ô', BaseVarType.INTEGER),
+    TYPE88(88, 'ö', BaseVarType.INTEGER),
     GWC_PLATFORM(89, 'ò', BaseVarType.INTEGER, "gwc_platform"),
-    TYPE_90(90, 'Ü', BaseVarType.INTEGER),
-    TYPE_91(91, 'ù', BaseVarType.INTEGER),
-    TYPE_92(92, 'ï', BaseVarType.INTEGER),
-    TYPE_93(93, '¯', BaseVarType.INTEGER),
+    TYPE90(90, 'Ü', BaseVarType.INTEGER),
+    TYPE91(91, 'ù', BaseVarType.INTEGER),
+    TYPE92(92, 'ï', BaseVarType.INTEGER),
+    TYPE93(93, '¯', BaseVarType.INTEGER),
     BUG_TEMPLATE(94, 'ê', BaseVarType.INTEGER, "bugtemplate"),
     BILLING_AUTH_FLAG(95, 'ð', BaseVarType.INTEGER, "billingauthflag"),
     ACCOUNT_FEATURE_FLAG(96, 'å', BaseVarType.INTEGER, "accountfeatureflag"),
@@ -115,10 +115,10 @@ public enum Type {
     HTTP_IMAGE(112, 'É', BaseVarType.INTEGER),
     POP_UP_DISPLAY_BEHAVIOUR(113, 'Ê', BaseVarType.INTEGER, "popupdisplaybehaviour"),
     POLL(114, '÷', BaseVarType.INTEGER),
-    TYPE_115(115, '¼', BaseVarType.LONG),
-    TYPE_116(116, '½', BaseVarType.LONG),
-    TYPE_117(117, 0, BaseVarType.INTEGER), // 206
-    TYPE_118(118, 0, BaseVarType.INTEGER), // 206
+    TYPE115(115, '¼', BaseVarType.LONG),
+    TYPE116(116, '½', BaseVarType.LONG),
+    TYPE117(117, 0, BaseVarType.INTEGER), // 206
+    TYPE118(118, 0, BaseVarType.INTEGER), // 206
 
     // unknown id
     ENTITYOVERLAY(-1, '-', BaseVarType.INTEGER), // todo:
@@ -127,16 +127,16 @@ public enum Type {
     WORLD_AREA(-1, 0, BaseVarType.INTEGER), // todo:
 
     // Group 2
-    TYPE_200(200, 'X', BaseVarType.INTEGER),
-    TYPE_201(201, 'W', BaseVarType.INTEGER),
-    TYPE_202(202, 'b', BaseVarType.INTEGER),
-    TYPE_203(203, 'B', BaseVarType.INTEGER),
-    TYPE_204(204, '4', BaseVarType.INTEGER),
-    TYPE_205(205, 'w', BaseVarType.INTEGER),
-    TYPE_206(206, 'q', BaseVarType.INTEGER),
-    TYPE_207(207, '0', BaseVarType.INTEGER),
-    TYPE_208(208, '6', BaseVarType.INTEGER),
-    TYPE_209(209, 0, BaseVarType.INTEGER), // 214
+    TYPE200(200, 'X', BaseVarType.INTEGER),
+    TYPE201(201, 'W', BaseVarType.INTEGER),
+    TYPE202(202, 'b', BaseVarType.INTEGER),
+    TYPE203(203, 'B', BaseVarType.INTEGER),
+    TYPE204(204, '4', BaseVarType.INTEGER),
+    TYPE205(205, 'w', BaseVarType.INTEGER),
+    TYPE206(206, 'q', BaseVarType.INTEGER),
+    TYPE207(207, '0', BaseVarType.INTEGER),
+    TYPE208(208, '6', BaseVarType.INTEGER),
+    TYPE209(209, 0, BaseVarType.INTEGER), // 214
 
     // Group 3
     TYPE_SPECIAL_1(-1, '#', BaseVarType.INTEGER),
@@ -327,10 +327,6 @@ public enum Type {
         }
 
         if (a == OBJ && b == NAMEDOBJ) { // todo: return has different behavior
-            return true;
-        }
-
-        if (a == FONTMETRICS && b == GRAPHIC) { // todo: return has different behavior
             return true;
         }
 

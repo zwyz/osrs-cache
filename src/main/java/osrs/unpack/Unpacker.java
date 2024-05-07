@@ -444,6 +444,9 @@ public class Unpacker {
                 case 8 -> "^gameoption_wave_volume";
                 case 9 -> "^gameoption_ambient_volume";
                 case 10 -> "^gameoption_chat_timestamp_mode";
+                case 11 -> "^gameoption_camera_sensitivity";
+                case 12 -> "^gameoption_draw_minimenu_header";
+                case 13 -> "^gameoption_minimenu_mouse_start_index";
                 default -> "^gameoption_" + value;
             };
 

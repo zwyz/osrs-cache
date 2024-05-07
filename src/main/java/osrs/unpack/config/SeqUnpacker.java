@@ -6,6 +6,7 @@ import osrs.unpack.Unpacker;
 import osrs.util.Packet;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SeqUnpacker {
@@ -16,6 +17,10 @@ public class SeqUnpacker {
 
         while (true) switch (packet.g1()) {
             case 0 -> {
+                if (packet.pos != packet.arr.length) {
+                    throw new IllegalStateException("end of file not reached");
+                }
+
                 return lines;
             }
 
@@ -84,9 +89,14 @@ public class SeqUnpacker {
             }
 
             case 13 -> {
-                if (Unpack.VERSION < 220) {
-                    var count = packet.g1();
+                var count = packet.g1();
 
+                // workaround for bug in jagex packer, count overflows
+                if (Arrays.hashCode(data) == 0xe71c2ca5) {
+                    count += 256;
+                }
+
+                if (Unpack.VERSION < 220) {
                     for (var i = 0; i < count; i++) {
                         var value = packet.g3();
 
@@ -98,8 +108,6 @@ public class SeqUnpacker {
                         }
                     }
                 } else {
-                    var count = packet.g1();
-
                     for (var i = 0; i < count; i++) {
                         var type = packet.g2();
                         var loops = packet.g1();

@@ -1,5 +1,4 @@
-unpacked/
-unpacked_old/
+unpacked*/
 target/
 .idea/
 

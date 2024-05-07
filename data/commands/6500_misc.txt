@@ -28,4 +28,4 @@
 6527 [command,platformtype]()(platformtype)
 6528 (gap)
 6529 (gap)
-6530 [command,unknown_command_6530](int)
+6530 [command,haptic](int $x1)
