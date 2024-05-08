@@ -653,30 +653,6 @@ public class Unpacker {
 
         if (SCRIPT_NAMES.containsKey(id)) {
             name = SCRIPT_NAMES.get(id);
-
-            try {
-                var n = Integer.parseInt(name);
-                var t = n + 512;
-
-                if (t >= 0 && t <= 255) {
-                    var trigger = ScriptTrigger.byID(n & 0xff);
-                    name = "[" + trigger.name().toLowerCase(Locale.ROOT) + ",_]";
-                } else {
-                    var c = Math.abs((n >> 8) + 3);
-                    t = (c << 8) + n + 768;
-
-                    if (t >= 0 && t <= 255) {
-                        var trigger = ScriptTrigger.byID(t);
-                        name = "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + format(Type.CATEGORY, c) + "]";
-                    } else {
-                        var trigger = ScriptTrigger.byID(n & 0xff);
-                        name = "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + format(trigger.type, n >> 8) + "]";
-                    }
-                }
-
-            } catch (NumberFormatException ignored) {
-
-            }
         }
 
         return name;

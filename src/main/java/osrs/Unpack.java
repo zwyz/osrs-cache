@@ -38,6 +38,7 @@ public class Unpack {
         Files.createDirectories(Path.of("unpacked/interface"));
 
         // load names
+        loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES);
         loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES::put);
         loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
 
@@ -104,6 +105,54 @@ public class Unpack {
 
         // maps
         unpackMaps();
+    }
+
+    private static void loadGroupNamesScriptTrigger(Js5Archive archive, Map<Integer, String> names) throws IOException {
+        var scriptByHash = new HashMap<Integer, Integer>();
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + JS5_CLIENTSCRIPTS.id + ".dat"))));
+        var archiveIndexConfig = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + 2 + ".dat"))));
+        var maxCategory = 6000;
+
+        for (var group : archiveIndex.groupId) {
+            scriptByHash.put(archiveIndex.groupNameHash[group], group);
+        }
+
+        for (var trigger : ScriptTrigger.values()) {
+            // trigger
+            var key1 = String.valueOf(trigger.id - 512);
+
+            if (scriptByHash.containsKey(key1.hashCode())) {
+                names.put(scriptByHash.get(key1.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + ",_]");
+            }
+
+            if (trigger.type != null) {
+                // category trigger
+                for (var category = 0; category < maxCategory; category++) {
+                    var key2 = String.valueOf((-3 - category << 8) + trigger.id);
+
+                    if (scriptByHash.containsKey(key2.hashCode())) {
+                        names.put(scriptByHash.get(key2.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + Unpacker.format(Type.CATEGORY, category) + "]");
+                    }
+                }
+
+                // type trigger
+                var maxType = switch (trigger.type) {
+                    case MAPELEMENT -> archiveIndexConfig.groupMaxFileId[MELTYPE.id];
+                    case NPC -> archiveIndexConfig.groupMaxFileId[NPCTYPE.id];
+                    case LOC -> archiveIndexConfig.groupMaxFileId[LOCTYPE.id];
+                    case OBJ -> archiveIndexConfig.groupMaxFileId[OBJTYPE.id];
+                    default -> throw new AssertionError("todo");
+                };
+
+                for (var type = 0; type < maxType; type++) {
+                    var key3 = String.valueOf((type << 8) + trigger.id);
+
+                    if (scriptByHash.containsKey(key3.hashCode())) {
+                        names.put(scriptByHash.get(key3.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + Unpacker.format(trigger.type, type) + "]");
+                    }
+                }
+            }
+        }
     }
 
     private static void generateNames(Path path, Map<Integer, String> names) throws IOException {
