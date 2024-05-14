@@ -362,9 +362,7 @@ public class CodeFormatter {
     }
 
     private static String formatConstant(Type type, Object value) {
-        if (ScriptUnpacker.ASSUME_UNKNOWN_TYPES_ARE_BASE) {
-            if (type == Type.UNKNOWN_INT || type == Type.INT) type = Type.INT_INT;
-        }
+        type = ScriptUnpacker.chooseDisplayType(type);
 
         if (value instanceof String s) {
             if (Objects.equals(s, "null")) {
@@ -380,9 +378,7 @@ public class CodeFormatter {
     }
 
     private static String formatType(Type type, boolean real) {
-        if (ScriptUnpacker.ASSUME_UNKNOWN_TYPES_ARE_BASE) {
-            if (type == Type.UNKNOWN_INT || type == Type.INT) type = Type.INT_INT;
-        }
+        type = ScriptUnpacker.chooseDisplayType(type);
 
         if (type.alias != null && real && !ScriptUnpacker.OUTPUT_TYPE_ALIASES) {
             type = type.alias;

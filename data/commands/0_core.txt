@@ -1,4 +1,4 @@
-0 [command,push_constant_int]()(unknown_int)
+0 [command,push_constant_int]todo
 1 [command,push_var]todo
 2 [command,pop_var]todo
 3 [command,push_constant_string]()(string)

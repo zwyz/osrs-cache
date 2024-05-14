@@ -175,7 +175,7 @@ public class TypePropagator {
         // output script signatures
         for (var script : scripts) {
             ScriptUnpacker.SCRIPT_PARAMETERS.put(script, IntStream.range(0, ScriptUnpacker.getParameterCount(script)).mapToObj(i -> find(parameter(script, i)).type).toList());
-            ScriptUnpacker.SCRIPT_RETURNS.put(script, IntStream.range(0, ScriptUnpacker.getReturnCount(script)).mapToObj(i -> find(result(script, i)).type).toList());
+            ScriptUnpacker.SCRIPT_RETURNS.put(script, IntStream.range(0, ScriptUnpacker.getReturnTypes(script).size()).mapToObj(i -> find(result(script, i)).type).toList());
         }
 
         // assume unused is clientscript

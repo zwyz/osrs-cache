@@ -246,7 +246,10 @@ public enum Type {
     // for decompiler
     HOOK,
     UNKNOWN,
-    UNKNOWN_INT,
+    UNKNOWN_INT, // int-based
+    UNKNOWN_INT_NOTBOOLEAN, // int-based, boolean impossible based on value set
+    UNKNOWN_INT_NOTINT, // int-based, int impossible based on default return -1
+    UNKNOWN_INT_NOTINT_NOTBOOLEAN, // int-based, both int and boolean impossible
     CONDITION,
     ;
 
@@ -313,6 +316,7 @@ public enum Type {
         throw new IllegalArgumentException("unknown char " + id);
     }
 
+    // todo: clean this up, just define the primitive subtypes and take reflexive transitive closure
     public static boolean subtype(Type a, Type b) {
         if (a == b) {
             return true;
@@ -323,7 +327,22 @@ public enum Type {
         }
 
         if (b == UNKNOWN_INT) {
-            return a.baseType == BaseVarType.INTEGER;
+            return a.baseType == BaseVarType.INTEGER ||
+                   a == UNKNOWN_INT_NOTBOOLEAN ||
+                   a == UNKNOWN_INT_NOTINT ||
+                   a == UNKNOWN_INT_NOTINT_NOTBOOLEAN;
+        }
+
+        if (b == UNKNOWN_INT_NOTBOOLEAN) {
+            return a.baseType == BaseVarType.INTEGER && a != BOOLEAN || a == UNKNOWN_INT_NOTINT_NOTBOOLEAN;
+        }
+
+        if (b == UNKNOWN_INT_NOTINT) {
+            return a.baseType == BaseVarType.INTEGER && !subtype(a, INT) || a == UNKNOWN_INT_NOTINT_NOTBOOLEAN;
+        }
+
+        if (b == UNKNOWN_INT_NOTINT_NOTBOOLEAN) {
+            return a.baseType == BaseVarType.INTEGER && !subtype(a, INT) && a != BOOLEAN;
         }
 
         if (a == OBJ && b == NAMEDOBJ) { // todo: return has different behavior
@@ -352,6 +371,10 @@ public enum Type {
 
         if (typeA.alias == INT && typeB.alias == INT) {
             return INT_INT;
+        }
+
+        if (typeA == UNKNOWN_INT_NOTBOOLEAN && typeB == UNKNOWN_INT_NOTINT || typeA == UNKNOWN_INT_NOTINT && typeB == UNKNOWN_INT_NOTBOOLEAN) {
+            return UNKNOWN_INT_NOTINT_NOTBOOLEAN;
         }
 
         return null;

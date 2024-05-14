@@ -5,7 +5,6 @@ import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Packet;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -89,13 +88,12 @@ public class InterfaceUnpacker {
         line(lines, "ondragcomplete=", decodeHook(packet), "null"); // if_setondragcomplete
         line(lines, "onscrollwheel=", decodeHook(packet), "null"); // if_setonscrollwheel
 
-        line(lines, "onvartransmitlist=", decodeHookTransmitList(packet), "null");
-        line(lines, "oninvtransmitlist=", decodeHookTransmitList(packet), "null");
-        line(lines, "onstattransmitlist=", decodeHookTransmitList(packet), "null");
+        line(lines, "onvartransmitlist=", decodeHookTransmitList(packet, Type.VAR_PLAYER), "null");
+        line(lines, "oninvtransmitlist=", decodeHookTransmitList(packet, Type.INV), "null");
+        line(lines, "onstattransmitlist=", decodeHookTransmitList(packet, Type.STAT), "null");
 
         if (packet.pos != packet.arr.length) {
-            System.err.println(Unpacker.format(Type.COMPONENT, id) + Arrays.toString(Arrays.copyOfRange(packet.arr, packet.pos, packet.arr.length)));
-//            throw new IllegalStateException("end of file not reached"); // todo
+            throw new IllegalStateException("end of file not reached");
         }
 
         return lines;
@@ -130,9 +128,7 @@ public class InterfaceUnpacker {
     }
 
     private static String formatHookArgument(Object value, Type type) {
-        if (ScriptUnpacker.ASSUME_UNKNOWN_TYPES_ARE_BASE) {
-            if (type == Type.UNKNOWN_INT || type == Type.INT) type = Type.INT_INT;
-        }
+        type = ScriptUnpacker.chooseDisplayType(type);
 
         if (Objects.equals(value, "event_opbase")) return "event_opbase";
         if (Objects.equals(value, "event_text")) return "event_text";
@@ -155,7 +151,7 @@ public class InterfaceUnpacker {
         return "\"" + value + "\"";
     }
 
-    private static String decodeHookTransmitList(Packet packet) {
+    private static String decodeHookTransmitList(Packet packet, Type type) {
         var count = packet.g1();
 
         if (count == 0) {
@@ -169,7 +165,7 @@ public class InterfaceUnpacker {
                 sb.append(",");
             }
 
-            sb.append(packet.g4s());
+            sb.append(Unpacker.format(type, packet.g4s()));
         }
 
         return sb.toString();

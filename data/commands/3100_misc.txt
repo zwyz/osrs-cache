@@ -128,7 +128,7 @@
 3309 [command,coordx](coord $x1)(int)
 3310 [command,coordy](coord $x1)(int)
 3311 [command,coordz](coord $x1)(int)
-3312 [command,map_members]()(int)
+3312 [command,map_members]()(boolean)
 3313 [command,invother_getobj](inv $x1, int $x2)(obj)
 3314 [command,invother_getnum](inv $x1, int $x2)(int)
 3315 [command,invother_total](inv $x1, obj $x2)(int)

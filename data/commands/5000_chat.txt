@@ -1,6 +1,6 @@
 5000 [command,chat_getfilter_public]()(chatfilter)
 5001 [command,chat_setfilter](chatfilter $x1, chatfilter $x2, chatfilter $x3)
-5002 [command,chat_sendabusereport](string $x1, int $x2, int $x3)
+5002 [command,chat_sendabusereport](string $x1, int $x2, boolean $x3)
 5003 [command,chat_gethistorymessage](int $x1)(string)
 5003 [command,chat_gethistory_bytypeandline](chattype $x1, int $x2)(int, int, string, string, string) 47
 5003 [command,chat_gethistory_bytypeandline](chattype $x1, int $x2)(int, int, string, string, string, int) 162
