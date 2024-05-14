@@ -4,12 +4,15 @@ import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 
 import java.util.*;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static osrs.unpack.script.Command.*;
 
 // converts ast to code
 public class CodeFormatter {
+    private static final Pattern DIRECT_STRING_PATTERN = Pattern.compile("[a-z_0-9]+");
+
     public static String formatScript(String name, List<Type> parameterTypes, List<Type> returnTypes, List<Expression> script) {
         var parameters = new ArrayList<String>();
         var returns = new ArrayList<String>();
@@ -176,10 +179,45 @@ public class CodeFormatter {
 
             case "join_string" -> {
                 var result = "";
+                var interpolations = new HashSet<Integer>();
 
-                for (var arg : expression.arguments) {
+                for (int i = 0; i < expression.arguments.size(); i++) {
+                    var arg = expression.arguments.get(i);
+
                     if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
-                        result += escape(s);
+                        if (s.startsWith("<") && s.endsWith(">")) {
+                            interpolations.add(i);
+                        } else if (i > 0 && !interpolations.contains(i - 1)) {
+                            var last = (String) expression.arguments.get(i - 1).operand;
+                            var lastSpaced = last.startsWith(" ") || last.endsWith(" ") || last.startsWith(". ") || last.startsWith(", ") || last.startsWith(": ");
+                            var currentSpaced = s.startsWith(" ") || s.endsWith(" ") || s.startsWith(". ") || s.startsWith(", ") || s.startsWith(": ");
+
+                            if (!lastSpaced && currentSpaced) {
+                                interpolations.add(i - 1);
+                            } else {
+                                interpolations.add(i);
+                            }
+                        }
+                    } else {
+                        interpolations.add(i);
+                    }
+                }
+
+                for (int i = 0; i < expression.arguments.size(); i++) {
+                    var arg = expression.arguments.get(i);
+
+                    if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
+                        if (!interpolations.contains(i)) {
+                            result += escape(s);
+                        } else if (s.startsWith("<") && s.endsWith(">")) {
+                            result += s;
+                        } else {
+                            if (DIRECT_STRING_PATTERN.matcher(s).matches()) {
+                                result += "<" + s + ">";
+                            } else {
+                                result += "<\"" + s + "\">";
+                            }
+                        }
                     } else {
                         result += "<" + format(arg) + ">";
                     }
