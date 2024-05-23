@@ -1,9 +1,12 @@
 package osrs;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import osrs.js5.Js5ArchiveIndex;
 import osrs.js5.Js5Util;
 import osrs.unpack.*;
 import osrs.unpack.config.*;
+import osrs.unpack.map.Environment;
 import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Packet;
 
@@ -30,12 +33,14 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 public class Unpack {
     public static final int VERSION = 220;
     private static final Path BASE_PATH = Path.of(System.getProperty("user.home") + "/.rscache/osrs");
+    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
 
     public static void main(String[] args) throws IOException {
         Files.createDirectories(Path.of("unpacked"));
         Files.createDirectories(Path.of("unpacked/config"));
         Files.createDirectories(Path.of("unpacked/script"));
         Files.createDirectories(Path.of("unpacked/interface"));
+        Files.createDirectories(Path.of("unpacked/maps"));
 
         // load names
         loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES);
@@ -104,7 +109,7 @@ public class Unpack {
         unpackArchive(10, Path.of("unpacked/binary"), ".dat");
 
         // maps
-        unpackMaps();
+        unpackMaps(Path.of("unpacked/maps"));
     }
 
     private static void loadGroupNamesScriptTrigger(Js5Archive archive, Map<Integer, String> names) throws IOException {
@@ -175,7 +180,7 @@ public class Unpack {
         }
     }
 
-    private static void unpackMaps() throws IOException {
+    private static void unpackMaps(Path path) throws IOException {
         var names = new HashSet<String>();
 
         for (var x = 0; x < 128; x++) {
@@ -230,42 +235,50 @@ public class Unpack {
                 var squareZ = Integer.parseInt(parts[1]);
                 var packet = new Packet(data);
 
-                if (data.length > 0) {
-                    System.out.println();
+                if (packet.g1() != 0) {
+                    var environment = new Environment(packet);
+                    packet.g4s(); // todo: osrs-only
+
+                    try {
+                        Files.writeString(path.resolve(name + ".json"), GSON.toJson(environment));
+                    } catch (IOException e) {
+                        throw new UncheckedIOException(e);
+                    }
                 }
 
-//                var lines = new ArrayList<String>();
-//                lines.add("coloura=" + packet.g1() + "," + packet.g1() + "," + packet.g1());
-//                lines.add("foga=" + packet.g1());
-//                lines.add("unknown5=" + packet.g1());
-//
-//                if (packet.g1() == 0) {
-//                    lines.add("colourb=" + packet.g1() + "," + packet.g1() + "," + packet.g1());
-//                    lines.add("fogb=" + packet.g1());
-//                }
-//
-//                var count = packet.gSmart2or4s();
-//
-//                if (packet.pos != packet.arr.length) {
-//                    throw new IllegalStateException("end of file not reached");
-//                }
-//
-////                    System.out.println(lines);
+                if (packet.pos < packet.arr.length) {
+                    throw new IllegalStateException("end of file not reached");
+                }
+
             } else if (name.startsWith("t")) {
                 var parts = name.substring(1).split("_");
                 var squareX = Integer.parseInt(parts[0]);
                 var squareZ = Integer.parseInt(parts[1]);
+                var packet = new Packet(data);
 
-                if (data.length > 0) {
-                    System.out.println();
+                if (packet.g1() != 0) {
+                    throw new IllegalStateException("todo");
+                }
+
+                if (packet.g1() != 0) {
+                    throw new IllegalStateException("todo");
+                }
+
+                if (packet.pos < packet.arr.length) {
+                    throw new IllegalStateException("end of file not reached");
                 }
             } else if (name.startsWith("w") && !name.startsWith("wm") && !name.startsWith("wa")) {
                 var parts = name.substring(1).split("_");
                 var squareX = Integer.parseInt(parts[0]);
                 var squareZ = Integer.parseInt(parts[1]);
+                var packet = new Packet(data);
 
-                if (data.length > 0) {
-                    System.out.println();
+                if (packet.g1() != 0) {
+                    throw new IllegalStateException("todo");
+                }
+
+                if (packet.pos < packet.arr.length) {
+                    throw new IllegalStateException("end of file not reached");
                 }
             } else if (name.startsWith("wm")) {
                 var parts = name.substring(2).split("_");
@@ -325,6 +338,10 @@ public class Unpack {
             while (index < target) {
                 result[index++] = value;
             }
+        }
+
+        if (packet.pos < packet.arr.length) {
+            throw new IllegalStateException("end of file not reached");
         }
 
         return result;
