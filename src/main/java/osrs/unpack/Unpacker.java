@@ -158,6 +158,7 @@ public class Unpacker {
                 case 20 -> "runecraft";
                 case 21 -> "hunter";
                 case 22 -> "construction";
+                case 23 -> "sailing";
                 default -> "stat_" + value;
             };
 
