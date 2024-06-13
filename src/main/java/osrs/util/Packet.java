@@ -311,6 +311,10 @@ public class Packet {
         return Float.intBitsToFloat(g4s());
     }
 
+    public void pFloat(float x) {
+        p4(Float.floatToIntBits(x));
+    }
+
     public boolean gBoolean() {
         return (g1() & 1) == 1;
     }

@@ -16,6 +16,7 @@ public class Download {
     public static final Path BASE_PATH = Path.of(System.getProperty("user.home") + "/.rscache/osrs");
 
     public static void main(String[] args) throws IOException, InterruptedException, ExecutionException {
+//        try (var js5 = TcpJs5ResourceProvider.create("oldschool285.runescape.com", 43594, 222)) {
         try (var js5 = TcpJs5ResourceProvider.create("oldschool1.runescape.com", 43594, 222)) {
 //        try (var js5 = new OpenRS2Js5ResourceProvider("runescape", 659)) {
             var masterIndex = new Js5MasterIndex(Js5Util.decompress(js5.get(255, 255, true)));

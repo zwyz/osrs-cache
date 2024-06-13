@@ -114,6 +114,9 @@
 3220 [command,midi_stop](int $fade_out_delay, int $fade_out_speed)
 3221 [command,midi_song_withsecondary](midi $song, midi $secondary, int $fade_out_delay, int $fade_out_speed, int $fade_in_delay)
 3222 [command,midi_song](midi $song, int $fade_out_delay, int $fade_out_speed, int $fade_in_delay)
+3223 [command,rt7_setenabled](boolean $x1)
+3224 [command,rt7_sd]
+3225 [command,rt7_hd]
 
 // Misc 3
 3300 [command,clientclock]()(int)
