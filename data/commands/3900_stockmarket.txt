@@ -23,7 +23,7 @@
 3923 [command,tradingpost_getofferage](int $x1)(string)
 3924 [command,tradingpost_getoffercount](int $x1)(int)
 3925 [command,tradingpost_getofferprice](int $x1)(int)
-3926 [command,tradingpost_getofferitem](int $x1)(int)
+3926 [command,tradingpost_getofferitem](int $x1)(obj)
 3927 (gap)
 3928 (gap)
 3929 (gap)

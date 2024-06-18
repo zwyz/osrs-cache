@@ -49,7 +49,7 @@ public class Command {
         return Objects.requireNonNull(BY_NAME.get(name));
     }
 
-    // define decompiler commands
+    // custom decompiler commands
     public static final Command LABEL = defineCommand("label");
     public static final Command BRANCHIF = defineCommand("branchif");
     public static final Command FLOW_ASSIGN = defineCommand("flow_assign"); // ..., ..., ... = ..., ..., ...
@@ -71,10 +71,67 @@ public class Command {
     public static final Command FLOW_POSTINC = defineCommand("flow_postinc"); // $x++
     public static final Command FLOW_POSTDEC = defineCommand("flow_postdec"); // $x--
 
-    // load normal commands
+    // core commands
+    public static Command PUSH_CONSTANT_INT;
+    public static Command PUSH_VAR;
+    public static Command POP_VAR;
+    public static Command PUSH_CONSTANT_STRING;
+    public static Command BRANCH;
+    public static Command BRANCH_NOT;
+    public static Command BRANCH_EQUALS;
+    public static Command BRANCH_LESS_THAN;
+    public static Command BRANCH_GREATER_THAN;
+    public static Command RETURN;
+    public static Command PUSH_VARBIT;
+    public static Command POP_VARBIT;
+    public static Command BRANCH_LESS_THAN_OR_EQUALS;
+    public static Command BRANCH_GREATER_THAN_OR_EQUALS;
+    public static Command PUSH_INT_LOCAL;
+    public static Command POP_INT_LOCAL;
+    public static Command PUSH_STRING_LOCAL;
+    public static Command POP_STRING_LOCAL;
+    public static Command JOIN_STRING;
+    public static Command POP_INT_DISCARD;
+    public static Command POP_STRING_DISCARD;
+    public static Command GOSUB_WITH_PARAMS;
+    public static Command PUSH_VARC_INT;
+    public static Command POP_VARC_INT;
+    public static Command DEFINE_ARRAY;
+    public static Command PUSH_ARRAY_INT;
+    public static Command POP_ARRAY_INT;
+    public static Command PUSH_VARC_STRING_OLD;
+    public static Command POP_VARC_STRING_OLD;
+    public static Command PUSH_VARC_STRING;
+    public static Command POP_VARC_STRING;
+    public static Command SWITCH;
+    public static Command PUSH_VARCLANSETTING;
+    public static Command PUSH_VARCLAN;
+
+    // commands with special behavior
+    public static Command ADD;
+    public static Command SUB;
+
+    public static Command ENUM;
+    public static Command ENUM_STRING;
+
+    public static Command LC_PARAM;
+    public static Command NC_PARAM;
+    public static Command OC_PARAM;
+    public static Command STRUCT_PARAM;
+
+    public static Command DB_FIND;
+    public static Command DB_FIND_WITH_COUNT;
+    public static Command DB_FIND_REFINE;
+    public static Command DB_FIND_REFINE_WITH_COUNT;
+    public static Command DB_GETFIELD;
+
+    // load commands
     private static final Pattern COMMAND_PATTERN = Pattern.compile("(?<opcode>\\d+) \\[command,(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
 
-    static {
+    public static void reset() {
+        BY_ID.clear();
+        BY_NAME.clear();
+
         try {
             for (var file : Files.list(Path.of("data/commands")).toList()) {
                 for (var line : Files.readAllLines(file)) {
@@ -121,6 +178,59 @@ public class Command {
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+
+        PUSH_CONSTANT_INT = findCommand("push_constant_int");
+        PUSH_VAR = findCommand("push_var");
+        POP_VAR = findCommand("pop_var");
+        PUSH_CONSTANT_STRING = findCommand("push_constant_string");
+        BRANCH = findCommand("branch");
+        BRANCH_NOT = findCommand("branch_not");
+        BRANCH_EQUALS = findCommand("branch_equals");
+        BRANCH_LESS_THAN = findCommand("branch_less_than");
+        BRANCH_GREATER_THAN = findCommand("branch_greater_than");
+        RETURN = findCommand("return");
+        PUSH_VARBIT = findCommand("push_varbit");
+        POP_VARBIT = findCommand("pop_varbit");
+        BRANCH_LESS_THAN_OR_EQUALS = findCommand("branch_less_than_or_equals");
+        BRANCH_GREATER_THAN_OR_EQUALS = findCommand("branch_greater_than_or_equals");
+        PUSH_INT_LOCAL = findCommand("push_int_local");
+        POP_INT_LOCAL = findCommand("pop_int_local");
+        PUSH_STRING_LOCAL = findCommand("push_string_local");
+        POP_STRING_LOCAL = findCommand("pop_string_local");
+        JOIN_STRING = findCommand("join_string");
+        POP_INT_DISCARD = findCommand("pop_int_discard");
+        POP_STRING_DISCARD = findCommand("pop_string_discard");
+        GOSUB_WITH_PARAMS = findCommand("gosub_with_params");
+        PUSH_VARC_INT = findCommand("push_varc_int");
+        POP_VARC_INT = findCommand("pop_varc_int");
+        DEFINE_ARRAY = findCommand("define_array");
+        PUSH_ARRAY_INT = findCommand("push_array_int");
+        POP_ARRAY_INT = findCommand("pop_array_int");
+        PUSH_VARC_STRING_OLD = findCommand("push_varc_string_old");
+        POP_VARC_STRING_OLD = findCommand("pop_varc_string_old");
+        PUSH_VARC_STRING = findCommand("push_varc_string");
+        POP_VARC_STRING = findCommand("pop_varc_string");
+        SWITCH = findCommand("switch");
+        PUSH_VARCLANSETTING = findCommand("push_varclansetting");
+        PUSH_VARCLAN = findCommand("push_varclan");
+
+        // commands with special behavior
+        ADD = findCommand("add");
+        SUB = findCommand("sub");
+
+        ENUM = findCommand("enum");
+        ENUM_STRING = findCommand("enum_string");
+
+        LC_PARAM = findCommand("lc_param");
+        NC_PARAM = findCommand("nc_param");
+        OC_PARAM = findCommand("oc_param");
+        STRUCT_PARAM = findCommand("struct_param");
+
+        DB_FIND = findCommand("db_find");
+        DB_FIND_WITH_COUNT = findCommand("db_find_with_count");
+        DB_FIND_REFINE = findCommand("db_find_refine");
+        DB_FIND_REFINE_WITH_COUNT = findCommand("db_find_refine_with_count");
+        DB_GETFIELD = findCommand("db_getfield");
     }
 
     private static Type parseType(String name) {
@@ -134,60 +244,6 @@ public class Command {
 
         throw new IllegalStateException("invalid type: " + name);
     }
-
-    // core commands
-    public static final Command PUSH_CONSTANT_INT = findCommand("push_constant_int");
-    public static final Command PUSH_VAR = findCommand("push_var");
-    public static final Command POP_VAR = findCommand("pop_var");
-    public static final Command PUSH_CONSTANT_STRING = findCommand("push_constant_string");
-    public static final Command BRANCH = findCommand("branch");
-    public static final Command BRANCH_NOT = findCommand("branch_not");
-    public static final Command BRANCH_EQUALS = findCommand("branch_equals");
-    public static final Command BRANCH_LESS_THAN = findCommand("branch_less_than");
-    public static final Command BRANCH_GREATER_THAN = findCommand("branch_greater_than");
-    public static final Command RETURN = findCommand("return");
-    public static final Command PUSH_VARBIT = findCommand("push_varbit");
-    public static final Command POP_VARBIT = findCommand("pop_varbit");
-    public static final Command BRANCH_LESS_THAN_OR_EQUALS = findCommand("branch_less_than_or_equals");
-    public static final Command BRANCH_GREATER_THAN_OR_EQUALS = findCommand("branch_greater_than_or_equals");
-    public static final Command PUSH_INT_LOCAL = findCommand("push_int_local");
-    public static final Command POP_INT_LOCAL = findCommand("pop_int_local");
-    public static final Command PUSH_STRING_LOCAL = findCommand("push_string_local");
-    public static final Command POP_STRING_LOCAL = findCommand("pop_string_local");
-    public static final Command JOIN_STRING = findCommand("join_string");
-    public static final Command POP_INT_DISCARD = findCommand("pop_int_discard");
-    public static final Command POP_STRING_DISCARD = findCommand("pop_string_discard");
-    public static final Command GOSUB_WITH_PARAMS = findCommand("gosub_with_params");
-    public static final Command PUSH_VARC_INT = findCommand("push_varc_int");
-    public static final Command POP_VARC_INT = findCommand("pop_varc_int");
-    public static final Command DEFINE_ARRAY = findCommand("define_array");
-    public static final Command PUSH_ARRAY_INT = findCommand("push_array_int");
-    public static final Command POP_ARRAY_INT = findCommand("pop_array_int");
-    public static final Command PUSH_VARC_STRING_OLD = findCommand("push_varc_string_old");
-    public static final Command POP_VARC_STRING_OLD = findCommand("pop_varc_string_old");
-    public static final Command PUSH_VARC_STRING = findCommand("push_varc_string");
-    public static final Command POP_VARC_STRING = findCommand("pop_varc_string");
-    public static final Command SWITCH = findCommand("switch");
-    public static final Command PUSH_VARCLANSETTING = findCommand("push_varclansetting");
-    public static final Command PUSH_VARCLAN = findCommand("push_varclan");
-
-    // commands with special behavior
-    public static final Command ADD = findCommand("add");
-    public static final Command SUB = findCommand("sub");
-
-    public static final Command ENUM = findCommand("enum");
-    public static final Command ENUM_STRING = findCommand("enum_string");
-
-    public static final Command LC_PARAM = findCommand("lc_param");
-    public static final Command NC_PARAM = findCommand("nc_param");
-    public static final Command OC_PARAM = findCommand("oc_param");
-    public static final Command STRUCT_PARAM = findCommand("struct_param");
-
-    public static final Command DB_FIND = findCommand("db_find");
-    public static final Command DB_FIND_WITH_COUNT = findCommand("db_find_with_count");
-    public static final Command DB_FIND_REFINE = findCommand("db_find_refine");
-    public static final Command DB_FIND_REFINE_WITH_COUNT = findCommand("db_find_refine_with_count");
-    public static final Command DB_GETFIELD = findCommand("db_getfield");
 
     public boolean hasHook() {
         return arguments != null && arguments.contains(Type.HOOK);

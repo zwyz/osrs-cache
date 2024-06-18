@@ -34,7 +34,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
         this.port = port;
         this.revision = revision;
 
-        Thread.ofPlatform().start(() -> {
+        Thread.ofPlatform().daemon().start(() -> {
             try {
                 processRequests();
             } catch (IOException | InterruptedException e) {

@@ -2,11 +2,11 @@ package osrs;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import osrs.js5.Js5ArchiveIndex;
-import osrs.js5.Js5Util;
+import osrs.js5.*;
 import osrs.unpack.*;
 import osrs.unpack.config.*;
 import osrs.unpack.map.Environment;
+import osrs.unpack.script.Command;
 import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Packet;
 
@@ -21,6 +21,8 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.StructuredTaskScope;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
@@ -31,16 +33,43 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 
 // todo: clean this up
 public class Unpack {
-    public static final int VERSION = 220;
-    private static final Path BASE_PATH = Path.of(System.getProperty("user.home") + "/.rscache/osrs");
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static int VERSION = 222;
+    private static Js5ResourceProvider PROVIDER;
+    private static Js5MasterIndex MASTER_INDEX;
 
-    public static void main(String[] args) throws IOException {
-        Files.createDirectories(Path.of("unpacked"));
-        Files.createDirectories(Path.of("unpacked/config"));
-        Files.createDirectories(Path.of("unpacked/script"));
-        Files.createDirectories(Path.of("unpacked/interface"));
-        Files.createDirectories(Path.of("unpacked/maps"));
+    public static void main(String[] args) throws IOException, InterruptedException {
+        unpackLive("unpacked/live", 222, "oldschool1.runescape.com", 43594);
+//        unpackOpenRS2("unpacked/beta", 222, "runescape", 1826);
+    }
+
+    public static void unpackOpenRS2(String path, int version, String scope, int id) throws IOException {
+        unpack(path, version, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
+                Path.of(System.getProperty("user.home") + "/.rscache/osrs"),
+                new OpenRS2Js5ResourceProvider(scope, id))
+        ));
+    }
+
+    public static void unpackLive(String path, int version, String host, int port) throws IOException {
+        unpack(path, version, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
+                Path.of(System.getProperty("user.home") + "/.rscache/osrs"),
+                new TcpJs5ResourceProvider(host, port, version))
+        ));
+    }
+
+    public static void unpack(String path, int version, MemoryCacheResourceProvider provider) throws IOException {
+        VERSION = version;
+        PROVIDER = provider;
+        MASTER_INDEX = new Js5MasterIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, 255, false)));
+        Command.reset(); // todo: make non-static
+        Unpacker.reset(); // todo: make non-static
+        ScriptUnpacker.reset(); // todo: make non-static
+
+        Files.createDirectories(Path.of(path));
+        Files.createDirectories(Path.of(path + "/config"));
+        Files.createDirectories(Path.of(path + "/script"));
+        Files.createDirectories(Path.of(path + "/interface"));
+//        Files.createDirectories(Path.of(path + "/maps"));
 
         // load names
         loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES);
@@ -48,74 +77,74 @@ public class Unpack {
         loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
 
         // things stuff depends on
-        unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, "unpacked/config/dump.varbit");
-        unpackConfigGroup(VARPLAYER, VarPlayerUnpacker::unpack, "unpacked/config/dump.varp");
-        unpackConfigGroup(VARCLIENT, VarClientUnpacker::unpack, "unpacked/config/dump.varc");
-        unpackConfigGroup(VARCLIENTSTR, VarClientStringUnpacker::unpack, "unpacked/config/dump.varcstr");
-        unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, "unpacked/config/dump.varobj"); // increased with treasure trail expansion
-        unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, "unpacked/config/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
-        unpackConfigGroup(VARSHAREDSTR, VarSharedStringUnpacker::unpack, "unpacked/config/dump.varsstr");
-        unpackConfigGroup(VARNPC, VarNpcUnpacker::unpack, "unpacked/config/dump.varn");
-        unpackConfigGroup(VARNPCBIT, VarNpcBitUnpacker::unpack, "unpacked/config/dump.varnbit");
-        unpackConfigGroup(VARGLOBAL, VarGlobalUnpacker::unpack, "unpacked/config/dump.varg"); // matches leaderboards
-        unpackConfigGroup(VARCONTROLLER, VarControllerUnpacker::unpack, "unpacked/config/dump.varcon"); // https://twitter.com/JagexAsh/status/1600154097742553088
-        unpackConfigGroup(VARCONTROLLERBIT, VarControllerBitUnpacker::unpack, "unpacked/config/dump.varconbit"); // https://twitter.com/JagexAsh/status/1600154097742553088
-        unpackConfigGroup(VAR_CLAN, VarClanUnpacker::unpack, "unpacked/config/dump.varclan");
-        unpackConfigGroup(VAR_CLAN_SETTING, VarClanSettingUnpacker::unpack, "unpacked/config/dump.varclansetting");
-        unpackConfigGroup(PARAMTYPE, ParamUnpacker::unpack, "unpacked/config/dump.param");
+        unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, path + "/config/dump.varbit");
+        unpackConfigGroup(VARPLAYER, VarPlayerUnpacker::unpack, path + "/config/dump.varp");
+        unpackConfigGroup(VARCLIENT, VarClientUnpacker::unpack, path + "/config/dump.varc");
+        unpackConfigGroup(VARCLIENTSTR, VarClientStringUnpacker::unpack, path + "/config/dump.varcstr");
+        unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, path + "/config/dump.varobj"); // increased with treasure trail expansion
+        unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, path + "/config/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
+        unpackConfigGroup(VARSHAREDSTR, VarSharedStringUnpacker::unpack, path + "/config/dump.varsstr");
+        unpackConfigGroup(VARNPC, VarNpcUnpacker::unpack, path + "/config/dump.varn");
+        unpackConfigGroup(VARNPCBIT, VarNpcBitUnpacker::unpack, path + "/config/dump.varnbit");
+        unpackConfigGroup(VARGLOBAL, VarGlobalUnpacker::unpack, path + "/config/dump.varg"); // matches leaderboards
+        unpackConfigGroup(VARCONTROLLER, VarControllerUnpacker::unpack, path + "/config/dump.varcon"); // https://twitter.com/JagexAsh/status/1600154097742553088
+        unpackConfigGroup(VARCONTROLLERBIT, VarControllerBitUnpacker::unpack, path + "/config/dump.varconbit"); // https://twitter.com/JagexAsh/status/1600154097742553088
+        unpackConfigGroup(VAR_CLAN, VarClanUnpacker::unpack, path + "/config/dump.varclan");
+        unpackConfigGroup(VAR_CLAN_SETTING, VarClanSettingUnpacker::unpack, path + "/config/dump.varclansetting");
+        unpackConfigGroup(PARAMTYPE, ParamUnpacker::unpack, path + "/config/dump.param");
 
         // regular configs
-        unpackConfigGroup(FLUTYPE, FloorUnderlayUnpacker::unpack, "unpacked/config/dump.flu");
-        unpackConfigGroup(HUNTTYPE, HuntUnpacker::unpack, "unpacked/config/dump.hunt"); // https://youtu.be/5pvoMQUCla4?si=-BvlpFgRrAo0UrXb&t=4070
-        unpackConfigGroup(IDKTYPE, IDKUnpacker::unpack, "unpacked/config/dump.idk");
-        unpackConfigGroup(FLOTYPE, FloorOverlayUnpacker::unpack, "unpacked/config/dump.flo");
-        unpackConfigGroup(INVTYPE, InvUnpacker::unpack, "unpacked/config/dump.inv");
-        unpackConfigGroup(LOCTYPE, LocUnpacker::unpack, "unpacked/config/dump.loc");
-        unpackConfigGroup(MESANIMTYPE, MesAnimUnpacker::unpack, "unpacked/config/dump.mesanim"); // todo: source?
-        unpackConfigGroup(ENUMTYPE, EnumUnpacker::unpack, "unpacked/config/dump.enum");
-        unpackConfigGroup(NPCTYPE, NpcUnpacker::unpack, "unpacked/config/dump.npc");
-        unpackConfigGroup(OBJTYPE, ObjUnpacker::unpack, "unpacked/config/dump.obj");
-        unpackConfigGroup(SEQTYPE, SeqUnpacker::unpack, "unpacked/config/dump.seq");
-        unpackConfigGroup(SPOTTYPE, EffectAnimUnpacker::unpack, "unpacked/config/dump.spot");
-        unpackConfigGroup(AREATYPE, AreaUnpacker::unpack, "unpacked/config/dump.area");
-        unpackConfigGroup(ITEMCODETYPE, ItemCodeUnpacker::unpack, "unpacked/config/dump.itemcode"); // https://twitter.com/JagexAsh/status/1663851152310452225
-        unpackConfigGroup(CONTROLLERTYPE, ControllerUnpacker::unpack, "unpacked/config/dump.controller"); // https://twitter.com/JagexAsh/status/1600154097742553088
-        unpackConfigGroup(UNKNOWN_31, Config31Unpacker::unpack, "unpacked/config/dump.unknown31");
-        unpackConfigGroup(HITMARKTYPE, HitmarkUnpacker::unpack, "unpacked/config/dump.hitmark");
-        unpackConfigGroup(HEADBARTYPE, HeadbarUnpacker::unpack, "unpacked/config/dump.headbar");
-        unpackConfigGroup(STRUCTTYPE, StructUnpacker::unpack, "unpacked/config/dump.struct");
-        unpackConfigGroup(MELTYPE, MapElementUnpacker::unpack, "unpacked/config/dump.mel");
-        unpackConfigGroup(STRINGVECTORTYPE, StringVectorUnpacker::unpack, "unpacked/config/dump.stringvector"); // https://twitter.com/JagexAsh/status/1656354577057185792
-        unpackConfigGroup(DBROWTYPE, DBRowUnpacker::unpack, "unpacked/config/dump.dbrow");
-        unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, "unpacked/config/dump.dbtable");
-        unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, "unpacked/config/dump.gamelogevent"); // tfu
+        unpackConfigGroup(FLUTYPE, FloorUnderlayUnpacker::unpack, path + "/config/dump.flu");
+        unpackConfigGroup(HUNTTYPE, HuntUnpacker::unpack, path + "/config/dump.hunt"); // https://youtu.be/5pvoMQUCla4?si=-BvlpFgRrAo0UrXb&t=4070
+        unpackConfigGroup(IDKTYPE, IDKUnpacker::unpack, path + "/config/dump.idk");
+        unpackConfigGroup(FLOTYPE, FloorOverlayUnpacker::unpack, path + "/config/dump.flo");
+        unpackConfigGroup(INVTYPE, InvUnpacker::unpack, path + "/config/dump.inv");
+        unpackConfigGroup(LOCTYPE, LocUnpacker::unpack, path + "/config/dump.loc");
+        unpackConfigGroup(MESANIMTYPE, MesAnimUnpacker::unpack, path + "/config/dump.mesanim"); // todo: source?
+        unpackConfigGroup(ENUMTYPE, EnumUnpacker::unpack, path + "/config/dump.enum");
+        unpackConfigGroup(NPCTYPE, NpcUnpacker::unpack, path + "/config/dump.npc");
+        unpackConfigGroup(OBJTYPE, ObjUnpacker::unpack, path + "/config/dump.obj");
+        unpackConfigGroup(SEQTYPE, SeqUnpacker::unpack, path + "/config/dump.seq");
+        unpackConfigGroup(SPOTTYPE, EffectAnimUnpacker::unpack, path + "/config/dump.spot");
+        unpackConfigGroup(AREATYPE, AreaUnpacker::unpack, path + "/config/dump.area");
+        unpackConfigGroup(ITEMCODETYPE, ItemCodeUnpacker::unpack, path + "/config/dump.itemcode"); // https://twitter.com/JagexAsh/status/1663851152310452225
+        unpackConfigGroup(CONTROLLERTYPE, ControllerUnpacker::unpack, path + "/config/dump.controller"); // https://twitter.com/JagexAsh/status/1600154097742553088
+        unpackConfigGroup(UNKNOWN_31, Config31Unpacker::unpack, path + "/config/dump.unknown31");
+        unpackConfigGroup(HITMARKTYPE, HitmarkUnpacker::unpack, path + "/config/dump.hitmark");
+        unpackConfigGroup(HEADBARTYPE, HeadbarUnpacker::unpack, path + "/config/dump.headbar");
+        unpackConfigGroup(STRUCTTYPE, StructUnpacker::unpack, path + "/config/dump.struct");
+        unpackConfigGroup(MELTYPE, MapElementUnpacker::unpack, path + "/config/dump.mel");
+        unpackConfigGroup(STRINGVECTORTYPE, StringVectorUnpacker::unpack, path + "/config/dump.stringvector"); // https://twitter.com/JagexAsh/status/1656354577057185792
+        unpackConfigGroup(DBROWTYPE, DBRowUnpacker::unpack, path + "/config/dump.dbrow");
+        unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, path + "/config/dump.dbtable");
+        unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, path + "/config/dump.gamelogevent"); // tfu
 
         // world map
-        unpackWorldMapGroup(DETAILS, "unpacked/config/dump.wma");
+        unpackWorldMapGroup(DETAILS, path + "/config/dump.wma");
 
         // defaults
-        unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, "unpacked/config/graphics.defaults");
+        unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");
 
         // scripts
-        unpackScripts(Path.of("unpacked/script"));
+        unpackScripts(Path.of(path + "/script"));
 
         // interface
-        unpackInterfaces(JS5_INTERFACES, InterfaceUnpacker::unpack, Path.of("unpacked/interface"));
+        unpackInterfaces(JS5_INTERFACES, InterfaceUnpacker::unpack, Path.of(path + "/interface"));
 
         // materials
-        unpackConfigArchive(JS5_TEXTURES, 0, TextureUnpacker::unpack, Path.of("unpacked/config/dump.texture"));
+        unpackConfigArchive(JS5_TEXTURES, 0, TextureUnpacker::unpack, Path.of(path + "/config/dump.texture"));
 
         // other
-        unpackArchive(10, Path.of("unpacked/binary"), ".dat");
+        unpackArchive(10, Path.of(path + "/binary"), ".dat");
 
         // maps
-        unpackMaps(Path.of("unpacked/maps"));
+//        unpackMaps(Path.of(path + "/maps"), path);
     }
 
     private static void loadGroupNamesScriptTrigger(Js5Archive archive, Map<Integer, String> names) throws IOException {
         var scriptByHash = new HashMap<Integer, Integer>();
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + JS5_CLIENTSCRIPTS.id + ".dat"))));
-        var archiveIndexConfig = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + 2 + ".dat"))));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_CLIENTSCRIPTS.id, false)));
+        var archiveIndexConfig = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, 2, false)));
         var maxCategory = 6000;
 
         for (var group : archiveIndex.groupId) {
@@ -142,10 +171,10 @@ public class Unpack {
 
                 // type trigger
                 var maxType = switch (trigger.type) {
-                    case MAPELEMENT -> archiveIndexConfig.groupMaxFileId[MELTYPE.id];
                     case NPC -> archiveIndexConfig.groupMaxFileId[NPCTYPE.id];
                     case LOC -> archiveIndexConfig.groupMaxFileId[LOCTYPE.id];
                     case OBJ -> archiveIndexConfig.groupMaxFileId[OBJTYPE.id];
+                    case MAPELEMENT -> MELTYPE.id >= archiveIndexConfig.groupMaxFileId.length ? 0 : archiveIndexConfig.groupMaxFileId[MELTYPE.id];
                     default -> throw new AssertionError("todo");
                 };
 
@@ -180,7 +209,7 @@ public class Unpack {
         }
     }
 
-    private static void unpackMaps(Path path) throws IOException {
+    private static void unpackMaps(Path path, String rootPath) throws IOException {
         var names = new HashSet<String>();
 
         for (var x = 0; x < 128; x++) {
@@ -310,13 +339,13 @@ public class Unpack {
                 .flatMap(Collection::stream)
                 .toList();
 
-        Files.write(Path.of("unpacked/config/dump.worldarea"), waLines);
+        Files.write(Path.of(rootPath + "/config/dump.worldarea"), waLines);
 
         var rgbData = new DataBufferInt(image, image.length);
         var raster = Raster.createPackedRaster(rgbData, width, height, width, new int[]{0xff0000, 0xff00, 0xff}, null);
         var colorModel = new DirectColorModel(24, 0xff0000, 0xff00, 0xff);
 
-        ImageIO.write(new BufferedImage(colorModel, raster, false, null), "png", new File("unpacked/areas.png"));
+        ImageIO.write(new BufferedImage(colorModel, raster, false, null), "png", new File(rootPath + "/areas.png"));
     }
 
     private static int[] decodeWorldMapColor(byte[] data) {
@@ -352,10 +381,11 @@ public class Unpack {
     }
 
     private static void unpackScripts(Path path) throws IOException {
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + JS5_CLIENTSCRIPTS.id + ".dat"))));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_CLIENTSCRIPTS.id, false)));
+        var groups = preloadGroups(JS5_CLIENTSCRIPTS.id);
 
         for (var group : archiveIndex.groupId) {
-            var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(JS5_CLIENTSCRIPTS.id + "/" + group + ".dat")));
+            var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
 
             if (archiveIndex.groupNameHash[group] == "version.dat".hashCode()) {
                 continue;
@@ -375,15 +405,33 @@ public class Unpack {
         }
     }
 
+    private static byte[][] preloadGroups(int id) {
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, id, false)));
+        var groups = new byte[archiveIndex.groupArraySize][];
+
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+            for (int group : archiveIndex.groupId) {
+                scope.fork(() -> {
+                    groups[group] = PROVIDER.get(id, group, false);
+                    return null;
+                });
+            }
+
+            scope.join().throwIfFailed();
+        } catch (ExecutionException | InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        return groups;
+    }
+
     private static void iterateArchiveNamed(Js5Archive archive, BiConsumer<Integer, byte[]> unpack) throws IOException {
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
+        var groups = preloadGroups(archive.id);
 
-        var groupId = archiveIndex.groupId;
-
-        for (var i = 0; i < groupId.length; i++) {
-            var group = groupId[i];
+        for (var group : archiveIndex.groupId) {
             try {
-                var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive.id + "/" + group + ".dat")));
+                var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
 
                 if (files.size() == 1 && files.containsKey(0)) {
                     unpack.accept(archiveIndex.groupNameHash[group], files.get(0));
@@ -398,10 +446,11 @@ public class Unpack {
 
     private static void unpackConfigArchive(Js5Archive archive, int bits, BiFunction<Integer, byte[], List<String>> unpack, Path result) throws IOException {
         var lines = new ArrayList<String>();
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
+        var groups = preloadGroups(archive.id);
 
         for (var group : archiveIndex.groupId) {
-            var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive.id + "/" + group + ".dat")));
+            var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
 
             for (var file : files.keySet()) {
                 lines.addAll(unpack.apply((group << bits) + file, files.get(file)));
@@ -413,10 +462,11 @@ public class Unpack {
     }
 
     private static void unpackInterfaces(Js5Archive archive, BiFunction<Integer, byte[], List<String>> unpack, Path result) throws IOException {
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
+        var groups = preloadGroups(archive.id);
 
         for (var group : archiveIndex.groupId) {
-            var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive.id + "/" + group + ".dat")));
+            var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
             var lines = new ArrayList<String>();
 
             for (var file : files.keySet()) {
@@ -439,17 +489,17 @@ public class Unpack {
     private static void unpackGroup(Js5Archive archive, int group, BiFunction<Integer, byte[], List<String>> unpack, String result) throws IOException {
         var lines = new ArrayList<String>();
 
-        if (!Files.exists(BASE_PATH.resolve(archive.id + "/" + archive.id + ".dat"))) {
+        if (archive.id >= MASTER_INDEX.getArchiveCount() || MASTER_INDEX.getArchiveData(archive.id).getCrc() == 0) {
+            return; // empty archives don't get packed
+        }
+
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
+
+        if (Arrays.binarySearch(archiveIndex.groupId, group) < 0) {
             return; // empty groups don't get packed
         }
 
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
-
-        if (!Files.exists(BASE_PATH.resolve(archive.id + "/" + group + ".dat"))) {
-            return; // empty groups don't get packed
-        }
-
-        var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive.id + "/" + group + ".dat")));
+        var files = Js5Util.unpackGroup(archiveIndex, group, PROVIDER.get(archive.id, group, false));
 
         for (var file : files.keySet()) {
             lines.addAll(unpack.apply(file, files.get(file)));
@@ -462,7 +512,7 @@ public class Unpack {
     private static void loadGroupNames(Path path, Js5Archive archive, BiConsumer<Integer, String> consumer) throws IOException {
         var unhash = new HashMap<Integer, String>();
         generateNames(path, unhash);
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive.id + ".dat"))));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
 
         for (var group : archiveIndex.groupId) {
             var hash = archiveIndex.groupNameHash[group];
@@ -474,15 +524,15 @@ public class Unpack {
     }
 
     private static void unpackArchive(int archive, Path path, String extension) throws IOException {
-        if (!Files.exists(BASE_PATH.resolve("255/" + archive + ".dat"))) {
-            return;
+        if (archive >= MASTER_INDEX.getArchiveCount() || MASTER_INDEX.getArchiveData(archive).getCrc() == 0) {
+            return; // empty archives don't get packed
         }
 
         Files.createDirectories(path);
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Files.readAllBytes(BASE_PATH.resolve("255/" + archive + ".dat"))));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive, false)));
 
         for (var group : archiveIndex.groupId) {
-            var files = Js5Util.unpackGroup(archiveIndex, group, Files.readAllBytes(BASE_PATH.resolve(archive + "/" + group + ".dat")));
+            var files = Js5Util.unpackGroup(archiveIndex, group, PROVIDER.get(archive, group, false));
 
             if (files.size() == 1 && files.containsKey(0)) {
                 Files.write(path.resolve(group + extension), files.get(0));
@@ -496,5 +546,4 @@ public class Unpack {
             }
         }
     }
-
 }

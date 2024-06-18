@@ -16,6 +16,18 @@ public class Unpacker {
     public static final Map<Integer, Type> VAR_CLAN_SETTING_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLAN_TYPE = new HashMap<>();
 
+    public static void reset() {
+        SCRIPT_NAMES.clear();
+        GRAPHIC_NAMES.clear();
+        WMA_NAMES.clear();
+        DBCOLUMN_TYPE.clear();
+        PARAM_TYPE.clear();
+        ENUM_INPUT_TYPE.clear();
+        ENUM_OUTPUT_TYPE.clear();
+        VAR_CLAN_SETTING_TYPE.clear();
+        VAR_CLAN_TYPE.clear();
+    }
+
     public static String format(Type type, int value) {
         return switch (type) {
             case INT -> String.valueOf(value);

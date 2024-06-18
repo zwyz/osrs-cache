@@ -26,6 +26,17 @@ public class ScriptUnpacker {
     public static final Set<Integer> CALLED = new LinkedHashSet<>();
     public static final Set<Integer> CLIENTSCRIPT = new LinkedHashSet<>();
 
+    public static void reset() {
+        SCRIPTS.clear();
+        SCRIPTS_DECOMPILED.clear();
+        SCRIPT_PARAMETER_COUNT.clear();
+        SCRIPT_RETURN_TYPES.clear();
+        SCRIPT_PARAMETERS.clear();
+        SCRIPT_RETURNS.clear();
+        CALLED.clear();
+        CLIENTSCRIPT.clear();
+    }
+
     public static void load(int id, byte[] data) {
         var script = CompiledScript.decode(data);
         SCRIPTS.put(id, script);

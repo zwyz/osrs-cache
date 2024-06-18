@@ -92,7 +92,9 @@ public class SeqUnpacker {
                 var count = packet.g1();
 
                 // workaround for bug in jagex packer, count overflows
-                if (Arrays.hashCode(data) == 0xe71c2ca5) {
+                var hash = Arrays.hashCode(data);
+
+                if (hash == 0xE71C2CA5 || hash == 0x1C8AA6F3 || hash == 0x8A48B202 || hash == 0x48D0CD51) {
                     count += 256;
                 }
 
