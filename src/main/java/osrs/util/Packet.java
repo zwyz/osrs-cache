@@ -711,7 +711,7 @@ public class Packet {
         arr[++pos - 1] = (byte) var1;
     }
 
-    public int g3_altTODO1() {
+    public int g3_alt1() {
         pos += 3;
         var b0 = arr[pos - 3] & 255;
         var b1 = arr[pos - 2] & 255;
@@ -772,6 +772,11 @@ public class Packet {
     public int g4_alt3() {
         pos += 4;
         return (arr[pos - 2] & 255) + ((arr[pos - 1] & 255) << 8) + ((arr[pos - 4] & 255) << 16) + ((arr[pos - 3] & 255) << 24);
+    }
+
+    public int g4s_alt2() {
+        this.pos += 4;
+        return (this.arr[this.pos - 3] & 255) + ((this.arr[this.pos - 4] & 255) << 8) + ((this.arr[this.pos - 1] & 255) << 16) + ((this.arr[this.pos - 2] & 255) << 24);
     }
 
     public void gdata_altTODO(byte[] var1, int var2, int var3) {

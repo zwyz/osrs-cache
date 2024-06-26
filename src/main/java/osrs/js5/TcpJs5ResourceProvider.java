@@ -19,6 +19,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
     private final String host;
     private final int port;
     private final int revision;
+    private final int[] key;
     private Socket socket;
     private final Queue<GroupRequest> unsentRequests = new LinkedBlockingQueue<>();
     private final Map<ArchiveGroup, GroupRequest> responses = new ConcurrentHashMap<>();
@@ -29,10 +30,11 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
     private int responseArchive;
     private int responseGroup;
 
-    public TcpJs5ResourceProvider(String host, int port, int revision) {
+    public TcpJs5ResourceProvider(String host, int port, int revision, int[] key) {
         this.host = host;
         this.port = port;
         this.revision = revision;
+        this.key = key;
 
         Thread.ofPlatform().daemon().start(() -> {
             try {
@@ -41,10 +43,6 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
                 throw new RuntimeException(e);
             }
         });
-    }
-
-    public static TcpJs5ResourceProvider create(String host, int port, int revision) {
-        return new TcpJs5ResourceProvider(host, port, revision);
     }
 
     public void processRequests() throws IOException, InterruptedException {
@@ -77,9 +75,13 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
             socket.setTcpNoDelay(true);
             socket.setReceiveBufferSize(10_000_000);
 
-            var packet = Packet.create(1 + 4);
+            var packet = Packet.create(20 + 1);
             packet.p1(15);
             packet.p4(revision);
+            packet.p4(key == null ? 0 : key[0]);
+            packet.p4(key == null ? 0 : key[1]);
+            packet.p4(key == null ? 0 : key[2]);
+            packet.p4(key == null ? 0 : key[3]);
             send(packet);
 
             var status = receive(1).g1();

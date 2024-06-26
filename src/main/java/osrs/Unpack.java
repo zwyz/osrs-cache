@@ -34,13 +34,13 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 // todo: clean this up
 public class Unpack {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static int VERSION = 222;
+    public static int VERSION = 223;
     private static Js5ResourceProvider PROVIDER;
     private static Js5MasterIndex MASTER_INDEX;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 222, "oldschool1.runescape.com", 43594);
-//        unpackOpenRS2("unpacked/beta", 222, "runescape", 1826);
+        unpackLive("unpacked/live", 223, "oldschool1.runescape.com", 43594, null);
+//        unpackOpenRS2("unpacked/beta", 223, "runescape", 1826);
     }
 
     public static void unpackOpenRS2(String path, int version, String scope, int id) throws IOException {
@@ -50,10 +50,10 @@ public class Unpack {
         ));
     }
 
-    public static void unpackLive(String path, int version, String host, int port) throws IOException {
+    public static void unpackLive(String path, int version, String host, int port, int[] key) throws IOException {
         unpack(path, version, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
                 Path.of(System.getProperty("user.home") + "/.rscache/osrs"),
-                new TcpJs5ResourceProvider(host, port, version))
+                new TcpJs5ResourceProvider(host, port, version, key))
         ));
     }
 

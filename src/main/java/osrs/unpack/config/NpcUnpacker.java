@@ -1,7 +1,7 @@
 package osrs.unpack.config;
 
-import osrs.unpack.ColourConversion;
 import osrs.Unpack;
+import osrs.unpack.ColourConversion;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
@@ -72,6 +72,12 @@ public class NpcUnpacker {
                 }
             }
 
+            case 74 -> lines.add("attack=" + packet.g2());
+            case 75 -> lines.add("defence=" + packet.g2());
+            case 76 -> lines.add("strength=" + packet.g2());
+            case 77 -> lines.add("hitpoints=" + packet.g2());
+            case 78 -> lines.add("ranged=" + packet.g2());
+            case 79 -> lines.add("magic=" + packet.g2());
             case 93 -> lines.add("minimap=no"); // https://twitter.com/JagexAsh/status/1763550956443111935
             case 95 -> lines.add("vislevel=" + packet.g2());
             case 97 -> lines.add("resizeh=" + packet.g2());
@@ -130,6 +136,7 @@ public class NpcUnpacker {
             case 117 -> lines.add("crawlanim=" + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()));
             case 122 -> lines.add("follower=yes");
             case 123 -> lines.add("lowpriorityops=yes");
+            case 124 -> lines.add("overlayheight=" + packet.g2());
 
             case 118 -> {
                 var multivarbit = packet.g2null();
