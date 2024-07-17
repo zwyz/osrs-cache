@@ -29,8 +29,8 @@ public enum ScriptTrigger {
     UNLOADPLAYER(42), // active: player
 
     // entities
-    OBJSTACK(45), // active: tile
-    OBJ_COUNT(46, Type.OBJ), // active: obj
+    UPDATEOBJSTACK(45), // active: tile
+    UPDATEOBJCOUNT(46, Type.OBJ), // active: obj
     PLAYER_DESTINATION(47), // active: player, tile
     PLAYER_HOVER(48), // active: player, tile
     PLAYER_MOVE(49), // active: player, tile
@@ -42,10 +42,10 @@ public enum ScriptTrigger {
 
     // minimenu
     TRIGGER_77(77, Type.OBJ),
-    OPLOC(78),
-    OPOBJ(79),
-    OPNPC(80),
-    OPPLAYER(81),
+    ONCLICKLOC(78),
+    ONCLICKOBJ(79),
+    ONCLICKNPC(80),
+    ONCLICKPLAYER(81),
     MINIMENU_OPENED(82),
     TRIGGER_83(83),
     ;
