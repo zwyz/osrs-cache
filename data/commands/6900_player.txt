@@ -5,4 +5,4 @@
 6904 [command,uid]()(player_uid)
 6905 [command,selfplayer_uid]()(player_uid)
 6906 [command,player_say](string $text,int $duration)
-6907 [command,player_minimenuop](int $x1,boolean $x2)(string)
+6907 [command,player_getop](int $x1,boolean $x2)(string)

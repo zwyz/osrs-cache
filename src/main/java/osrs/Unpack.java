@@ -109,7 +109,7 @@ public class Unpack {
         unpackConfigGroup(AREATYPE, AreaUnpacker::unpack, path + "/config/dump.area");
         unpackConfigGroup(ITEMCODETYPE, ItemCodeUnpacker::unpack, path + "/config/dump.itemcode"); // https://twitter.com/JagexAsh/status/1663851152310452225
         unpackConfigGroup(CONTROLLERTYPE, ControllerUnpacker::unpack, path + "/config/dump.controller"); // https://twitter.com/JagexAsh/status/1600154097742553088
-        unpackConfigGroup(UNKNOWN_31, Config31Unpacker::unpack, path + "/config/dump.unknown31");
+        unpackConfigGroup(BUGTEMPLATETYPE, BugTemplateUnpacker::unpack, path + "/config/dump.bugtemplate");
         unpackConfigGroup(HITMARKTYPE, HitmarkUnpacker::unpack, path + "/config/dump.hitmark");
         unpackConfigGroup(HEADBARTYPE, HeadbarUnpacker::unpack, path + "/config/dump.headbar");
         unpackConfigGroup(STRUCTTYPE, StructUnpacker::unpack, path + "/config/dump.struct");

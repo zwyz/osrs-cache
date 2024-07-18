@@ -191,7 +191,6 @@ public enum Type {
     MESANIM,
     UNDERLAY,
     OVERLAY,
-    CONFIG31,
     WORLD_AREA,
 
     // special
