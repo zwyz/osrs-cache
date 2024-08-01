@@ -16,7 +16,7 @@ public class UnpackEverything {
             var build = Integer.parseInt(parts[0]);
             var name = parts[1];
             var id = Integer.parseInt(parts[2]);
-            System.out.println("[Cache Unpacker] Unpacking " + name + " build " + build + " (" + index + "/" + caches.size() + ")");
+            System.out.println("[Cache Unpacker] Unpacking " + name + " build " + build + " (" + (index + 1) + "/" + caches.size() + ")");
 
             if (index >= START_INDEX) {
                 Unpack.unpackOpenRS2("unpacked/" + name, build, "runescape", id);
