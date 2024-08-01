@@ -469,12 +469,16 @@ public class Unpack {
             var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
             var lines = new ArrayList<String>();
 
+            boolean scripted = false;
             for (var file : files.keySet()) {
-                lines.addAll(unpack.apply(file, files.get(file)));
+                byte[] data = files.get(file);
+                scripted |= data[0] == -1;
+                lines.addAll(unpack.apply(file, data));
                 lines.add("");
             }
 
-            Files.write(result.resolve(Unpacker.format(Type.INTERFACE, group) + ".if3"), lines);
+            String extension = scripted ? "if3" : "if";
+            Files.write(result.resolve(Unpacker.format(Type.INTERFACE, group) + "." + extension), lines);
         }
     }
 
