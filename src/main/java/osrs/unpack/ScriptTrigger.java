@@ -48,6 +48,13 @@ public enum ScriptTrigger {
     ONCLICKPLAYER(81),
     MINIMENU_OPENED(82),
     TRIGGER_83(83),
+
+    // shift click
+    ONSHIFTCLICKNPC(-1),
+    ONSHIFTCLICKLOC(-1),
+    ONSHIFTCLICKOBJ(-1),
+    ONSHIFTCLICKPLAYER(-1),
+    ONSHIFTCLICKTILE(-1),
     ;
 
     public final int id;

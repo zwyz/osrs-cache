@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 
@@ -24,7 +25,7 @@ public class ScriptUnpacker {
     public static final Map<Integer, List<Type>> SCRIPT_PARAMETERS = new HashMap<>();
     public static final Map<Integer, List<Type>> SCRIPT_RETURNS = new HashMap<>();
     public static final Set<Integer> CALLED = new LinkedHashSet<>();
-    public static final Set<Integer> CLIENTSCRIPT = new LinkedHashSet<>();
+    public static final Map<Integer, ScriptTrigger> SCRIPT_TRIGGERS = new LinkedHashMap<>();
 
     public static void reset() {
         SCRIPTS.clear();
@@ -34,7 +35,7 @@ public class ScriptUnpacker {
         SCRIPT_PARAMETERS.clear();
         SCRIPT_RETURNS.clear();
         CALLED.clear();
-        CLIENTSCRIPT.clear();
+        SCRIPT_TRIGGERS.clear();
     }
 
     public static void load(int id, byte[] data) {
@@ -104,6 +105,12 @@ public class ScriptUnpacker {
             }
 
             propagation.finish(SCRIPTS_DECOMPILED.keySet());
+        }
+
+        var triggerInference = new TriggerInference();
+        for (var id : SCRIPTS_DECOMPILED.keySet()) {
+            var script = SCRIPTS_DECOMPILED.get(id);
+            triggerInference.run(id, script);
         }
     }
 

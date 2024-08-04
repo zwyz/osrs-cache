@@ -174,7 +174,7 @@ public class Unpacker {
                 default -> "stat_" + value;
             };
 
-            case CLIENTSCRIPT -> {
+            case CLIENTSCRIPT, ONSHIFTCLICKNPC, ONSHIFTCLICKLOC, ONSHIFTCLICKOBJ, ONSHIFTCLICKPLAYER, ONSHIFTCLICKTILE -> {
                 if (value == -1) {
                     yield "null";
                 }
@@ -662,7 +662,8 @@ public class Unpacker {
     }
 
     public static String getScriptName(int id) {
-        var name = "[" + (ScriptUnpacker.CLIENTSCRIPT.contains(id) ? "clientscript" : "proc") + ",script" + id + "]";
+        var trigger = ScriptUnpacker.SCRIPT_TRIGGERS.get(id);
+        var name = "[" + (trigger != null ? trigger.name().toLowerCase() : "proc") + ",script" + id + "]";
 
         if (SCRIPT_NAMES.containsKey(id)) {
             name = SCRIPT_NAMES.get(id);

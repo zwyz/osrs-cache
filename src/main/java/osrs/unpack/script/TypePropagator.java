@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
 
 import java.util.*;
@@ -50,7 +51,7 @@ public class TypePropagator {
 
             if (otherScript != -1) {
                 ScriptUnpacker.CALLED.add(otherScript);
-                ScriptUnpacker.CLIENTSCRIPT.add(otherScript);
+                ScriptUnpacker.SCRIPT_TRIGGERS.put(otherScript, ScriptTrigger.CLIENTSCRIPT);
                 var index = 0;
 
                 for (var i = hookStart; i < hookEnd; i++) {
@@ -182,7 +183,7 @@ public class TypePropagator {
         if (ScriptUnpacker.ASSUME_UNUSED_IS_CLIENTSCRIPT) {
             for (var script : scripts) {
                 if (!ScriptUnpacker.CALLED.contains(script) && ScriptUnpacker.SCRIPT_RETURNS.get(script).isEmpty()) {
-                    ScriptUnpacker.CLIENTSCRIPT.add(script);
+                    ScriptUnpacker.SCRIPT_TRIGGERS.put(script, ScriptTrigger.CLIENTSCRIPT);
                 }
             }
         }
