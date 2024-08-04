@@ -10,6 +10,7 @@ import java.io.UncheckedIOException;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.zip.GZIPInputStream;
 
 public class Js5Util {
@@ -70,7 +71,7 @@ public class Js5Util {
             }
         }
 
-        var fileMap = new HashMap<Integer, byte[]>();
+        var fileMap = new LinkedHashMap<Integer, byte[]>();
 
         for (var i = 0; i < fileCount; ++i) {
             fileMap.put(fileIds == null ? i : fileIds[i], files[i]);
