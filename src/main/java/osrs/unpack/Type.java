@@ -240,6 +240,8 @@ public enum Type {
     INT_GRADIENTMODE(-1, 0, BaseVarType.INTEGER, Type.INT, "gradientmode"),
     INT_OBJOWNER(-1, 0, BaseVarType.INTEGER, Type.INT, "objowner"),
     INT_RGB(-1, 0, BaseVarType.INTEGER, Type.INT, "rgb"),
+    INT_OPKIND(-1, 0, BaseVarType.INTEGER, Type.INT, "opkind"),
+    INT_OPMODE(-1, 0, BaseVarType.INTEGER, Type.INT, "opmode"),
 
     // for decompiler
     HOOK,

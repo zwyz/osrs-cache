@@ -506,6 +506,32 @@ public class Unpacker {
                 default -> "^objowner_" + value;
             };
 
+            case INT_OPKIND -> switch (value) {
+                case -1 -> "null";
+                case 0 -> "^opkind_entitynoshift";
+                case 1 -> "^opkind_target";
+                case 2 -> "^opkind_entity";
+                case 3 -> "^opkind_component";
+                case 4 -> "^opkind_walk";
+                case 5 -> "^opkind_shiftop";
+                case 6 -> "^opkind_player";
+                case 7 -> "^opkind_use";
+                case 8 -> "^opkind_cancel";
+                case 9 -> "^opkind_examine";
+                case 10 -> "^opkind_unknown";
+                case 11 -> "^opkind_obj";
+                default -> "^opkind_" + value;
+            };
+
+            case INT_OPMODE -> switch (value) {
+                case -1 -> "null";
+                case 0 -> "^opmode_always";
+                case 1 -> "^opmode_never";
+                case 2 -> "^opmode_shift";
+                case 3 -> "^opmode_noshift";
+                default -> "^opmode_" + value;
+            };
+
             default -> {
                 if (value == -1) {
                     yield "null";

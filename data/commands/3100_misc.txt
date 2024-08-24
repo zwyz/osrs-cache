@@ -15,7 +15,7 @@
 3113 [command,openurl](string $x1, boolean $x2)
 3114 (gap)
 3115 [command,resume_objdialog](obj $x1)
-3116 [command,bug_report](int $x1, string $x2, string $x3)
+3116 [command,bug_report](bugtemplate $x1, string $x2, string $x3)
 3117 [command,setshiftclickdrop](boolean $x1)
 3118 [command,setshowmouseovertext](boolean $x1)
 3119 [command,renderself](boolean $x1)
@@ -152,3 +152,5 @@
 3330 [command,destinationcoord]()(coord)
 3331 [command,runenergy]
 3332 [command,stat_unknown](stat $x1)(int)
+3333 [command,unknown_command_3333]()(string)
+

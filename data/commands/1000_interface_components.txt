@@ -86,6 +86,9 @@
 1307 [command,cc_clearops]
 1308 [command,cc_setalwaysleftclick](boolean $x1)
 1309 [command,cc_setpinch](boolean $x1)
+1310 [command,cc_clearsubops](int $index)
+1311 [command,cc_setsubop](int $index, int $subindex, string $op)
+1312 [command,cc_setoppriority](int $x1)
 
 1350 [command,cc_setopkey](int $x1, key $x2, int $x3, int $x4, int $x5, int $x6, int $x7, int $x8, int $x9, int $x10, int $x11)
 1351 [command,cc_setoptkey](int $x1, key $x2)

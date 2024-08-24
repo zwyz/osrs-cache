@@ -759,24 +759,19 @@ public class Packet {
         arr[++pos - 1] = (byte) (var1 >> 8);
     }
 
-    public int g4_alt1() {
+    public int g4s_alt1() {
         pos += 4;
         return ((arr[pos - 1] & 255) << 24) + ((arr[pos - 2] & 255) << 16) + ((arr[pos - 3] & 255) << 8) + (arr[pos - 4] & 255);
     }
 
-    public int g4_alt2() {
+    public int g4s_alt2() {
         pos += 4;
         return (arr[pos - 3] & 255) + ((arr[pos - 4] & 255) << 8) + ((arr[pos - 1] & 255) << 16) + ((arr[pos - 2] & 255) << 24);
     }
 
-    public int g4_alt3() {
+    public int g4s_alt3() {
         pos += 4;
         return (arr[pos - 2] & 255) + ((arr[pos - 1] & 255) << 8) + ((arr[pos - 4] & 255) << 16) + ((arr[pos - 3] & 255) << 24);
-    }
-
-    public int g4s_alt2() {
-        this.pos += 4;
-        return (this.arr[this.pos - 3] & 255) + ((this.arr[this.pos - 4] & 255) << 8) + ((this.arr[this.pos - 1] & 255) << 16) + ((this.arr[this.pos - 2] & 255) << 24);
     }
 
     public void gdata_altTODO(byte[] var1, int var2, int var3) {

@@ -17,3 +17,7 @@
 4216 [command,oc_wearpos3](obj $x1)(int)
 4217 [command,oc_weight](obj $x1)(int)
 4218 [command,oc_desc](obj $x1)(string)
+4219 (gap)
+4220 (gap)
+4221 (gap)
+4222 [command,oc_isubop](obj $x1,int $x2,int $x3)(string)

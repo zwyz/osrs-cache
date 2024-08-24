@@ -34,7 +34,7 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 // todo: clean this up
 public class Unpack {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static int VERSION = 223;
+    public static int VERSION = 224;
     private static Js5ResourceProvider PROVIDER;
     private static Js5MasterIndex MASTER_INDEX;
 

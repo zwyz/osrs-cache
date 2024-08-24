@@ -75,6 +75,17 @@ public class ObjUnpacker {
             }
 
             case 42 -> lines.add("shiftclickiop=" + packet.g1s()); // https://twitter.com/JagexAsh/status/1654115186863910912
+
+            case 43 -> {
+                var op = packet.g1() + 1; // 1 to 5
+                var subop = packet.g1(); // 1 to 20
+
+                while (subop != 0) {
+                    lines.add("isubop" + op + "=" + subop + "," + packet.gjstr());
+                    subop = packet.g1();
+                }
+            }
+
             case 65 -> lines.add("stockmarket=yes");
 
             case 75 -> { // https://twitter.com/JagexAsh/status/570235510691487744
