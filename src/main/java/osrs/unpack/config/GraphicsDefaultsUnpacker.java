@@ -38,6 +38,12 @@ public class GraphicsDefaultsUnpacker {
                 var texticon = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
                 lines.add("sprites=" + mapcompass + "," + maparrow + "," + mapscene + "," + headiconskull + "," + headiconprayer + "," + headiconhint + "," + mapmarker + "," + cross + "," + mapdot + "," + scrollbar + "," + texticon);
             }
+
+            case 3 -> {
+                for (int i = 0; i < 3; i++) {
+                    lines.add("flamespalette" + (i + 1) + "=" + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()));
+                }
+            }
             default -> throw new IllegalStateException("unknown opcode");
         }
     }
