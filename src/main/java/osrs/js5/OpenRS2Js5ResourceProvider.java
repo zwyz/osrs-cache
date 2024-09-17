@@ -21,8 +21,7 @@ public class OpenRS2Js5ResourceProvider implements Js5ResourceProvider, AutoClos
     }
 
     @Override
-    public byte[] get(int archive, int group, boolean priority) {
-
+    public byte[] get(int archive, int group, boolean urgent) {
         try {
             semaphore.acquire();
             var response = HTTP.send(HttpRequest.newBuilder(URI.create("https://archive.openrs2.org/caches/" + scope + "/" + id + "/archives/" + archive + "/groups/" + group + ".dat")).build(), HttpResponse.BodyHandlers.ofByteArray());

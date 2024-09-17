@@ -34,12 +34,12 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 // todo: clean this up
 public class Unpack {
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
-    public static int VERSION = 224;
+    public static int VERSION;
     private static Js5ResourceProvider PROVIDER;
     private static Js5MasterIndex MASTER_INDEX;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 223, "oldschool1.runescape.com", 43594, null);
+        unpackLive("unpacked/live", 225, "oldschool1.runescape.com", 43594, null);
 //        unpackOpenRS2("unpacked/beta", 223, "runescape", 1826);
     }
 
@@ -57,7 +57,7 @@ public class Unpack {
         ));
     }
 
-    public static void unpack(String path, int version, MemoryCacheResourceProvider provider) throws IOException {
+    public static void unpack(String path, int version, Js5ResourceProvider provider) throws IOException {
         VERSION = version;
         PROVIDER = provider;
         MASTER_INDEX = new Js5MasterIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, 255, false)));

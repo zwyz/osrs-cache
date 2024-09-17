@@ -38,7 +38,7 @@ public class FileSystemCacheResourceProvider implements Js5ResourceProvider {
     }
 
     @Override
-    public byte[] get(int archive, int group, boolean priority) {
+    public byte[] get(int archive, int group, boolean urgent) {
         try {
             if (archive == 255 && group == 255) {
                 return masterIndexData;
@@ -58,7 +58,7 @@ public class FileSystemCacheResourceProvider implements Js5ResourceProvider {
                     }
                 }
 
-                var data = underlying.get(archive, group, priority);
+                var data = underlying.get(archive, group, urgent);
                 Files.createDirectories(file.getParent());
                 Files.write(file, data);
                 return data;

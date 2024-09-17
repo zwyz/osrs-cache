@@ -13,7 +13,7 @@ public class FlatFileResourceProvider implements Js5ResourceProvider {
     }
 
     @Override
-    public byte[] get(int archive, int group, boolean priority) {
+    public byte[] get(int archive, int group, boolean urgent) {
         try {
             var path = this.path.resolve(archive + "/" + group + ".dat");
 

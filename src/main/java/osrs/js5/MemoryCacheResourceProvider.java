@@ -12,7 +12,7 @@ public class MemoryCacheResourceProvider implements Js5ResourceProvider {
     }
 
     @Override
-    public byte[] get(int archive, int group, boolean priority) {
-        return cache.computeIfAbsent(archive + "." + group, _ -> underlying.get(archive, group, priority));
+    public byte[] get(int archive, int group, boolean urgent) {
+        return cache.computeIfAbsent(archive + "." + group, _ -> underlying.get(archive, group, urgent));
     }
 }

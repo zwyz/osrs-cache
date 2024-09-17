@@ -52,12 +52,12 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
             while (responses.size() < MAX_PENDING_REQUESTS - 1 && !unsentRequests.isEmpty()) {
                 var request = unsentRequests.poll();
                 responses.put(new ArchiveGroup(request.archive, request.group), request);
-                System.out.println("request " + request.archive + " " + request.group + " " + request.priority);
+                System.out.println("request " + request.archive + " " + request.group + " " + request.urgent);
 
-                if (!request.priority) {
+                if (!request.urgent) {
                     sendRequestPrefetch(request.archive, request.group);
                 } else {
-                    sendRequestPriority(request.archive, request.group);
+                    sendRequestUrgent(request.archive, request.group);
                 }
             }
 
@@ -103,7 +103,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
         send(request);
     }
 
-    private void sendRequestPriority(int archive, int group) throws IOException {
+    private void sendRequestUrgent(int archive, int group) throws IOException {
         var request = Packet.create(4);
         request.p1(1);
         request.p1(archive);
@@ -172,8 +172,8 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
     }
 
     @Override
-    public byte[] get(int archive, int group, boolean priority) {
-        var future = getAsync(archive, group, priority);
+    public byte[] get(int archive, int group, boolean urgent) {
+        var future = getAsync(archive, group, urgent);
 
         try {
             return future.get();
@@ -184,7 +184,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
         }
     }
 
-    public CompletableFuture<byte[]> getAsync(int archive, int group, boolean priority) {
+    public CompletableFuture<byte[]> getAsync(int archive, int group, boolean urgent) {
         shutdownRequestedLock.readLock().lock();
 
         try {
@@ -192,7 +192,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
                 return CompletableFuture.failedFuture(new IOException("resource provider has been shutdown"));
             } else {
                 var future = new CompletableFuture<byte[]>();
-                unsentRequests.add(new GroupRequest(archive, group, priority, future));
+                unsentRequests.add(new GroupRequest(archive, group, urgent, future));
                 return future;
             }
         } finally {
@@ -214,14 +214,14 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
         private final int archive;
         private final int group;
         private final CompletableFuture<byte[]> future;
-        private final boolean priority;
+        private final boolean urgent;
         private ByteBuffer buffer;
 
-        public GroupRequest(int archive, int group, boolean priority, CompletableFuture<byte[]> future) {
+        public GroupRequest(int archive, int group, boolean urgent, CompletableFuture<byte[]> future) {
             this.archive = archive;
             this.group = group;
             this.future = future;
-            this.priority = priority;
+            this.urgent = urgent;
         }
     }
 
