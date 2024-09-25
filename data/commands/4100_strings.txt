@@ -21,5 +21,5 @@
 4120 [command,string_indexof_char](string $x1, char $x2)(int)
 4121 [command,string_indexof_string](string $x1, string $x2, int $x3)(int)
 4122 [command,uppercase](string $x1)(string)
-4123 [command,text_gender](string $x1, string $x2, string $x3)(string)
-4124 [command,gender]()(int)
+4123 [command,text_pronoun](string $x1, string $x2, string $x3)(string)
+4124 [command,pronoun]()(int)
