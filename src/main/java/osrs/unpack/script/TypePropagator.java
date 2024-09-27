@@ -131,6 +131,11 @@ public class TypePropagator {
     }
 
     public void finish(Set<Integer> scripts) {
+        // infer arrays
+        if (ScriptUnpacker.INFER_ARRAYS) {
+            runArrayInference(scripts);
+        }
+
         // merge parameters with locals
         for (var script : scripts) {
             var parameterCountInt = ScriptUnpacker.getParameterCount(script, LocalDomain.INTEGER);
@@ -346,5 +351,137 @@ public class TypePropagator {
         public String toString() {
             return "script" + script + ".return" + index;
         }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                    Array Inference                                                     //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    // The Jagex compiler is buggy and doesn't actually pass down array parameters to things using them (in fact the get/set  //
+    // commands don't even have an array argument). This recursively identifies scripts that use an undeclared array and then //
+    // guesses the array parameter for them. We do this at the end of propagation to make sure that we know the types of the  //
+    // array access expressions.                                                                                              //
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    private final Map<Integer, Type> arrayUsages = new LinkedHashMap<>();
+    private final Map<Integer, Set<Integer>> conditionalArrayUsages = new LinkedHashMap<>();
+
+    private void runArrayInference(Set<Integer> scripts) {
+        // build initial set of array usages + conditional array usages
+        for (var script : scripts) {
+            buildArrayGraphBlock(script, ScriptUnpacker.SCRIPTS_DECOMPILED.get(script));
+        }
+
+        // propagate array usages through conditional array usages
+        var queue = new ArrayDeque<>(arrayUsages.keySet());
+
+        while (!queue.isEmpty()) {
+            var current = queue.removeFirst();
+
+            for (var other : conditionalArrayUsages.getOrDefault(current, Set.of())) {
+                if (!arrayUsages.containsKey(other)) {
+                    arrayUsages.put(other, arrayUsages.get(current));
+                    queue.add(other);
+                }
+            }
+        }
+
+        // set the types of scripts using arrays
+        for (var entry : arrayUsages.entrySet()) {
+            var script = entry.getKey();
+            var type = entry.getValue();
+
+            // guess which parameter is the array (first unused parameter, can be improved)
+            var possible = new LinkedHashSet<Integer>();
+
+            for (int i = 0; i < ScriptUnpacker.getParameterCount(script); i++) {
+                possible.add(i);
+            }
+
+            var expressions = ScriptUnpacker.SCRIPTS_DECOMPILED.get(script);
+
+            for (var expression : expressions) {
+                removeUsedParameters(expression, possible);
+            }
+
+            bound(local(script, LocalDomain.INTEGER, possible.getFirst()), type);
+        }
+    }
+
+    private void removeUsedParameters(Expression expression, Set<Integer> unused) {
+        if (expression.command == FLOW_LOAD) {
+            if (expression.operand instanceof LocalReference local) {
+                if (local.domain() == LocalDomain.INTEGER) {
+                    unused.remove(local.local());
+                }
+            }
+        }
+
+        expression.visitChildren(child -> removeUsedParameters(child, unused));
+    }
+
+    private void buildArrayGraphBlock(int script, List<Expression> expressions) {
+        for (var expression : expressions) {
+            if (buildArrayGraphExpression(script, expression)) {
+                break; // an array was defined, no need to check the rest
+            }
+        }
+    }
+
+    public boolean buildArrayGraphExpression(int script, Expression expression) {
+        if (expression.command == DEFINE_ARRAY) {
+            return true;
+        }
+
+        if (expression.command == PUSH_ARRAY_INT) {
+            if ((int) expression.operand == 0) {
+                // current script requires an array parameter
+                arrayUsages.put(script, determineArrayType(expression.type.get(0)));
+            }
+        }
+
+        if (expression.command == POP_ARRAY_INT) {
+            if ((int) expression.operand == 0) {
+                // current script requires an array parameter
+                arrayUsages.put(script, determineArrayType(expression.arguments.get(0).type.get(0)));
+            }
+        }
+
+        if (expression.command == GOSUB_WITH_PARAMS) {
+            // if called script requires an array parameter, so does current script
+            conditionalArrayUsages.computeIfAbsent((int) expression.operand, _ -> new LinkedHashSet<>()).add(script);
+        }
+
+        // arguments can't define an array
+        for (var argument : expression.arguments) {
+            buildArrayGraphExpression(script, argument);
+        }
+
+        // blocks run in a new scope for each
+        if (expression.command == FLOW_IF) {
+            buildArrayGraphBlock(script, (List<Expression>) expression.operand);
+        }
+
+        if (expression.command == FLOW_IFELSE) {
+            buildArrayGraphBlock(script, ((IfElseBranches) expression.operand).trueBranch());
+            buildArrayGraphBlock(script, ((IfElseBranches) expression.operand).falseBranche());
+        }
+
+        if (expression.command == FLOW_WHILE) {
+            buildArrayGraphBlock(script, (List<Expression>) expression.operand);
+        }
+
+        if (expression.command == FLOW_SWITCH) {
+            for (var branch : ((List<SwitchBranch>) expression.operand)) {
+                buildArrayGraphBlock(script, branch.branch());
+            }
+        }
+
+        return false;
+    }
+
+    private Type determineArrayType(Type elementType) {
+        if (elementType == Type.INT) return Type.INTARRAY;
+        if (elementType == Type.COMPONENT) return Type.COMPONENTARRAY;
+        return Type.INTARRAY; // todo: error if incompatible type?
     }
 }

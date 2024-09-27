@@ -11,6 +11,7 @@ import static osrs.unpack.script.Command.*;
 public class ScriptUnpacker {
     public static final boolean DISASSEMBLE_ONLY = false;
     public static final boolean PROPAGATE_TYPES = true;
+    public static final boolean INFER_ARRAYS = true;
     public static final boolean KEEP_LABELS = false;
     public static final boolean ASSUME_UNKNOWN_TYPES_ARE_BASE = true;
     public static final boolean OUTPUT_TYPE_ALIASES = false;
@@ -18,10 +19,10 @@ public class ScriptUnpacker {
     public static final boolean FORMAT_HOOKS = true;
     public static final boolean CHECK_NONEMPTY_STACK = true;
     public static final boolean CHECK_EMPTY_ARGUMENT = true;
-    private static final Map<Integer, CompiledScript> SCRIPTS = new HashMap<>();
-    private static final Map<Integer, List<Expression>> SCRIPTS_DECOMPILED = new HashMap<>();
-    private static final Map<Integer, Integer> SCRIPT_PARAMETER_COUNT = new HashMap<>();
-    private static final Map<Integer, List<Type>> SCRIPT_RETURN_TYPES = new HashMap<>();
+    public static final Map<Integer, CompiledScript> SCRIPTS = new HashMap<>();
+    public static final Map<Integer, List<Expression>> SCRIPTS_DECOMPILED = new HashMap<>();
+    public static final Map<Integer, Integer> SCRIPT_PARAMETER_COUNT = new HashMap<>();
+    public static final Map<Integer, List<Type>> SCRIPT_RETURN_TYPES = new HashMap<>();
     public static final Map<Integer, List<Type>> SCRIPT_PARAMETERS = new HashMap<>();
     public static final Map<Integer, List<Type>> SCRIPT_RETURNS = new HashMap<>();
     public static final Set<Integer> CALLED = new LinkedHashSet<>();
