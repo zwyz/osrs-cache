@@ -532,6 +532,9 @@ public class Unpacker {
                 default -> "^opmode_" + value;
             };
 
+            case INTARRAY -> "intarray" + value;
+            case COMPONENTARRAY -> "componentarray" + value;
+
             default -> {
                 if (value == -1) {
                     yield "null";

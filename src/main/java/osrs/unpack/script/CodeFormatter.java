@@ -21,7 +21,11 @@ public class CodeFormatter {
         var declaredLocals = new HashSet<LocalReference>();
 
         for (var type : parameterTypes) {
-            if (Type.subtype(type, Type.UNKNOWN_INT)) {
+            if (type == Type.INTARRAY || type == Type.COMPONENTARRAY) {
+                declaredLocals.add(new LocalReference(LocalDomain.INTEGER, 0));
+                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, 0), type));
+                indexInt++;
+            } else if (Type.subtype(type, Type.UNKNOWN_INT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.INTEGER, indexInt));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, indexInt++), type));
             } else if (type == Type.STRING) {
