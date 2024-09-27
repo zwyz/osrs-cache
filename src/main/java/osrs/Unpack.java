@@ -151,11 +151,16 @@ public class Unpack {
             scriptByHash.put(archiveIndex.groupNameHash[group], group);
         }
 
+        // set of names that result in a collision.
+        // only necessary for scripts we don't actually know the name of.
+        Set<Integer> collisions = new HashSet<>();
+        collisions.add("5926".hashCode());       // [trigger_38,type_23]
+
         for (var trigger : ScriptTrigger.values()) {
             // trigger
             var key1 = String.valueOf(trigger.id - 512);
 
-            if (scriptByHash.containsKey(key1.hashCode())) {
+            if (scriptByHash.containsKey(key1.hashCode()) && !collisions.contains(key1.hashCode())) {
                 names.put(scriptByHash.get(key1.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + ",_]");
             }
 
@@ -164,7 +169,7 @@ public class Unpack {
                 for (var category = 0; category < maxCategory; category++) {
                     var key2 = String.valueOf((-3 - category << 8) + trigger.id);
 
-                    if (scriptByHash.containsKey(key2.hashCode())) {
+                    if (scriptByHash.containsKey(key2.hashCode()) && !collisions.contains(key2.hashCode())) {
                         names.put(scriptByHash.get(key2.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + Unpacker.format(Type.CATEGORY, category) + "]");
                     }
                 }
@@ -181,7 +186,7 @@ public class Unpack {
                 for (var type = 0; type < maxType; type++) {
                     var key3 = String.valueOf((type << 8) + trigger.id);
 
-                    if (scriptByHash.containsKey(key3.hashCode())) {
+                    if (scriptByHash.containsKey(key3.hashCode()) && !collisions.contains(key3.hashCode())) {
                         names.put(scriptByHash.get(key3.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + Unpacker.format(trigger.type, type) + "]");
                     }
                 }
