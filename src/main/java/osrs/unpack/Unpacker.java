@@ -664,7 +664,6 @@ public class Unpacker {
     }
 
     public static void setVarPlayerType(int var, Type type) {
-        System.out.println("varplayer_" + var + " " + type);
         VAR_PLAYER_TYPE.put(var, type);
     }
 
@@ -673,7 +672,6 @@ public class Unpacker {
     }
 
     public static void setVarClientType(int var, Type type) {
-        System.out.println("varclient_" + var + " " + type);
         VAR_CLIENT_TYPE.put(var, type);
     }
 
