@@ -138,6 +138,12 @@ public class TypePropagator {
             merge(arg(expression, 1), array(script, (int) expression.operand));
         }
 
+        if (expression.command == DEFINE_ARRAY) {
+            var index = (int) expression.operand >> 16;
+            var type = Type.byChar((int) expression.operand & 0xffff);
+            bound(array(script, index), type);
+        }
+
         // equality
         if (expression.command == FLOW_EQ || expression.command == FLOW_NE) {
             merge(arg(expression, 0), arg(expression, 1));
