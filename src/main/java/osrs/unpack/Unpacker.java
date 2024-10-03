@@ -11,6 +11,7 @@ import java.util.Objects;
 public class Unpacker {
     public static final HashMap<Integer, String> SCRIPT_NAMES = new HashMap<>();
     public static final HashMap<Integer, String> GRAPHIC_NAMES = new HashMap<>();
+    public static final HashMap<Integer, String> BINARY_NAMES = new HashMap<>();
     public static final Map<Integer, String> WMA_NAMES = new HashMap<>();
     public static final Map<Tuple2<Integer, Integer>, List<Type>> DBCOLUMN_TYPE = new HashMap<>();
     public static final Map<Integer, Type> PARAM_TYPE = new HashMap<>();
@@ -24,6 +25,7 @@ public class Unpacker {
     public static void reset() {
         SCRIPT_NAMES.clear();
         GRAPHIC_NAMES.clear();
+        BINARY_NAMES.clear();
         WMA_NAMES.clear();
         DBCOLUMN_TYPE.clear();
         PARAM_TYPE.clear();

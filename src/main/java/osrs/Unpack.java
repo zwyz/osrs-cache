@@ -75,6 +75,7 @@ public class Unpack {
         loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES);
         loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES::put);
         loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
+        loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAMES::put);
 
         // things stuff depends on
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, path + "/config/dump.varbit");
@@ -135,7 +136,7 @@ public class Unpack {
         unpackConfigArchive(JS5_TEXTURES, 0, TextureUnpacker::unpack, Path.of(path + "/config/dump.texture"));
 
         // other
-        unpackArchive(10, Path.of(path + "/binary"), ".dat");
+        unpackBinaries(Path.of(path + "/binary"));
 
         // maps
 //        unpackMaps(Path.of(path + "/maps"), path);
@@ -532,27 +533,13 @@ public class Unpack {
         }
     }
 
-    private static void unpackArchive(int archive, Path path, String extension) throws IOException {
-        if (archive >= MASTER_INDEX.getArchiveCount() || MASTER_INDEX.getArchiveData(archive).getCrc() == 0) {
-            return; // empty archives don't get packed
-        }
-
+    private static void unpackBinaries(Path path) throws IOException {
         Files.createDirectories(path);
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive, false)));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_BINARY.id, false)));
 
         for (var group : archiveIndex.groupId) {
-            var files = Js5Util.unpackGroup(archiveIndex, group, PROVIDER.get(archive, group, false));
-
-            if (files.size() == 1 && files.containsKey(0)) {
-                Files.write(path.resolve(group + extension), files.get(0));
-            } else {
-                var groupDirectory = path.resolve(String.valueOf(group));
-                Files.createDirectories(groupDirectory);
-
-                for (var file : files.keySet()) {
-                    Files.write(groupDirectory.resolve(file + extension), files.get(file));
-                }
-            }
+            var files = Js5Util.unpackGroup(archiveIndex, group, PROVIDER.get(JS5_BINARY.id, group, false));
+            Files.write(path.resolve(Unpacker.BINARY_NAMES.get(group)), files.get(0));
         }
     }
 }
