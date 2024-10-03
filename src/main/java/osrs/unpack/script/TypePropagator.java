@@ -2,6 +2,7 @@ package osrs.unpack.script;
 
 import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
+import osrs.unpack.Unpacker;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -100,6 +101,14 @@ public class TypePropagator {
             if (expression.operand instanceof LocalReference local) {
                 merge(type(expression, 0), local(script, local.domain(), local.local()));
             }
+
+            if (expression.operand instanceof VarPlayerReference var) {
+                merge(type(expression, 0), varplayer(var.var()));
+            }
+
+            if (expression.operand instanceof VarClientReference var) {
+                merge(type(expression, 0), varclient(var.var()));
+            }
         }
 
         if (expression.command == FLOW_ASSIGN) {
@@ -108,6 +117,14 @@ public class TypePropagator {
             for (var i = 0; i < targets.size(); i++) {
                 if (targets.get(i) instanceof LocalReference local) {
                     merge(arg(expression, i), local(script, local.domain(), local.local()));
+                }
+
+                if (targets.get(i) instanceof VarPlayerReference var) {
+                    merge(arg(expression, i), varplayer(var.var()));
+                }
+
+                if (targets.get(i) instanceof VarClientReference var) {
+                    merge(arg(expression, i), varclient(var.var()));
                 }
             }
         }
@@ -192,6 +209,17 @@ public class TypePropagator {
                 }
             }
         }
+
+        // output var types
+        for (var set : sets.keySet()) {
+            if (set instanceof VarPlayerNode var) {
+                Unpacker.setVarPlayerType(var.index(), ScriptUnpacker.chooseDisplayType(find(var).type));
+            }
+
+            if (set instanceof VarClientNode var) {
+                Unpacker.setVarClientType(var.index(), ScriptUnpacker.chooseDisplayType(find(var).type));
+            }
+        }
     }
 
     private void merge(Node a, Node b) {
@@ -257,6 +285,14 @@ public class TypePropagator {
 
     private Node local(int script, LocalDomain baseType, int index) {
         return new LocalNode(script, baseType, index);
+    }
+
+    private Node varplayer(int index) {
+        return new VarPlayerNode(index);
+    }
+
+    private Node varclient(int index) {
+        return new VarClientNode(index);
     }
 
     private Node array(int script, int index) {
@@ -332,6 +368,18 @@ public class TypePropagator {
     private record LocalNode(int script, LocalDomain domain, int index) implements Node {
         public String toString() {
             return "script" + script + "." + domain.name().toLowerCase(Locale.ROOT) + index;
+        }
+    }
+
+    private record VarPlayerNode(int index) implements Node {
+        public String toString() {
+            return "varplayer" + index;
+        }
+    }
+
+    private record VarClientNode(int index) implements Node {
+        public String toString() {
+            return "varclient" + index;
         }
     }
 

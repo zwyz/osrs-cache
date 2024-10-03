@@ -3,7 +3,10 @@ package osrs.unpack;
 import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Tuple2;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 public class Unpacker {
     public static final HashMap<Integer, String> SCRIPT_NAMES = new HashMap<>();
@@ -15,6 +18,8 @@ public class Unpacker {
     public static final Map<Integer, Type> ENUM_OUTPUT_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLAN_SETTING_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLAN_TYPE = new HashMap<>();
+    public static final Map<Integer, Type> VAR_PLAYER_TYPE = new HashMap<>();
+    public static final Map<Integer, Type> VAR_CLIENT_TYPE = new HashMap<>();
 
     public static void reset() {
         SCRIPT_NAMES.clear();
@@ -654,6 +659,24 @@ public class Unpacker {
 
     public static Type getVarClanType(int var) {
         return Objects.requireNonNull(VAR_CLAN_TYPE.get(var));
+    }
+
+    public static void setVarPlayerType(int var, Type type) {
+        System.out.println("varplayer_" + var + " " + type);
+        VAR_PLAYER_TYPE.put(var, type);
+    }
+
+    public static Type getVarPlayerType(int var) {
+        return VAR_PLAYER_TYPE.get(var);
+    }
+
+    public static void setVarClientType(int var, Type type) {
+        System.out.println("varclient_" + var + " " + type);
+        VAR_CLIENT_TYPE.put(var, type);
+    }
+
+    public static Type getVarClientType(int var) {
+        return VAR_CLIENT_TYPE.get(var);
     }
 
     public static String formatColour(int colour) {
