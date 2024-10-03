@@ -459,6 +459,7 @@ public class CodeFormatter {
 
     private static String escape(String s) {
         return s.replace("\\", "\\\\")
+                .replace("<", "\\<")
                 .replace("\"", "\\\"");
     }
 }
