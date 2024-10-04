@@ -496,7 +496,7 @@ public class TypePropagator {
         if (expression.command == POP_ARRAY_INT) {
             if ((int) expression.operand == 0) {
                 // current script requires an array parameter
-                arrayUsages.put(script, determineArrayType(expression.arguments.get(0).type.get(0)));
+                arrayUsages.put(script, determineArrayType(expression.arguments.get(1).type.get(0)));
             }
         }
 
@@ -534,8 +534,8 @@ public class TypePropagator {
     }
 
     private Type determineArrayType(Type elementType) {
-        if (elementType == Type.INT) return Type.INTARRAY;
-        if (elementType == Type.COMPONENT) return Type.COMPONENTARRAY;
+        if (Type.subtype(elementType, Type.INT)) return Type.INTARRAY;
+        if (Type.subtype(elementType, Type.COMPONENT)) return Type.COMPONENTARRAY;
         return Type.INTARRAY; // todo: error if incompatible type?
     }
 }
