@@ -89,16 +89,16 @@ public class SeqUnpacker {
             }
 
             case 13 -> {
-                var count = packet.g1();
-
-                // workaround for bug in jagex packer, count overflows
-                var hash = Arrays.hashCode(data);
-
-                if (hash == 0xE71C2CA5 || hash == 0x1C8AA6F3 || hash == 0x8A48B202 || hash == 0x48D0CD51) {
-                    count += 256;
-                }
-
                 if (Unpack.VERSION < 220) {
+                    var count = packet.g1();
+
+                    // workaround for bug in jagex packer, count overflows
+                    var hash = Arrays.hashCode(data);
+
+                    if (hash == 0xE71C2CA5 || hash == 0x1C8AA6F3 || hash == 0x8A48B202 || hash == 0x48D0CD51) {
+                        count += 256;
+                    }
+
                     for (var i = 0; i < count; i++) {
                         var value = packet.g3();
 
@@ -109,9 +109,18 @@ public class SeqUnpacker {
                             lines.add("sound" + i + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range);
                         }
                     }
-                } else {
+                } else if (Unpack.VERSION < 226) {
+                    var count = packet.g1();
+
+                    // workaround for bug in jagex packer, count overflows
+                    var hash = Arrays.hashCode(data);
+
+                    if (hash == 0xE71C2CA5 || hash == 0x1C8AA6F3 || hash == 0x8A48B202 || hash == 0x48D0CD51) {
+                        count += 256;
+                    }
+
                     for (var i = 0; i < count; i++) {
-                        var type = packet.g2();
+                        var type = packet.g2null();
                         var loops = packet.g1();
                         var range = packet.g1();
                         var size = packet.g1();
@@ -120,11 +129,27 @@ public class SeqUnpacker {
                             lines.add("sound" + i + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size);
                         }
                     }
+                } else {
+                    lines.add("keyframeset=" + packet.g4s());
                 }
             }
 
             case 14 -> {
-                lines.add("keyframeset=" + packet.g4s());
+                if (Unpack.VERSION < 226) {
+                    lines.add("keyframeset=" + packet.g4s());
+                } else {
+                    var count = packet.g2();
+
+                    for (var i = 0; i < count; i++) {
+                        var index = packet.g2();
+                        var type = packet.g2null();
+                        var loops = packet.g1();
+                        var range = packet.g1();
+                        var size = packet.g1();
+                        var unknown = packet.g1();
+                        lines.add("sound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size + "," + unknown);
+                    }
+                }
             }
 
             case 15 -> {
@@ -139,16 +164,29 @@ public class SeqUnpacker {
                         var range = value & 15;
                         lines.add("keyframesound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range);
                     }
-                } else {
+                } else if (Unpack.VERSION < 226) {
                     var count = packet.g2();
 
                     for (var i = 0; i < count; i++) {
-                        lines.add("keyframesound" + packet.g2() + "=" + Unpacker.format(Type.SYNTH, packet.g2null()) + "," + packet.g1() + "," + packet.g1() + "," + packet.g1());
+                        var index = packet.g2();
+                        var type = packet.g2null();
+                        var loops = packet.g1();
+                        var range = packet.g1();
+                        var size = packet.g1();
+                        lines.add("keyframesound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size);
                     }
+                } else {
+                    lines.add("keyframerange=" + packet.g2() + "," + packet.g2());
                 }
             }
 
-            case 16 -> lines.add("keyframerange=" + packet.g2() + "," + packet.g2());
+            case 16 -> {
+                if (Unpack.VERSION < 226) {
+                    lines.add("keyframerange=" + packet.g2() + "," + packet.g2());
+                } else {
+                    throw new IllegalStateException("invalid");
+                }
+            }
 
             case 17 -> {
                 var count = packet.g1();
@@ -157,6 +195,8 @@ public class SeqUnpacker {
                     lines.add("keyframewalkmerge=" + packet.g1());
                 }
             }
+
+            case 18 -> lines.add("unknown18=" + packet.gjstr());
 
             default -> throw new IllegalStateException("unknown opcode");
         }

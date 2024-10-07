@@ -16,3 +16,7 @@
 7465 [command,minimenu_resetorder]
 7466 [command,minimenu_setorderedit](boolean $x1)
 7467 [command,minimenu_getorderedit]()(boolean)
+7468 [command,minimenu_setscrollheight](int $x1)
+7469 [command,minimenu_getscrollheight]()(int)
+7470 [command,minimenu_togglescroll]
+7471 [command,minimenu_getscroll]()(boolean)

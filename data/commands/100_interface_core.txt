@@ -3,6 +3,7 @@
 102 [command,cc_deleteall](component $component)
 103 [command,cc_create_entityoverlay](entityoverlay $overlay, iftype $type, int $subid)
 104 [command,cc_deleteall_entityoverlay](entityoverlay $overlay)
+105 [command,cc_copy](component $component, int $subid)
 
 200 [command,cc_find](component $component, int $subid)(intbool)
 201 [command,if_find](component $component)(intbool)
