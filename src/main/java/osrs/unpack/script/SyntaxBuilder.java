@@ -741,6 +741,10 @@ public class SyntaxBuilder {
 
             if (!cases.isEmpty()) {
                 started = true;
+            } else { // empty switch at the end
+                started = true;
+                cases = null;
+                bodyStart = stack.size() - 1;
             }
         }
 
