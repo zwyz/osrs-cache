@@ -59,7 +59,7 @@ public class Unpacker {
 
             case TYPE -> Type.byChar(value).name;
 
-            case VAR_PLAYER -> "varplayer_" + value;
+            case VAR_PLAYER, VARP -> "varplayer_" + value;
             case VAR_PLAYER_BIT -> "varplayerbit_" + value;
             case VAR_CLIENT -> "varclient_" + value;
             case VAR_CLIENT_STRING -> "varclientstring_" + value;
