@@ -11,8 +11,8 @@
 7810 [command,hiscore_clear]
 7811 [command,hiscore_geterror]()(string)
 7812 [command,hiscore_setapi](int $value)
-7813 [command,hiscore_getbossrank](int $key)(int)
-7814 [command,hiscore_getbosskills](int $key)(int)
+7813 [command,hiscore_getbossrank](varp $key)(int)
+7814 [command,hiscore_getbosskills](varp $key)(int)
 7815 [command,hiscore_getgrouptotallevel]()(int)
 7816 [command,hiscore_getgrouptotalxp]()(int)
 7817 [command,hiscore_getgroupsize]()(int)

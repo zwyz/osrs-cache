@@ -14,8 +14,8 @@
 7463 [command,minimenu_setsingleclick](boolean $x1)
 7464 [command,minimenu_setlowpriority](opkind $kind, opmode $mode)
 7465 [command,minimenu_resetorder]
-7466 [command,minimenu_setorderedit](boolean $x1)
-7467 [command,minimenu_getorderedit]()(boolean)
+7466 [command,minimenu_setorderedit](int $x1)
+7467 [command,minimenu_getorderedit]()(int)
 7468 [command,minimenu_setscrollheight](int $x1)
 7469 [command,minimenu_getscrollheight]()(int)
 7470 [command,minimenu_togglescroll]
