@@ -130,7 +130,7 @@ public enum Type {
     SOFTTIMER(206, 'q', BaseVarType.INTEGER),
     OBJVAR(207, '0', BaseVarType.INTEGER),
     WALKTRIGGER(208, '6', BaseVarType.INTEGER),
-    VARP(209, 0, BaseVarType.INTEGER), // 214
+    VARP(209, '7', BaseVarType.INTEGER), // 214
 
     // Group 3
     TYPE_SPECIAL_1(-1, '#', BaseVarType.INTEGER),
