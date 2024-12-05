@@ -19,4 +19,4 @@
 7468 [command,minimenu_setscrollheight](int $x1)
 7469 [command,minimenu_getscrollheight]()(int)
 7470 [command,minimenu_togglescroll]
-7471 [command,minimenu_getscroll]()(boolean)
+7471 [command,minimenu_getscroll]()(int)
