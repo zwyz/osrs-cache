@@ -28,7 +28,7 @@ public class ParamUnpacker {
                 lines.add("type=" + Unpacker.format(Type.TYPE, type));
             }
 
-            case 2 -> lines.add("default=" + packet.g4s());
+            case 2 -> lines.add("default=" + Unpacker.format(Unpacker.getParamType(id), packet.g4s()));
             case 4 -> lines.add("autodisable=no");
             case 5 -> lines.add("default=" + packet.gjstr());
             default -> throw new IllegalStateException("unknown opcode");
