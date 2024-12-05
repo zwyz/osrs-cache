@@ -63,8 +63,8 @@ public class SeqUnpacker {
 
             case 4 -> lines.add("stretches=yes");
             case 5 -> lines.add("priority=" + packet.g1());
-            case 6 -> lines.add("lefthand=" + packet.g2());
-            case 7 -> lines.add("righthand=" + packet.g2());
+            case 6 -> lines.add("lefthand=" + Unpacker.format(Type.OBJ, packet.g2() - 512));
+            case 7 -> lines.add("righthand=" + Unpacker.format(Type.OBJ, packet.g2() - 512));
             case 8 -> lines.add("loopcount=" + packet.g1());
             case 9 -> lines.add("preanim_move=" + Unpacker.getPreanimMoveName(packet.g1()));
             case 10 -> lines.add("postanim_move=" + Unpacker.getPostanimMoveName(packet.g1()));
