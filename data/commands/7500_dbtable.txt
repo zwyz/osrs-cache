@@ -7,5 +7,8 @@
 7506 [command,db_find_get](int $x1)(dbrow)
 7507 [command,db_find_refine_with_count]todo
 7508 [command,db_find]todo
+7500 [command,db_find]todo 228
 7509 [command,db_find_refine]todo
+7507 [command,db_find_refine]todo 228
 7510 [command,db_listall](dbtable $x1)
+7504 [command,db_listall](dbtable $x1)(int) 228

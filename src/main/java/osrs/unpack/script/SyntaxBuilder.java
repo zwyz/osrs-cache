@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 
@@ -267,7 +268,7 @@ public class SyntaxBuilder {
         if (command == DB_FIND) {
             var column = (int) stack.get(stack.size() - 3).operand;
             var argumentTypes = List.of(Type.DBCOLUMN, Unpacker.getDBColumnTypeTupleAssertSingle(column >>> 12, (column >>> 4) & 255, (column & 15) - 1), Type.BASEVARTYPE);
-            var returnTypes = List.<Type>of();
+            var returnTypes = Unpack.VERSION >= 228 ? List.of(Type.INT_INT) : List.<Type>of();
             buildCommand(code, index, command, operand, argumentTypes, returnTypes);
             return;
         }
@@ -283,7 +284,7 @@ public class SyntaxBuilder {
         if (command == DB_FIND_REFINE) {
             var column = (int) stack.get(stack.size() - 3).operand;
             var argumentTypes = List.of(Type.DBCOLUMN, Unpacker.getDBColumnTypeTupleAssertSingle(column >>> 12, (column >>> 4) & 255, (column & 15) - 1), Type.BASEVARTYPE);
-            var returnTypes = List.<Type>of();
+            var returnTypes = Unpack.VERSION >= 228 ? List.of(Type.INT_INT) : List.<Type>of();
             buildCommand(code, index, command, operand, argumentTypes, returnTypes);
             return;
         }

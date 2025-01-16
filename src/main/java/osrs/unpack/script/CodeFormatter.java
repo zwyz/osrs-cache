@@ -230,7 +230,7 @@ public class CodeFormatter {
                 yield "\"" + result + "\"";
             }
 
-            case "db_find", "db_find_with_count", "db_find_refine" -> expression.command.name + "(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ")";
+            case "db_find", "db_find_with_count", "db_find_refine", "db_find_refine_with_count" -> expression.command.name + "(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ")";
 
             // control flow
             case "flow_ne" -> formatBinary(prec, 40, " ! ", expression.arguments.get(0), expression.arguments.get(1));
