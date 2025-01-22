@@ -22,10 +22,10 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
     private final int[] key;
     private Socket socket;
     private final Queue<GroupRequest> unsentRequests = new LinkedBlockingQueue<>();
-    private final Map<ArchiveGroup, GroupRequest> responses = new ConcurrentHashMap<>();
-    private boolean connected;
+    private final Map<ArchiveGroup, GroupRequest> sentRequests = new ConcurrentHashMap<>();
     private boolean shutdownRequested = false;
     private final ReentrantReadWriteLock shutdownRequestedLock = new ReentrantReadWriteLock();
+    private long lastResponseTime = Long.MAX_VALUE;
     private GroupRequest response = null;
     private int responseArchive;
     private int responseGroup;
@@ -46,12 +46,25 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
     }
 
     public void processRequests() throws IOException, InterruptedException {
-        ensureConnected();
+        connect();
 
         while (true) {
-            while (responses.size() < MAX_PENDING_REQUESTS - 1 && !unsentRequests.isEmpty()) {
+            if (lastResponseTime < System.currentTimeMillis() - 30000 && (!sentRequests.isEmpty() || !unsentRequests.isEmpty())) {
+                lastResponseTime = System.currentTimeMillis();
+
+                for (var request : sentRequests.values()) {
+                    request.buffer = null;
+                    unsentRequests.add(request);
+                }
+
+                sentRequests.clear();
+                socket.close();
+                connect();
+            }
+
+            while (sentRequests.size() < MAX_PENDING_REQUESTS && !unsentRequests.isEmpty()) {
                 var request = unsentRequests.poll();
-                responses.put(new ArchiveGroup(request.archive, request.group), request);
+                sentRequests.put(new ArchiveGroup(request.archive, request.group), request);
                 System.out.println("request " + request.archive + " " + request.group + " " + request.urgent);
 
                 if (!request.urgent) {
@@ -62,6 +75,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
             }
 
             if (socket.getInputStream().available() > 0) {
+                lastResponseTime = System.currentTimeMillis();
                 handleResponse();
             }
 
@@ -69,28 +83,24 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
         }
     }
 
-    private void ensureConnected() throws IOException {
-        if (!connected) {
-            socket = new Socket(host, port);
-            socket.setTcpNoDelay(true);
-            socket.setReceiveBufferSize(10_000_000);
+    private void connect() throws IOException {
+        socket = new Socket(host, port);
+        socket.setTcpNoDelay(true);
+        socket.setReceiveBufferSize(10_000_000);
 
-            var packet = Packet.create(20 + 1);
-            packet.p1(15);
-            packet.p4(revision);
-            packet.p4(key == null ? 0 : key[0]);
-            packet.p4(key == null ? 0 : key[1]);
-            packet.p4(key == null ? 0 : key[2]);
-            packet.p4(key == null ? 0 : key[3]);
-            send(packet);
+        var packet = Packet.create(20 + 1);
+        packet.p1(15);
+        packet.p4(revision);
+        packet.p4(key == null ? 0 : key[0]);
+        packet.p4(key == null ? 0 : key[1]);
+        packet.p4(key == null ? 0 : key[2]);
+        packet.p4(key == null ? 0 : key[3]);
+        send(packet);
 
-            var status = receive(1).g1();
+        var status = receive(1).g1();
 
-            if (status != 0) {
-                throw new IOException("failed to connect " + status);
-            }
-
-            connected = true;
+        if (status != 0) {
+            throw new IOException("failed to connect " + status);
         }
     }
 
@@ -120,7 +130,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
             responseGroup = packet.g2();
             System.out.println("receive " + responseArchive + " " + responseGroup);
 
-            response = responses.get(new ArchiveGroup(responseArchive, responseGroup));
+            response = sentRequests.get(new ArchiveGroup(responseArchive, responseGroup));
 
             if (response == null) {
                 throw new IOException("received a group that wasn't asked for: archive = " + responseArchive + " group = " + responseGroup);
@@ -148,7 +158,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
         response.buffer.put(receive(Math.min(response.buffer.remaining(), BLOCK_SIZE - blockPosition)).arr);
 
         if (response.buffer.remaining() == 0) {
-            responses.remove(new ArchiveGroup(responseArchive, responseGroup));
+            sentRequests.remove(new ArchiveGroup(responseArchive, responseGroup));
             response.future.complete(response.buffer.array());
             response = null;
             responseArchive = -1;
