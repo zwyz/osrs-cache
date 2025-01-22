@@ -5,7 +5,7 @@
 7104 [command,minimenu_active_obj]()(boolean)
 7105 [command,minimenu_active_player]()(boolean)
 7106 [command,minimenu_active_coord]()(coord)
-7107 [command,unknown_command_7107]()(int)
+7107 [command,minimenu_active_obj]()(boolean)
 7108 [command,minimenu_isopen]()(boolean)
 7109 [command,minimenu_active_component]()(boolean)
 7110 [command,minimenu_size]()(int)

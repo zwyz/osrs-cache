@@ -313,6 +313,9 @@
 2307 [command,if_clearops](component $x1)
 2308 [command,if_setalwaysleftclick](boolean $x1, component $x2)
 2309 [command,if_setpinch](boolean $x1, component $x2)
+2310 [command,cc_clearsubops](int $index, component $x2)
+2311 [command,cc_setsubop](int $index, int $subindex, string $op, component $x4)
+2312 [command,cc_setoppriority](int $x1, component $x2)
 
 2350 [command,if_setopkey](int $x1, key $x2, int $x3, component $x4)
 2351 [command,if_setoptkey](int $x1, key $x2, component $x3)
