@@ -1,14 +1,14 @@
-7500 [command,db_find_with_count]todo
+7500 [command,db_find_with_count]
 7501 [command,db_findnext]()(dbrow)
-7502 [command,db_getfield]todo
+7502 [command,db_getfield]
 7503 [command,db_getfieldcount](dbrow $x1, dbcolumn $x2)(int)
 7504 [command,db_listall_with_count](dbtable $x1)(int)
 7505 [command,db_getrowtable](dbrow $x1)(dbtable)
 7506 [command,db_find_get](int $x1)(dbrow)
-7507 [command,db_find_refine_with_count]todo
-7508 [command,db_find]todo
-7500 [command,db_find]todo 228
-7509 [command,db_find_refine]todo
-7507 [command,db_find_refine]todo 228
+7507 [command,db_find_refine_with_count]
+7508 [command,db_find]
+7500 [command,db_find] 228
+7509 [command,db_find_refine]
+7507 [command,db_find_refine] 228
 7510 [command,db_listall](dbtable $x1)
 7504 [command,db_listall](dbtable $x1)(int) 228
