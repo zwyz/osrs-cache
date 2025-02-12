@@ -11,23 +11,37 @@
 3609 [command,friend_test](string $x1)(boolean)
 3610 (gap)
 3611 [command,clan_getchatdisplayname]()(string)
+3611 [command,friendschat_getchatdisplayname]()(string) 195
 3612 [command,clan_getchatcount]()(int)
+3612 [command,friendschat_getchatcount]()(int) 195
 3613 [command,clan_getchatusername](int $x1)(string)
+3613 [command,friendschat_getchatusername](int $x1)(string) 195
 3614 [command,clan_getchatuserworld](int $x1)(int)
+3614 [command,friendschat_getchatuserworld](int $x1)(int) 195
 3615 [command,clan_getchatuserrank](int $x1)(int)
+3615 [command,friendschat_getchatuserrank](int $x1)(int) 195
 3616 [command,clan_getchatminkick]()(int)
+3616 [command,friendschat_getchatminkick]()(int) 195
 3617 [command,clan_kickuser](string $x1)
+3617 [command,friendschat_kickuser](string $x1) 195
 3618 [command,clan_getchatrank]()(int)
+3618 [command,friendschat_getchatrank]()(int) 195
 3619 [command,clan_joinchat](string $x1)
+3619 [command,friendschat_joinchat](string $x1) 195
 3620 [command,clan_leavechat]
+3620 [command,friendschat_leavechat] 195
 3621 [command,ignore_count]()(int)
 3622 [command,ignore_getname](int $x1)(string)
 3622 [command,ignore_getname](int $x1)(string, string) 53
 3623 [command,ignore_test](string $x1)(boolean)
 3624 [command,clan_isself](int $x1)(boolean)
+3624 [command,friendschat_isself](int $x1)(boolean) 195
 3625 [command,clan_getchatownername]()(string)
+3625 [command,friendschat_getchatownername]()(string) 195
 3626 [command,clan_isfriend](int $x1)(boolean)
+3626 [command,friendschat_isfriend](int $x1)(boolean) 195
 3627 [command,clan_isignore](int $x1)(boolean)
+3627 [command,friendschat_isignore](int $x1)(boolean) 195
 3628 [command,friendlist_sort_reset]
 3629 [command,friendlist_sort_legacy](boolean $x1)
 3630 [command,friendlist_sort_name](boolean $x1)
@@ -45,16 +59,29 @@
 3642 [command,ignorelist_sort_name](boolean $x1)
 3643 [command,ignorelist_sort_apply]
 3644 [command,clan_sort_reset]
+3644 [command,friendschat_sort_reset] 195
 3645 [command,clan_sort_legacy](boolean $x1)
+3645 [command,friendschat_sort_legacy](boolean $x1) 195
 3646 [command,clan_sort_name](boolean $x1)
+3646 [command,friendschat_sort_name](boolean $x1) 195
 3647 [command,clan_sort_world](boolean $x1)
+3647 [command,friendschat_sort_world](boolean $x1) 195
 3648 [command,clan_sort_lastworldchange](boolean $x1)
+3648 [command,friendschat_sort_lastworldchange](boolean $x1) 195
 3649 [command,clan_sort_online_status](boolean $x1)
+3649 [command,friendschat_sort_online_status](boolean $x1) 195
 3650 [command,clan_sort_online_name](boolean $x1)
+3650 [command,friendschat_sort_online_name](boolean $x1) 195
 3651 [command,clan_sort_online_lastworldchange](boolean $x1)
+3651 [command,friendschat_sort_online_lastworldchange](boolean $x1) 195
 3652 [command,clan_sort_online_world](boolean $x1)
+3652 [command,friendschat_sort_online_world](boolean $x1) 195
 3653 [command,clan_sort_ownworld_name](boolean $x1)
+3653 [command,friendschat_sort_ownworld_name](boolean $x1) 195
 3654 [command,clan_sort_ownworld_world](boolean $x1)
+3654 [command,friendschat_sort_ownworld_world](boolean $x1) 195
 3655 [command,clan_sort_apply]
+3655 [command,friendschat_sort_apply] 195
 3656 [command,friendlist_sort_rank](boolean $x1)
 3657 [command,clan_sort_rank](boolean $x1)
+3657 [command,friendschat_sort_rank](boolean $x1) 195

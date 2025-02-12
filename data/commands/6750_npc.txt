@@ -1,6 +1,6 @@
 6750 [command,npc_name]()(string)
 6751 [command,npc_uid]()(npc_uid)
-6752 [command,npc_spawncycle]()(int)
+6752 [command,npc_creationcycle]()(int)
 6753 [command,npc_type]()(npc)
 6754 [command,nc_name](npc $x1)(string)
 6755 [command,npc_route_length]()(int)

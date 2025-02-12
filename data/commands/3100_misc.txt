@@ -26,15 +26,15 @@
 3124 [command,resetdrawplayernames]
 3125 [command,setshowmousecross](boolean $x1)
 3126 [command,setshowloadingmessages](boolean $x1)
-3127 [command,settaptodrop](boolean $x1)
-3128 [command,gettaptodrop]()(boolean)
-3129 [command,unknown_command_3129](int $x1, int $x2)
-3130 [command,setclickgraphic](graphic $graphic, boolean $transparency)
-3131 [command,unknown_command_3131](boolean $x1)
+3127 [command,setsimulatedshiftactive](boolean $x1)
+3128 [command,getsimulatedshiftactive]()(boolean)
+3129 [command,setfreecamspeed](int $x1, int $x2)
+3130 [command,setfeedbacksprite](graphic $graphic, boolean $transparency)
+3131 [command,setfeedbackshowpopuptext](boolean $x1)
 3132 [command,getcanvassize]()(int, int)
 3133 [command,mobile_setfps](int $x1)
 3134 [command,shop_open]
-3135 [command,shop_opencategories](int $x1, boolean $x2)
+3135 [command,shop_opensubset](int $x1, boolean $x2)
 3136 [command,setkeyinputmode_component](boolean $x1)
 3137 [command,setkeyinputmode_interface](boolean $x1)
 3138 [command,setkeyinputmode_all]
@@ -56,7 +56,7 @@
 3154 [command,unknown_command_3154]todo
 3155 [command,shop_purchaseitem]todo
 3156 [command,shop_requestdata]todo
-3157 [command,unknown_command_3157](int $x1, int $x2)
+3157 [command,shop_opencategories](int $x1, int $x2)
 3158 [command,shop_purchaseitemstatus]todo
 3159 [command,shop_requestdatastatus]todo
 3160 [command,shop_getcategorycount]todo
