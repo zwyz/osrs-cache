@@ -12,11 +12,11 @@ public enum ScriptTrigger {
     WORLDMAPELEMENTMOUSEREPEAT(17, Type.MAPELEMENT),
 
     // shift ops
-    SHIFTOPNPC(30),
-    SHIFTOPLOC(31),
-    SHIFTOPOBJ(32),
-    SHIFTOPPLAYER(33),
-    SHIFTOPTILE(34),
+    CLIENTOPNPC(30),
+    CLIENTOPLOC(31),
+    CLIENTOPOBJ(32),
+    CLIENTOPPLAYER(33),
+    CLIENTOPTILE(34),
 
     // load/unload
     LOADNPC(35, Type.NPC), // active: npc https://twitter.com/JagexAsh/status/1425523182006583297
@@ -49,12 +49,12 @@ public enum ScriptTrigger {
     MINIMENU_OPENED(82),
     TRIGGER_83(83),
 
-    // shift click
-    ONSHIFTCLICKNPC(-1),
-    ONSHIFTCLICKLOC(-1),
-    ONSHIFTCLICKOBJ(-1),
-    ONSHIFTCLICKPLAYER(-1),
-    ONSHIFTCLICKTILE(-1),
+    // client op
+    ONCLIENTOPNPC(-1),
+    ONCLIENTOPLOC(-1),
+    ONCLIENTOPOBJ(-1),
+    ONCLIENTOPPLAYER(-1),
+    ONCLIENTOPTILE(-1),
     ;
 
     public final int id;

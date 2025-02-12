@@ -16,7 +16,7 @@
 3114 (gap)
 3115 [command,resume_objdialog](obj $x1)
 3116 [command,bug_report](bugtemplate $x1, string $x2, string $x3)
-3117 [command,setshiftclickdrop](boolean $x1)
+3117 [command,setshiftclickenabled](boolean $x1)
 3118 [command,setshowmouseovertext](boolean $x1)
 3119 [command,renderself](boolean $x1)
 3120 [command,setdrawplayernames_friends](boolean $x1)

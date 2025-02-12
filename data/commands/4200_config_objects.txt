@@ -11,7 +11,7 @@
 4210 [command,oc_find](string $x1, boolean $x2)(int)
 4211 [command,oc_findnext]()(obj)
 4212 [command,oc_findreset]
-4213 [command,oc_shiftclickop](obj $x1)(int)
+4213 [command,oc_shiftclickiop](obj $x1)(int)
 4214 [command,oc_wearpos](obj $x1)(int)
 4215 [command,oc_wearpos2](obj $x1)(int)
 4216 [command,oc_wearpos3](obj $x1)(int)

@@ -188,7 +188,7 @@ public class Unpacker {
                 default -> "stat_" + value;
             };
 
-            case CLIENTSCRIPT, ONSHIFTCLICKNPC, ONSHIFTCLICKLOC, ONSHIFTCLICKOBJ, ONSHIFTCLICKPLAYER, ONSHIFTCLICKTILE -> {
+            case CLIENTSCRIPT, ONCLIENTOPNPC, ONCLIENTOPLOC, ONCLIENTOPOBJ, ONCLIENTOPPLAYER, ONCLIENTOPTILE -> {
                 if (value == -1) {
                     yield "null";
                 }
@@ -522,7 +522,7 @@ public class Unpacker {
 
             case INT_OPKIND -> switch (value) {
                 case -1 -> "null";
-                case 0 -> "^opkind_entitynoshift";
+                case 0 -> "^opkind_entityserver";
                 case 1 -> "^opkind_target";
                 case 2 -> "^opkind_entity";
                 case 3 -> "^opkind_component";
