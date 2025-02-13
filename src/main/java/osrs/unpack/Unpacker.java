@@ -293,7 +293,7 @@ public class Unpacker {
                 case 9 -> "^iftype_line";
                 case 10 -> "^iftype_arc";
                 case 11 -> "^iftype_crmview";
-                case 12 -> "^iftype_input";
+                case 12 -> "^iftype_inputfield";
                 default -> "^iftype_" + value;
             };
 
@@ -388,23 +388,23 @@ public class Unpacker {
 
             case INT_SETPOSH -> switch (value) {
                 case -1 -> "null";
-                case 0 -> "^setposh_abs_left";
-                case 1 -> "^setposh_abs_centre";
-                case 2 -> "^setposh_abs_right";
-                case 3 -> "^setposh_proportion_left";
-                case 4 -> "^setposh_proportion_centre";
-                case 5 -> "^setposh_proportion_right";
+                case 0 -> "^setpos_abs_left";
+                case 1 -> "^setpos_abs_centre";
+                case 2 -> "^setpos_abs_right";
+                case 3 -> "^setpos_proportion_left";
+                case 4 -> "^setpos_proportion_centre";
+                case 5 -> "^setpos_proportion_right";
                 default -> "^setposh_" + value;
             };
 
             case INT_SETPOSV -> switch (value) {
                 case -1 -> "null";
-                case 0 -> "^setposv_abs_top";
-                case 1 -> "^setposv_abs_centre";
-                case 2 -> "^setposv_abs_bottom";
-                case 3 -> "^setposv_proportion_top";
-                case 4 -> "^setposv_proportion_centre";
-                case 5 -> "^setposv_proportion_bottom";
+                case 0 -> "^setpos_abs_top";
+                case 1 -> "^setpos_abs_centre";
+                case 2 -> "^setpos_abs_bottom";
+                case 3 -> "^setpos_proportion_top";
+                case 4 -> "^setpos_proportion_centre";
+                case 5 -> "^setpos_proportion_bottom";
                 default -> "^setposv_" + value;
             };
 
@@ -418,17 +418,17 @@ public class Unpacker {
 
             case INT_SETTEXTALIGNH -> switch (value) {
                 case -1 -> "null";
-                case 0 -> "^settextalignh_left";
-                case 1 -> "^settextalignh_centre";
-                case 2 -> "^settextalignh_right";
+                case 0 -> "^settextalign_left";
+                case 1 -> "^settextalign_centre";
+                case 2 -> "^settextalign_right";
                 default -> "^settextalignh_" + value;
             };
 
             case INT_SETTEXTALIGNV -> switch (value) {
                 case -1 -> "null";
-                case 0 -> "^settextalignv_top";
-                case 1 -> "^settextalignv_centre";
-                case 2 -> "^settextalignv_bottom";
+                case 0 -> "^settextalign_top";
+                case 1 -> "^settextalign_centre";
+                case 2 -> "^settextalign_bottom";
                 default -> "^settextalignv_" + value;
             };
 
