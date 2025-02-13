@@ -171,7 +171,7 @@ public class Unpack {
                     var key2 = String.valueOf((-3 - category << 8) + trigger.id);
 
                     if (scriptByHash.containsKey(key2.hashCode()) && !collisions.contains(key2.hashCode())) {
-                        names.put(scriptByHash.get(key2.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + Unpacker.format(Type.CATEGORY, category) + "]");
+                        names.put(scriptByHash.get(key2.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + ",_" + Unpacker.format(Type.CATEGORY, category) + "]");
                     }
                 }
 
