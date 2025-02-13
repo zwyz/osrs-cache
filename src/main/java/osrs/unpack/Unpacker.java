@@ -101,12 +101,12 @@ public class Unpacker {
                 }
             }
 
-            case GRAPHIC -> {
+            case GRAPHIC, FONTMETRICS -> {
                 if (value == -1) {
                     yield "null";
                 }
 
-                var name = GRAPHIC_NAMES.getOrDefault(value, "graphic_" + value);
+                var name = GRAPHIC_NAMES.getOrDefault(value, type.name + "_" + value);
 
                 if (name.contains(",")) {
                     name = "\"" + name + "\"";
