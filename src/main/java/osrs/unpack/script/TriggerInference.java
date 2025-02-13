@@ -18,16 +18,16 @@ public class TriggerInference {
         if (expression.command == PUSH_CONSTANT_INT) {
             // push_constant_int should have exactly 1 type, always
             Type type = expression.type.getFirst();
-            if (type == Type.ONCLIENTOPNPC) {
-                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.ONCLIENTOPNPC);
-            } else if (type == Type.ONCLIENTOPLOC) {
-                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.ONCLIENTOPLOC);
-            } else if (type == Type.ONCLIENTOPOBJ) {
-                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.ONCLIENTOPOBJ);
-            } else if (type == Type.ONCLIENTOPPLAYER) {
-                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.ONCLIENTOPPLAYER);
-            } else if (type == Type.ONCLIENTOPTILE) {
-                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.ONCLIENTOPTILE);
+            if (type == Type.CLIENTOPNPC) {
+                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.CLIENTOPNPC);
+            } else if (type == Type.CLIENTOPLOC) {
+                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.CLIENTOPLOC);
+            } else if (type == Type.CLIENTOPOBJ) {
+                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.CLIENTOPOBJ);
+            } else if (type == Type.CLIENTOPPLAYER) {
+                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.CLIENTOPPLAYER);
+            } else if (type == Type.CLIENTOPTILE) {
+                ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.CLIENTOPTILE);
             }
         }
 

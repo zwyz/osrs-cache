@@ -11,7 +11,7 @@ public enum ScriptTrigger {
     WORLDMAPELEMENTMOUSELEAVE(16, Type.MAPELEMENT),
     WORLDMAPELEMENTMOUSEREPEAT(17, Type.MAPELEMENT),
 
-    // shift ops
+    // client ops
     CLIENTOPNPC(30),
     CLIENTOPLOC(31),
     CLIENTOPOBJ(32),
@@ -42,19 +42,12 @@ public enum ScriptTrigger {
 
     // minimenu
     TRIGGER_77(77, Type.OBJ),
-    ONCLICKLOC(78),
-    ONCLICKOBJ(79),
-    ONCLICKNPC(80),
+    ONCLICKLOC(78, Type.LOC),
+    ONCLICKOBJ(79, Type.OBJ),
+    ONCLICKNPC(80, Type.NPC),
     ONCLICKPLAYER(81),
     MINIMENU_OPENED(82),
     TRIGGER_83(83),
-
-    // client op
-    ONCLIENTOPNPC(-1),
-    ONCLIENTOPLOC(-1),
-    ONCLIENTOPOBJ(-1),
-    ONCLIENTOPPLAYER(-1),
-    ONCLIENTOPTILE(-1),
     ;
 
     public final int id;

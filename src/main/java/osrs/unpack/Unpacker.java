@@ -188,7 +188,7 @@ public class Unpacker {
                 default -> "stat_" + value;
             };
 
-            case CLIENTSCRIPT, ONCLIENTOPNPC, ONCLIENTOPLOC, ONCLIENTOPOBJ, ONCLIENTOPPLAYER, ONCLIENTOPTILE -> {
+            case CLIENTSCRIPT, CLIENTOPNPC, CLIENTOPLOC, CLIENTOPOBJ, CLIENTOPPLAYER, CLIENTOPTILE -> {
                 if (value == -1) {
                     yield "null";
                 }
