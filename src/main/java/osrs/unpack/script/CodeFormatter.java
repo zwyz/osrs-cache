@@ -375,19 +375,17 @@ public class CodeFormatter {
             if (Objects.equals(expression.operand, Integer.MIN_VALUE + 1)) return "event_mousex";
             if (Objects.equals(expression.operand, Integer.MIN_VALUE + 2)) return "event_mousey";
             if (Objects.equals(expression.operand, Integer.MIN_VALUE + 3)) return "event_com";
-            if (Objects.equals(expression.operand, Integer.MIN_VALUE + 4)) return "event_opindex";
+            if (Objects.equals(expression.operand, Integer.MIN_VALUE + 4)) return "event_op";
             if (Objects.equals(expression.operand, Integer.MIN_VALUE + 5)) return "event_comsubid";
             if (Objects.equals(expression.operand, Integer.MIN_VALUE + 6)) return "event_com2";
             if (Objects.equals(expression.operand, Integer.MIN_VALUE + 7)) return "event_comsubid2";
-            if (Objects.equals(expression.operand, Integer.MIN_VALUE + 8)) return "event_key";
+            if (Objects.equals(expression.operand, Integer.MIN_VALUE + 8)) return "event_keycode";
             if (Objects.equals(expression.operand, Integer.MIN_VALUE + 9)) return "event_keychar";
-            if (Objects.equals(expression.operand, Integer.MIN_VALUE + 10)) return "event_gamepadvalue";
-            if (Objects.equals(expression.operand, Integer.MIN_VALUE + 11)) return "event_gamepadbutton";
+            if (Objects.equals(expression.operand, Integer.MIN_VALUE + 10)) return "event_subop";
         }
 
         if (expression.command == PUSH_CONSTANT_STRING) {
             if (Objects.equals(expression.operand, "event_opbase")) return "event_opbase";
-            if (Objects.equals(expression.operand, "event_text")) return "event_text";
         }
 
         return format(expression);
