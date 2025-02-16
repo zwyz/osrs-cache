@@ -484,9 +484,9 @@ public class Unpacker {
                 case 2 -> "^menuentrytype_npc";
                 case 3 -> "^menuentrytype_loc";
                 case 4 -> "^menuentrytype_obj";
-                case 5 -> "^menuentrytype_player";
-                case 6 -> "^menuentrytype_component";
-                case 7 -> "^menuentrytype_worldmapelement";
+                case 6 -> "^menuentrytype_player";
+                case 7 -> "^menuentrytype_component";
+                case 8 -> "^menuentrytype_worldmapelement";
                 default -> "^menuentrytype_" + value;
             };
 
