@@ -96,7 +96,7 @@ public class SyntaxBuilder {
             for (var pop : pops.reversed()) {
                 switch (pop) {
                     case VarPlayerReference(var var) -> argumentTypes.add(Type.UNKNOWN_INT);
-                    case VarPlayerBitReference(var var) -> argumentTypes.add(Type.INT_INT);
+                    case VarPlayerBitReference(var var) -> argumentTypes.add(Type.INT);
                     case VarClientReference(var var, var string) -> argumentTypes.add(string ? Type.STRING : Type.UNKNOWN_INT);
                     case VarClientStringReference(var var) -> argumentTypes.add(Type.STRING);
 
@@ -146,7 +146,7 @@ public class SyntaxBuilder {
 
         if (command == PUSH_VARBIT) {
             var var = (int) operand;
-            var type = Type.INT_INT;
+            var type = Type.INT;
             buildCommand(code, index, FLOW_LOAD, new VarPlayerBitReference(var), List.of(), List.of(type));
             return;
         }

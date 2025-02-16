@@ -104,6 +104,10 @@ public class TypePropagator {
                 merge(type(expression, 0), varplayer(var.var()));
             }
 
+            if (expression.operand instanceof VarPlayerBitReference var) {
+                merge(type(expression, 0), varplayerbit(var.var()));
+            }
+
             if (expression.operand instanceof VarClientReference var) {
                 merge(type(expression, 0), varclient(var.var()));
             }
@@ -119,6 +123,10 @@ public class TypePropagator {
 
                 if (targets.get(i) instanceof VarPlayerReference var) {
                     merge(arg(expression, i), varplayer(var.var()));
+                }
+
+                if (targets.get(i) instanceof VarPlayerBitReference var) {
+                    merge(arg(expression, i), varplayerbit(var.var()));
                 }
 
                 if (targets.get(i) instanceof VarClientReference var) {
@@ -295,6 +303,10 @@ public class TypePropagator {
         return new VarPlayerNode(index);
     }
 
+    private Node varplayerbit(int index) {
+        return new VarPlayerBitNode(index);
+    }
+
     private Node varclient(int index) {
         return new VarClientNode(index);
     }
@@ -365,7 +377,7 @@ public class TypePropagator {
         }
 
         public String toString() {
-            return expression + " type " + index;
+            return expression + " " + Integer.toHexString(expression.hashCode()) + " type " + index;
         }
     }
 
@@ -378,6 +390,12 @@ public class TypePropagator {
     private record VarPlayerNode(int index) implements Node {
         public String toString() {
             return "varplayer" + index;
+        }
+    }
+
+    private record VarPlayerBitNode(int index) implements Node {
+        public String toString() {
+            return "varplayerbit" + index;
         }
     }
 
