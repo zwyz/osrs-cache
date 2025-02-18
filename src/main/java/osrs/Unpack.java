@@ -119,6 +119,7 @@ public class Unpack {
         unpackConfigGroup(DBROWTYPE, DBRowUnpacker::unpack, path + "/config/dump.dbrow");
         unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, path + "/config/dump.dbtable");
         unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, path + "/config/dump.gamelogevent"); // tfu
+        unpackConfigGroup(WORLDENTITY, WorldEntityUnpacker::unpack, path + "/config/dump.worldentity");
 
         // world map
         unpackWorldMapGroup(DETAILS, path + "/config/dump.wma");
