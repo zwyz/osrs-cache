@@ -22,13 +22,13 @@ public class WorldEntityUnpacker {
                 return lines;
             }
 
-            case 2 -> lines.add("unknown2=" + packet.g1());
-            case 4 -> lines.add("unknown4=" + packet.g2s());
-            case 5 -> lines.add("unknown5=" + packet.g2s());
-            case 6 -> lines.add("unknown6=" + packet.g2s());
-            case 7 -> lines.add("unknown7=" + packet.g2s());
-            case 8 -> lines.add("unknown8=" + packet.g2());
-            case 9 -> lines.add("unknown9=" + packet.g2());
+            case 2 -> lines.add("mainlevel=" + packet.g1());
+            case 4 -> lines.add("mainx=" + packet.g2s());
+            case 5 -> lines.add("mainz=" + packet.g2s());
+            case 6 -> lines.add("boundscenterx=" + packet.g2s());
+            case 7 -> lines.add("boundscenterz=" + packet.g2s());
+            case 8 -> lines.add("boundssizex=" + packet.g2());
+            case 9 -> lines.add("boundssizez=" + packet.g2());
             case 12 -> lines.add("unknown12=" + packet.gjstr());
             case 14 -> lines.add("unknown14=yes");
             case 15 -> lines.add("op1=" + packet.gjstr());

@@ -1,0 +1,2 @@
+7900 [command,worldentity_setrenderlimit](int $x1)
+7901 [command,worldentity_getrenderlimit]()(int)
