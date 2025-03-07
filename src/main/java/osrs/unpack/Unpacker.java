@@ -37,7 +37,11 @@ public class Unpacker {
 
     public static String format(Type type, int value) {
         return switch (type) {
-            case INT -> String.valueOf(value);
+            case INT -> switch (value) {
+                case Integer.MIN_VALUE -> "^min_32bit_int";
+                case Integer.MAX_VALUE -> "^max_32bit_int";
+                default -> String.valueOf(value);
+            };
 
             case BOOLEAN -> switch (value) {
                 case -1 -> "null";
@@ -201,7 +205,7 @@ public class Unpacker {
 
             case NAMEDOBJ -> format(Type.OBJ, value);
 
-            case INT_INT -> String.valueOf(value);
+            case INT_INT -> format(Type.INT, value);
 
             case INT_BOOLEAN -> switch (value) {
                 case -1 -> "null";
