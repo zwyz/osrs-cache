@@ -546,6 +546,13 @@ public class Unpacker {
                 default -> "^opmode_" + value;
             };
 
+            case INT_CLAN -> switch (value) {
+                case 0 -> "^clantype_clan";
+                case 1 -> "^clantype_gim";
+                case 2 -> "^clantype_pvpa_group";
+                default -> "^clantype_" + value;
+            };
+
             case INTARRAY -> "intarray" + value;
             case COMPONENTARRAY -> "componentarray" + value;
 

@@ -1,5 +1,5 @@
 3800 [command,activeclansettings_find_listened]()(boolean)
-3801 [command,activeclansettings_find_affined](int $x1)(boolean)
+3801 [command,activeclansettings_find_affined](clan $x1)(boolean)
 3802 [command,activeclansettings_getclanname]()(string)
 3803 [command,activeclansettings_getallowunaffined]()(boolean)
 3804 [command,activeclansettings_getranktalk]()(int)
@@ -22,7 +22,7 @@
 3822 [command,activeclansettings_getaffinedmuted](int $x1)(boolean)
 
 3850 [command,activeclanchannel_find_listened]()(boolean)
-3851 [command,activeclanchannel_find_affined](int $x1)(boolean)
+3851 [command,activeclanchannel_find_affined](clan $x1)(boolean)
 3852 [command,activeclanchannel_getclanname]()(string)
 3853 [command,activeclanchannel_getrankkick]()(int)
 3854 [command,activeclanchannel_getranktalk]()(int)

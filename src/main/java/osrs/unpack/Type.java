@@ -243,6 +243,7 @@ public enum Type {
     INT_RGB(-1, 0, BaseVarType.INTEGER, Type.INT, "rgb"),
     INT_OPKIND(-1, 0, BaseVarType.INTEGER, Type.INT, "opkind"),
     INT_OPMODE(-1, 0, BaseVarType.INTEGER, Type.INT, "opmode"),
+    INT_CLAN(-1, 0, BaseVarType.INTEGER, Type.INT, "clan"),
 
     // for decompiler
     HOOK,
