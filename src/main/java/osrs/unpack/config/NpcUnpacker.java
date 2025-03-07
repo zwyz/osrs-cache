@@ -28,7 +28,7 @@ public class NpcUnpacker {
                 var count = packet.g1();
 
                 for (var i = 0; i < count; i++) {
-                    lines.add("model=" + Unpacker.format(Type.MODEL, packet.g2()));
+                    lines.add("model" + (i + 1) + "=" + Unpacker.format(Type.MODEL, packet.g2()));
                 }
             }
 
@@ -68,7 +68,7 @@ public class NpcUnpacker {
                 var length = packet.g1();
 
                 for (var i = 0; i < length; i++) {
-                    lines.add("headmodel=" + Unpacker.format(Type.MODEL, packet.g2()));
+                    lines.add("head" + (i + 1) + "=" + Unpacker.format(Type.MODEL, packet.g2()));
                 }
             }
 
