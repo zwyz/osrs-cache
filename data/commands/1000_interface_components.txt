@@ -382,7 +382,7 @@
 2607 [command,if_getmodelangle_z](component $x1)(int)
 2608 [command,if_getmodelangle_y](component $x1)(int)
 2609 [command,if_gettrans](component $x1)(int)
-2610 [command,if_getgradientrans](component $x1)(int)
+2610 [command,if_getgradienttrans](component $x1)(int)
 2611 [command,if_getcolour](component $x1)(rgb)
 2612 [command,if_getgradientcolour](component $x1)(rgb)
 2613 [command,if_getgradientmode](component $x1)(gradientmode)
