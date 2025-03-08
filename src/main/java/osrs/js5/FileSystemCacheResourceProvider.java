@@ -23,18 +23,9 @@ public class FileSystemCacheResourceProvider implements Js5ResourceProvider {
         this.masterIndexData = underlying.get(255, 255, true);
         this.masterIndex = new Js5MasterIndex(Js5Util.decompress(masterIndexData));
 
-        // Load archive indices (needed for CRCs)
+        // Initialise array for archive indices (needed for CRCs)
         this.archiveIndexData = new byte[masterIndex.getArchiveCount()][];
         this.archiveIndex = new Js5ArchiveIndex[masterIndex.getArchiveCount()];
-
-        for (int archive = 0; archive < masterIndex.getArchiveCount(); archive++) {
-            var data = masterIndex.getArchiveData(archive);
-
-            if (data.getCrc() != 0) {
-                archiveIndexData[archive] = underlying.get(255, archive, true);
-                archiveIndex[archive] = new Js5ArchiveIndex(Js5Util.decompress(archiveIndexData[archive]));
-            }
-        }
     }
 
     @Override
@@ -43,28 +34,40 @@ public class FileSystemCacheResourceProvider implements Js5ResourceProvider {
             if (archive == 255 && group == 255) {
                 return masterIndexData;
             } else if (archive == 255) {
-                return archiveIndexData[group];
-            } else {
-                var crc = archiveIndex[archive].groupChecksum[group];
-                var file = path.resolve(archive + "/" + group + "_" + Integer.toHexString(crc));
-
-                if (Files.exists(file)) {
-                    var data = Files.readAllBytes(file);
-
-                    if (CRC32.crc(data) == crc) {
-                        return data;
-                    } else {
-                        System.err.println("[File System Cache] CRC mismatch on " + archive + "." + group);
-                    }
+                if (archiveIndexData[group] == null) {
+                    archiveIndexData[group] = get(archive, group, urgent, masterIndex.getArchiveData(group).getCrc());
                 }
 
-                var data = underlying.get(archive, group, urgent);
-                Files.createDirectories(file.getParent());
-                Files.write(file, data);
-                return data;
+                return archiveIndexData[group];
+            } else {
+                if (archiveIndex[archive] == null) {
+                    archiveIndex[archive] = new Js5ArchiveIndex(Js5Util.decompress(get(255, archive, true)));
+                }
+
+                return get(archive, group, urgent, archiveIndex[archive].groupChecksum[group]);
             }
+
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
+    }
+
+    private byte[] get(int archive, int group, boolean urgent, int crc) throws IOException {
+        var file = path.resolve(archive + "/" + group + "_" + Integer.toHexString(crc));
+
+        if (Files.exists(file)) {
+            var data = Files.readAllBytes(file);
+
+            if (CRC32.crc(data) == crc) {
+                return data;
+            } else {
+                System.err.println("[File System Cache] CRC mismatch on " + archive + "." + group);
+            }
+        }
+
+        var data = underlying.get(archive, group, urgent);
+        Files.createDirectories(file.getParent());
+        Files.write(file, data);
+        return data;
     }
 }
