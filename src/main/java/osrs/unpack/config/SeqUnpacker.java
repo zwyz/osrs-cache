@@ -123,10 +123,10 @@ public class SeqUnpacker {
                         var type = packet.g2null();
                         var loops = packet.g1();
                         var range = packet.g1();
-                        var size = packet.g1();
+                        var dropoffrange = packet.g1();
 
-                        if (type != 0 || loops != 0 || range != 0 || size != 0) {
-                            lines.add("sound" + i + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size);
+                        if (type != 0 || loops != 0 || range != 0 || dropoffrange != 0) {
+                            lines.add("sound" + i + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + dropoffrange);
                         }
                     }
                 } else {
@@ -143,11 +143,11 @@ public class SeqUnpacker {
                     for (var i = 0; i < count; i++) {
                         var index = packet.g2();
                         var type = packet.g2null();
+                        var weight = packet.g1();
                         var loops = packet.g1();
                         var range = packet.g1();
-                        var size = packet.g1();
-                        var unknown = packet.g1();
-                        lines.add("sound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size + "," + unknown);
+                        var dropoffrange = packet.g1();
+                        lines.add("sound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + weight + "," + loops + "," + range + "," + dropoffrange);
                     }
                 }
             }
@@ -172,8 +172,8 @@ public class SeqUnpacker {
                         var type = packet.g2null();
                         var loops = packet.g1();
                         var range = packet.g1();
-                        var size = packet.g1();
-                        lines.add("keyframesound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + size);
+                        var dropoffrange = packet.g1();
+                        lines.add("keyframesound" + index + "=" + Unpacker.format(Type.SYNTH, type) + "," + loops + "," + range + "," + dropoffrange);
                     }
                 } else {
                     lines.add("keyframerange=" + packet.g2() + "," + packet.g2());
