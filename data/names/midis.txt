@@ -1,13 +1,15 @@
 7th realm
 adventure
-al kharid
+a farmers grind
 alchemical hydra
+al kharid
 alls fairy in love n war
 alone
 altar_ego
 alternative root
 ambient jungle
 amlodd
+ancient prison
 anywhere
 arabian
 arabian2
@@ -34,16 +36,16 @@ autumn voyage
 avium_savannah
 aye car rum ba
 aztec
-back to life
 background
+back to life
 bait
 ballad of enchantment
 ballad of the basilisk
 bandit camp
 bandos battalion
-barb wire
 barbarian assault tutorial
 barbarianism
+barb wire
 barking mad
 baroque
 barren_land
@@ -69,9 +71,11 @@ bubble and squeak
 bunny_sugar_rush
 burning desire
 cabin fever
+camdozaal_vault
 camelot
 cam_torum
 castlewars
+catacombs and tombs
 catacombsofkourend
 catch me if you can
 cave background
@@ -96,7 +100,7 @@ close quarters
 coil
 competition
 complication
-confrontationwarrensancient prison
+confrontation
 conspiracy
 contest
 coronation
@@ -109,6 +113,7 @@ crest of a wave
 crystal castle
 crystal cave
 crystal sword
+cryws
 cursed
 dagannoth dawn
 dance of death
@@ -123,8 +128,8 @@ darkmeyer
 darkness_in_the_depths
 davy jones locker
 dead can dance
-dead quiet
 deadlands
+dead quiet
 deep down
 deep wildy
 delrith summoning
@@ -143,6 +148,7 @@ doorways
 dorgeshun city
 dorgeshun deep
 down and out
+down below
 down to earth
 dragonkin ambience
 dragonkin temple
@@ -152,6 +158,7 @@ dreamstate
 drunken dwarf
 duel arena
 dunjun
+dusk in yu'biusk
 dwarf theme
 dynasty
 eagle peak
@@ -181,9 +188,10 @@ faith_of_the_hefin
 fanfare
 fanfare2
 fanfare3
+fangs for the memory
 far away
-fe fi fo fum
 fear and loathing
+fe fi fo fum
 fenkenstrain's refrain
 fight of the basilisk
 fight or flight
@@ -216,13 +224,14 @@ garden of spring
 garden of summer
 garden of winter
 gargoyleboss
+gauntlet_minigame
 getting down to business
-giant dwarf meetingthe lost melody
+giant dwarf meeting
 gill bill
+gnomeball
 gnome king
 gnome village
 gnome village2
-gnomeball
 gnome_village_party
 goblin game
 goblin village
@@ -235,6 +244,7 @@ ground scape
 grow grow grow
 grumpy
 guardians of the rift
+hallowed sepulchre
 ham and seek
 ham attack
 ham fisted
@@ -252,8 +262,8 @@ hespori cave
 high seas
 high spirits
 hoe down
-home sweet home
 homescape
+home sweet home
 horizon
 housesofkourend
 hunter_guild
@@ -263,16 +273,16 @@ ice melody
 illusive
 impetuous
 impetuous_clue
-in between
-in the brine
-in the clinkmudskipper melodysubterranea
-in the manor
-in the pits
 inadequacy
+in between
 incantation
 inferno
 insect queen
 inspiration
+in the brine
+in the clink
+in the manor
+in the pits
 into the abyss
 intrepid
 iowerths_lament
@@ -301,18 +311,18 @@ knightly
 knightmare
 kourend_the_magnificent
 kr_betray_jingle
-la mort
 labyrinth
 lair
 lair of the basilisk
+lament
 lament of meiyerditch
-lamentmaking waves
-land down undermeddling kids
+la mort
+land down under
+landlubber
 land of snow
 land of the dwarves
-landlubber
-last stand
 lasting
+last stand
 last_man_standing
 legend
 legion
@@ -335,12 +345,13 @@ lucid nightmare
 lullaby
 mad eadgar
 mage arena
+magical journey
 magic dance
 magic magic magic
-magical journey
 maiden ambience
 maiden combat
 major miner
+making waves
 malady
 march
 marooned
@@ -349,6 +360,7 @@ masquerade
 mastermindless
 mausoleum
 maws_jaws_claws
+meddling kids
 medieval
 mellow
 melodrama
@@ -370,13 +382,14 @@ monkey sadness
 monkey trouble
 monster melee
 moody
-mor-ul-rekfangs for the memory
+mor-ul-rek
 morytania
 mouse trap
+mudskipper melody
 mutant medley
-my arms journey
 my2arm_boss_battle
 my2arm_love_theme_full
+my arms journey
 myths guild
 narnode's theme
 natural
@@ -385,13 +398,13 @@ neverland
 newbie farming
 newbie melody
 neypotzli
-night of the vampiyre
 nightfall
 nightmare_combat
-no pasaran
-no way out
+night of the vampiyre
 nomad
+no pasaran
 norse code
+no way out
 nox_irae
 null
 null and void
@@ -400,14 +413,14 @@ nylocas combat
 observatory telescope cutscene
 ogre the top
 olm_battle
+oncoming foe
 on the up
 on the wing
-oncoming foe
 on_the_shore
 oriental
 out of the deep
-over to nardah
 overpass
+over to nardah
 overture
 parade
 path of peril
@@ -425,10 +438,11 @@ pinball wizard
 pirates of penance
 pirates of peril
 poles apart
-prif_slayer_dungeoncryws
+prif_slayer_dungeon
 prime time
 principality
 quest
+ralos_rise
 rat a tat tat
 rat hunt
 ready for battle
@@ -437,16 +451,18 @@ reggae
 reggae2
 rellekka
 rest_in_peace
-revenant slayer cave
 revenants
-right on track
+revenant slayer cave
+rhapsody
 righteousness
+right on track
 rising damp
 riverside
 roc and roll
 roll the bones
 romancing the crone
 romper chomper
+roots_and_flutes
 rose
 royale
 rugged_terrain
@@ -455,11 +471,11 @@ sad meadow
 safety in numbers
 saga
 sarachnis_lair
-sarcophagusdown below
+sarcophagus
 sarim's vermin
 scape cave
 scape crystal
-scape five tsroots_and_flutes
+scape five ts
 scape hunter
 scape main
 scape main default
@@ -475,8 +491,8 @@ schools out
 scorpia_dances
 scrubfoots descent
 sea shanty
-sea shanty xmas
 sea shanty2
+sea shanty xmas
 sea_minor_shanty
 serenade
 serene
@@ -503,8 +519,8 @@ slug a bug ball
 sojourn
 sotetseg ambience
 sotetseg combat
-soul wars
 soulfall
+soul wars
 soundscape
 sphinx
 spirit
@@ -514,19 +530,20 @@ spooky
 spooky2
 spookyjungle
 spy games
-spymasterralos_rise
+spymaster
 stagnant
 stand up and be counted
 starlight
 start
-still night
 stillness
+still night
 storm brew
 stranded
 strange place
 stratosphere
 strength of saradomin
-stuck in the mirea farmers grind
+stuck in the mire
+subterranea
 sunburn
 superstition
 surok_king_battle_music
@@ -537,11 +554,12 @@ tears of guthix
 technology
 temple
 temple of light
-temple of tribestemple of the eye
-temporosscamdozaal_vaultrhapsody
+temple of the eye
+temple of tribes
+tempoross
 that_sullen_hall
 the adventurer
-the angels furydusk in yu'biuskcatacombs and tombs
+the angels fury
 the cellar dwellers
 the chosen
 the dark fragment
@@ -555,9 +573,11 @@ the galleon
 the genie
 the golem
 the last shanty
+the lost melody
 the lost tribe
 the lunar isle
 the mad mole
+theme
 the mollusc menace
 the monsters below
 the navigator
@@ -568,14 +588,13 @@ the quizmaster
 the rogues den
 the shadow
 the slayer
-the terrible cavernswell hallowed air
+the terrible caverns
 the terrible tower
 the terrible tunnels
 the tower
 the trade parade
 the waiting game
-theme
-the_tower_of_voicesgauntlet_minigame
+the_tower_of_voices
 thrall_of_the_serpent
 throne of the demon
 time out
@@ -590,8 +609,8 @@ trawler minor
 tree spirits
 tremble
 tribal
-tribal background
 tribal2
+tribal background
 trinity
 troll_shuffle
 trouble brewing
@@ -607,7 +626,7 @@ unknown land
 untouchable
 upass
 upcoming
-upir likhyihallowed sepulchre
+upir likhyi
 upper_depths
 vanescula
 vanstrom
@@ -628,6 +647,7 @@ wally cutscene
 wander
 warpath
 warped_library
+warrens
 warrior
 warriors guild
 wasteland
@@ -638,13 +658,14 @@ way of the wyrm
 wayward
 we are the fairies
 weiss_town
+well hallowed air
 well of voyage
 werewolves
 where eagles lair
-wild side
 wilderness
 wilderness2
 wilderness3
+wild side
 wildwood
 winter funfare
 wintertodt_boss
@@ -655,8 +676,8 @@ wonder
 wonderous
 woodland
 woodland walk
-work work work
 workshop
+work work work
 wrath and ruin
 xamphur
 xarpus ambience
