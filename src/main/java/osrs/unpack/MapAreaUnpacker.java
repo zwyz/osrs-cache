@@ -1,5 +1,6 @@
 package osrs.unpack;
 
+import osrs.Unpack;
 import osrs.util.Packet;
 
 import java.util.ArrayList;
@@ -16,10 +17,12 @@ public class MapAreaUnpacker {
 
         lines.add("name=" + packet.gjstr());
         lines.add("origin=" + Unpacker.format(Type.COORDGRID, packet.g4s()));
-        lines.add("unknown1=" + Unpacker.formatColour(packet.g4s()));
-        lines.add("background=" + Unpacker.formatColour(packet.g4s()));
-        lines.add("unknown2=" + packet.g1());
-        lines.add("main=" + (packet.g1() == 1));
+        lines.add("backgroundcolour=" + Unpacker.formatColour(packet.g4s()));
+        if (Unpack.VERSION >= 217) {
+            lines.add("fillcolour=" + Unpacker.formatColour(packet.g4s()));
+        }
+        lines.add("unknown=" + packet.g1());
+        lines.add("defaultmap=" + (packet.g1() == 1));
         lines.add("zoom=" + packet.g1());
 
         var count = packet.g1();
