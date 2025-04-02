@@ -121,6 +121,7 @@ public class Unpack {
         unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, path + "/config/dump.dbtable");
         unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, path + "/config/dump.gamelogevent"); // tfu
         unpackConfigGroup(WORLDENTITY, WorldEntityUnpacker::unpack, path + "/config/dump.worldentity");
+        unpackConfigGroup(UNKNOWN71, Unknown71Unpacker::unpack, path + "/config/dump.unknown71");
 
         // world map
         unpackWorldMapGroup(DETAILS, path + "/config/dump.wma");

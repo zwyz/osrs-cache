@@ -41,6 +41,7 @@ public enum Js5ConfigGroup {
     VAR_CLAN(47),
     VAR_CLAN_SETTING(54),
     GAMELOGEVENT(70),
+    UNKNOWN71(71),
     WORLDENTITY(72),
     ;
 

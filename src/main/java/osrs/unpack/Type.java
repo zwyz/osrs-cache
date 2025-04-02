@@ -187,6 +187,7 @@ public enum Type {
     // unknown id
     STRINGVECTOR(-1, '¸', BaseVarType.INTEGER), // added in 202 todo: id?
     WORLDENTITY(-1, 0, BaseVarType.INTEGER),
+    UNKNOWN71(-1, 0, BaseVarType.INTEGER),
 
     // unknown id - server only
     MESANIM,
