@@ -1,11 +1,18 @@
 100 [command,cc_create](component $component, iftype $type, int $subid)
+100 [command,cc_create](component $component, iftype $type, int $subid, boolean $keep_children) 230
 101 [command,cc_delete]
 102 [command,cc_deleteall](component $component)
 103 [command,cc_create_entityoverlay](entityoverlay $overlay, iftype $type, int $subid)
 104 [command,cc_deleteall_entityoverlay](entityoverlay $overlay)
 105 [command,cc_copy](component $component, int $subid)
+106 [command,cc_createchild](iftype $type, int $subid)
+107 [command,cc_createparentchild](iftype $type, int $subid)
 
 200 [command,cc_find](component $component, int $subid)(intbool)
 201 [command,if_find](component $component)(intbool)
 202 [command,if_find_entityoverlay](entityoverlay $overlay)(intbool)
 203 [command,cc_find_entityoverlay](entityoverlay $overlay, int $subid)(intbool)
+204 [command,cc_find_parent]()(intbool)
+206 [command,cc_find_layer]()(intbool)
+207 [command,cc_deleteallchild]()(intbool)
+208 [command,cc_countchild]()(int)
