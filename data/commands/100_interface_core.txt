@@ -1,5 +1,5 @@
 100 [command,cc_create](component $component, iftype $type, int $subid)
-100 [command,cc_create](component $component, iftype $type, int $subid, boolean $keep_children)(int) 230
+100 [command,cc_create](component $component, iftype $type, int $subid, boolean $keep_children) 230
 101 [command,cc_delete]
 102 [command,cc_deleteall](component $component)
 103 [command,cc_create_entityoverlay](entityoverlay $overlay, iftype $type, int $subid)
