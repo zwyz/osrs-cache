@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 
@@ -231,6 +232,17 @@ public class CodeFormatter {
             }
 
             case "db_find", "db_find_with_count", "db_find_refine", "db_find_refine_with_count" -> expression.command.name + "(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ")";
+
+            case "cc_create" -> {
+                var args = expression.arguments;
+                var dot = expression.operand instanceof Integer i && i == 1;
+
+                if (Unpack.VERSION >= 230 && expression.arguments.get(3).command == PUSH_CONSTANT_INT && (int) expression.arguments.get(3).operand == 0) {
+                    args = args.subList(0, 3);
+                }
+
+                yield (dot ? "." : "") + "cc_create(" + args.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
+            }
 
             // control flow
             case "flow_ne" -> formatBinary(prec, 40, " ! ", expression.arguments.get(0), expression.arguments.get(1));

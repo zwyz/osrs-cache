@@ -475,6 +475,8 @@ public class Unpacker {
                 case 17 -> "^deviceoption_full_screen";
                 case 19 -> "^deviceoption_master_volume";
                 case 20 -> "^deviceoption_anti_aliasing_sample_level";
+                case 21 -> "^deviceoption_plugin_safe_mode";
+                case 22 -> "^deviceoption_is_sfx_8_bit";
                 default -> "^deviceoption_" + value;
             };
 
