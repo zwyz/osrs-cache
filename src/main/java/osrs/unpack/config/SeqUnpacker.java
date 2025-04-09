@@ -205,7 +205,7 @@ public class SeqUnpacker {
                 }
             }
 
-            case 18 -> lines.add("unknown18=" + packet.gjstr());
+            case 18 -> lines.add("debugname=" + packet.gjstr());
 
             default -> throw new IllegalStateException("unknown opcode");
         }
