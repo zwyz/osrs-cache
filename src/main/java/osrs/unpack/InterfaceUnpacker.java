@@ -222,7 +222,7 @@ public class InterfaceUnpacker {
         line(lines, "textalignh=", packet.g1(), 0); // if_settextalign
         line(lines, "textalignv=", packet.g1(), 0); // if_settextalign
         line(lines, "textshadow=", (packet.g1() == 1 ? "yes" : "no"), "no"); // if_settextshadow
-        line(lines, "colour=", Unpacker.formatColour(packet.g4s()), "0xffffff"); // if_setcolour
+        line(lines, "colour=", Unpacker.formatColour(packet.g4s())); // if_setcolour
     }
 
     private static void decodeRectangle(ArrayList<String> lines, Packet packet, int version) {
