@@ -1,8 +1,8 @@
 7th realm
-adventure
 a farmers grind
-alchemical hydra
+adventure
 al kharid
+alchemical hydra
 alls fairy in love n war
 alone
 altar_ego
@@ -36,16 +36,16 @@ autumn voyage
 avium_savannah
 aye car rum ba
 aztec
-background
 back to life
+background
 bait
 ballad of enchantment
 ballad of the basilisk
 bandit camp
 bandos battalion
+barb wire
 barbarian assault tutorial
 barbarianism
-barb wire
 barking mad
 baroque
 barren_land
@@ -71,9 +71,9 @@ bubble and squeak
 bunny_sugar_rush
 burning desire
 cabin fever
+cam_torum
 camdozaal_vault
 camelot
-cam_torum
 castlewars
 catacombs and tombs
 catacombsofkourend
@@ -128,8 +128,8 @@ darkmeyer
 darkness_in_the_depths
 davy jones locker
 dead can dance
-deadlands
 dead quiet
+deadlands
 deep down
 deep wildy
 delrith summoning
@@ -183,15 +183,15 @@ expedition
 exposed
 faerie
 fairy dragon cutscene
-faithless
 faith_of_the_hefin
+faithless
 fanfare
 fanfare2
 fanfare3
 fangs for the memory
 far away
-fear and loathing
 fe fi fo fum
+fear and loathing
 fenkenstrain's refrain
 fight of the basilisk
 fight or flight
@@ -228,11 +228,11 @@ gauntlet_minigame
 getting down to business
 giant dwarf meeting
 gill bill
-gnomeball
 gnome king
 gnome village
 gnome village2
 gnome_village_party
+gnomeball
 goblin game
 goblin village
 golden touch
@@ -262,8 +262,8 @@ hespori cave
 high seas
 high spirits
 hoe down
-homescape
 home sweet home
+homescape
 horizon
 housesofkourend
 hunter_guild
@@ -273,16 +273,16 @@ ice melody
 illusive
 impetuous
 impetuous_clue
-inadequacy
 in between
-incantation
-inferno
-insect queen
-inspiration
 in the brine
 in the clink
 in the manor
 in the pits
+inadequacy
+incantation
+inferno
+insect queen
+inspiration
 into the abyss
 intrepid
 iowerths_lament
@@ -311,19 +311,19 @@ knightly
 knightmare
 kourend_the_magnificent
 kr_betray_jingle
+la mort
 labyrinth
 lair
 lair of the basilisk
 lament
 lament of meiyerditch
-la mort
 land down under
-landlubber
 land of snow
 land of the dwarves
-lasting
+landlubber
 last stand
 last_man_standing
+lasting
 legend
 legion
 life's a beach!
@@ -345,9 +345,9 @@ lucid nightmare
 lullaby
 mad eadgar
 mage arena
-magical journey
 magic dance
 magic magic magic
+magical journey
 maiden ambience
 maiden combat
 major miner
@@ -387,9 +387,9 @@ morytania
 mouse trap
 mudskipper melody
 mutant medley
+my arms journey
 my2arm_boss_battle
 my2arm_love_theme_full
-my arms journey
 myths guild
 narnode's theme
 natural
@@ -398,13 +398,13 @@ neverland
 newbie farming
 newbie melody
 neypotzli
+night of the vampiyre
 nightfall
 nightmare_combat
-night of the vampiyre
-nomad
 no pasaran
-norse code
 no way out
+nomad
+norse code
 nox_irae
 null
 null and void
@@ -413,14 +413,14 @@ nylocas combat
 observatory telescope cutscene
 ogre the top
 olm_battle
-oncoming foe
 on the up
 on the wing
 on_the_shore
+oncoming foe
 oriental
 out of the deep
-overpass
 over to nardah
+overpass
 overture
 parade
 path of peril
@@ -451,11 +451,11 @@ reggae
 reggae2
 rellekka
 rest_in_peace
-revenants
 revenant slayer cave
+revenants
 rhapsody
-righteousness
 right on track
+righteousness
 rising damp
 riverside
 roc and roll
@@ -491,8 +491,8 @@ schools out
 scorpia_dances
 scrubfoots descent
 sea shanty
-sea shanty2
 sea shanty xmas
+sea shanty2
 sea_minor_shanty
 serenade
 serene
@@ -500,8 +500,8 @@ settlement
 shadowland
 shadows bouncer jingle
 shayzien crypt
-shayzienforces
 shayzien_march
+shayzienforces
 shine
 shining
 shining_spirit
@@ -519,8 +519,8 @@ slug a bug ball
 sojourn
 sotetseg ambience
 sotetseg combat
-soulfall
 soul wars
+soulfall
 soundscape
 sphinx
 spirit
@@ -535,8 +535,8 @@ stagnant
 stand up and be counted
 starlight
 start
-stillness
 still night
+stillness
 storm brew
 stranded
 strange place
@@ -577,7 +577,6 @@ the lost melody
 the lost tribe
 the lunar isle
 the mad mole
-theme
 the mollusc menace
 the monsters below
 the navigator
@@ -595,6 +594,7 @@ the tower
 the trade parade
 the waiting game
 the_tower_of_voices
+theme
 thrall_of_the_serpent
 throne of the demon
 time out
@@ -609,8 +609,8 @@ trawler minor
 tree spirits
 tremble
 tribal
-tribal2
 tribal background
+tribal2
 trinity
 troll_shuffle
 trouble brewing
@@ -662,10 +662,10 @@ well hallowed air
 well of voyage
 werewolves
 where eagles lair
+wild side
 wilderness
 wilderness2
 wilderness3
-wild side
 wildwood
 winter funfare
 wintertodt_boss
@@ -676,8 +676,8 @@ wonder
 wonderous
 woodland
 woodland walk
-workshop
 work work work
+workshop
 wrath and ruin
 xamphur
 xarpus ambience
