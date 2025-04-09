@@ -13,7 +13,7 @@ public class SeqUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.SEQ, id) + "]");
+        lines.add("[" + Unpacker.format(Type.SEQ, id, false) + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {
@@ -63,8 +63,17 @@ public class SeqUnpacker {
 
             case 4 -> lines.add("stretches=yes");
             case 5 -> lines.add("priority=" + packet.g1());
-            case 6 -> lines.add("lefthand=" + Unpacker.format(Type.OBJ, packet.g2() - 512));
-            case 7 -> lines.add("righthand=" + Unpacker.format(Type.OBJ, packet.g2() - 512));
+
+            case 6 -> {
+                var value = packet.g2();
+                lines.add("lefthand=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
+            }
+
+            case 7 -> {
+                var value = packet.g2();
+                lines.add("righthand=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
+            }
+
             case 8 -> lines.add("loopcount=" + packet.g1());
             case 9 -> lines.add("preanim_move=" + Unpacker.getPreanimMoveName(packet.g1()));
             case 10 -> lines.add("postanim_move=" + Unpacker.getPostanimMoveName(packet.g1()));

@@ -18,7 +18,7 @@ public class VarClanUnpacker {
                     throw new IllegalStateException("end of file not reached");
                 }
 
-                lines.addFirst("[" + Unpacker.format(Type.VAR_CLAN, id) + "]");
+                lines.addFirst("[" + Unpacker.format(Type.VAR_CLAN, id, false) + "]");
                 return lines;
             }
 

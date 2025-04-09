@@ -12,7 +12,7 @@ public class EffectAnimUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.SPOTANIM, id) + "]");
+        lines.add("[" + Unpacker.format(Type.SPOTANIM, id, false) + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {

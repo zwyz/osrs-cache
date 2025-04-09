@@ -11,7 +11,7 @@ public class VarControllerUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.VAR_CONTROLLER, id) + "]");
+        lines.add("[" + Unpacker.format(Type.VAR_CONTROLLER, id, false) + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {

@@ -1,7 +1,6 @@
 package osrs.unpack;
 
 import osrs.unpack.script.ScriptUnpacker;
-import osrs.util.Tuple2;
 
 import java.util.HashMap;
 import java.util.List;
@@ -52,6 +51,10 @@ public class Unpacker {
     }
 
     public static String format(Type type, int value) {
+        return format(type, value, true);
+    }
+
+    public static String format(Type type, int value, boolean safe) {
         return switch (type) {
             case INT -> switch (value) {
                 case Integer.MIN_VALUE -> "^min_32bit_int";
@@ -79,21 +82,21 @@ public class Unpacker {
 
             case TYPE -> Type.byChar(value).name;
 
-            case GRAPHIC, FONTMETRICS -> formatName(value, GRAPHIC_NAME, "graphic");
-            case MIDI -> formatName(value, MIDI_NAME, "midi");
-            case MAPAREA -> formatName(value, MAPAREA_NAME, "maparea");
-            case OBJ -> formatName(value, OBJ_NAME, "obj");
-            case NPC -> formatName(value, NPC_NAME, "npc");
-            case INV -> formatName(value, INV_NAME, "inv");
-            case LOC -> formatName(value, LOC_NAME, "loc");
-            case SEQ -> formatName(value, SEQ_NAME, "seq");
-            case SPOTANIM -> formatName(value, SPOTANIM_NAME, "spotanim");
-            case DBROW -> formatName(value, DBROW_NAME, "dbrow");
-            case DBTABLE -> formatName(value, DBTABLE_NAME, "dbtable");
-            case JINGLE -> formatName(value, JINGLE_NAME, "jingle");
-            case INTERFACE -> formatName(value, INTERFACE_NAME, "interface");
-            case VAR_PLAYER, VARP -> formatName(value, VARP_NAME, "varplayer");
-            case VAR_PLAYER_BIT -> formatName(value, VARBIT_NAME, "varplayerbit");
+            case GRAPHIC, FONTMETRICS -> formatName(value, GRAPHIC_NAME, "graphic", safe);
+            case MIDI -> formatName(value, MIDI_NAME, "midi", safe);
+            case MAPAREA -> formatName(value, MAPAREA_NAME, "maparea", safe);
+            case OBJ -> formatName(value, OBJ_NAME, "obj", safe);
+            case NPC -> formatName(value, NPC_NAME, "npc", safe);
+            case INV -> formatName(value, INV_NAME, "inv", safe);
+            case LOC -> formatName(value, LOC_NAME, "loc", safe);
+            case SEQ -> formatName(value, SEQ_NAME, "seq", safe);
+            case SPOTANIM -> formatName(value, SPOTANIM_NAME, "spotanim", safe);
+            case DBROW -> formatName(value, DBROW_NAME, "dbrow", safe);
+            case DBTABLE -> formatName(value, DBTABLE_NAME, "dbtable", safe);
+            case JINGLE -> formatName(value, JINGLE_NAME, "jingle", safe);
+            case INTERFACE -> formatName(value, INTERFACE_NAME, "interface", safe);
+            case VAR_PLAYER, VARP -> formatName(value, VARP_NAME, "varplayer", safe);
+            case VAR_PLAYER_BIT -> formatName(value, VARBIT_NAME, "varplayerbit", safe);
             case VAR_CLIENT -> "varclient_" + value;
             case VAR_CLIENT_STRING -> "varclientstring_" + value;
             case VAR_CLAN_SETTING -> "varclansetting" + getVarClanSettingType(value).name + "_" + value;
@@ -112,7 +115,9 @@ public class Unpacker {
                     yield "null";
                 }
 
-                yield format(Type.INTERFACE, value >> 16) + ":" + COMPONENT_NAME.getOrDefault(value, "com_" + (value & 0xffff));
+                var name = format(Type.INTERFACE, value >> 16) + ":" + COMPONENT_NAME.getOrDefault(value, "com_" + (value & 0xffff));
+                if (safe) name = quote(name);
+                yield name;
             }
 
             case DBCOLUMN -> {
@@ -120,7 +125,9 @@ public class Unpacker {
                 var column = (value >>> 4) & 255;
                 var tuple = (value & 15) - 1;
                 var name = format(Type.DBTABLE, table) + ":" + DBCOLUMN_NAME.getOrDefault((table << 16) | column, "col" + column);
-                yield tuple == -1 ? name : name + ":" + tuple;
+                if (tuple == -1) name = name + ":" + tuple;
+                if (safe) name = quote(name);
+                yield name;
             }
 
             case MOVESPEED -> switch (value) {
@@ -568,8 +575,18 @@ public class Unpacker {
         };
     }
 
-    private static String formatName(int value, Map<Integer, String> names, String prefix) {
-        return value == -1 ? "null" : names.getOrDefault(value, prefix + "_" + value);
+    private static String formatName(int value, Map<Integer, String> names, String prefix, boolean safe) {
+        var name = value == -1 ? "null" : names.getOrDefault(value, prefix + "_" + value);
+        if (safe) name = quote(name);
+        return name;
+    }
+
+    private static String quote(String name) {
+        if (!name.matches("[a-zA-Z0-9_.:]+")) {
+            name = "\"" + name + "\"";
+        }
+
+        return name;
     }
 
     public static String format(Type type, Long value) {

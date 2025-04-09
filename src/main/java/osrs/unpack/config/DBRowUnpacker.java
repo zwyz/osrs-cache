@@ -11,7 +11,7 @@ public class DBRowUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.DBROW, id) + "]");
+        lines.add("[" + Unpacker.format(Type.DBROW, id, false) + "]");
         var table = -1;
 
         while (true) switch (packet.g1()) {

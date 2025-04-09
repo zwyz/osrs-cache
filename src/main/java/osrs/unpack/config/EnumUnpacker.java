@@ -12,7 +12,7 @@ public class EnumUnpacker {
         var nextAutoIntIndex = 0;
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.ENUM, id) + "]");
+        lines.add("[" + Unpacker.format(Type.ENUM, id, false) + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {

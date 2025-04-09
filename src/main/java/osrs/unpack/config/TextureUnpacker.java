@@ -11,7 +11,7 @@ public class TextureUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.MATERIAL, id) + "]");
+        lines.add("[" + Unpacker.format(Type.MATERIAL, id, false) + "]");
 
         lines.add("averagecolour=" + packet.g2());
         lines.add("opaque=" + (packet.g1() == 1 ? "yes" : "no"));

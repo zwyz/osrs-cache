@@ -8,7 +8,7 @@ public class WorldAreaUnpacker {
     public static ArrayList<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.WORLD_AREA, id) + "]");
+        lines.add("[" + Unpacker.format(Type.WORLD_AREA, id, false) + "]");
         lines.add("colour=" + Unpacker.formatColour(packet.g3()));
 
         while (packet.pos < packet.arr.length) {

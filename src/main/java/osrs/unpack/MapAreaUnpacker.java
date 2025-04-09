@@ -13,7 +13,7 @@ public class MapAreaUnpacker {
 
         var debugname = packet.gjstr();
         Unpacker.setWorldMapAreaName(id, debugname);
-        lines.add("[" + Unpacker.format(Type.MAPAREA, id) + "]");
+        lines.add("[" + Unpacker.format(Type.MAPAREA, id, false) + "]");
 
         lines.add("name=" + packet.gjstr());
         lines.add("origin=" + Unpacker.format(Type.COORDGRID, packet.g4s()));
