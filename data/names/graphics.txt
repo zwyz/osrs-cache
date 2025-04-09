@@ -1632,7 +1632,6 @@ square_button,#
 square_button_large,#
 stagnant
 stand up and be counted
-standard_armour_#,#
 standard_armour_100,#
 standard_armour_120,#
 standard_armour_140,#
@@ -1644,7 +1643,6 @@ standard_armour_60,#
 standard_armour_70,#
 standard_armour_80,#
 standard_armour_90,#
-standard_charge_#,#
 standard_charge_100,#
 standard_charge_120,#
 standard_charge_140,#
@@ -1656,7 +1654,6 @@ standard_charge_60,#
 standard_charge_70,#
 standard_charge_80,#
 standard_charge_90,#
-standard_health_#,#
 standard_health_100,#
 standard_health_120,#
 standard_health_140,#
@@ -1668,7 +1665,6 @@ standard_health_60,#
 standard_health_70,#
 standard_health_80,#
 standard_health_90,#
-standard_poison_#,#
 standard_poison_100,#
 standard_poison_120,#
 standard_poison_140,#
@@ -1680,7 +1676,6 @@ standard_poison_60,#
 standard_poison_70,#
 standard_poison_80,#
 standard_poison_90,#
-standard_prayer_#,#
 standard_prayer_100,#
 standard_prayer_120,#
 standard_prayer_140,#
@@ -1692,7 +1687,6 @@ standard_prayer_60,#
 standard_prayer_70,#
 standard_prayer_80,#
 standard_prayer_90,#
-standard_shield_#,#
 standard_shield_100,#
 standard_shield_120,#
 standard_shield_140,#
