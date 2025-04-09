@@ -2,15 +2,21 @@
 2x_ancient_spells_on,#
 2x_lunar_spells_off,#
 2x_lunar_spells_on,#
+2x_magic_spell_padlocks,#
 2x_necro_spells_off,#
 2x_necro_spells_on,#
 2x_standard_spells_off,#
 2x_standard_spells_on,#
+9slice_chiselled01_4x4,#
+9slice_dark01_3x3,#
 a farmers grind
+acc_man_icons,#
 account_icons,#
 achievement_diary_icons,#
 achievement_tabs,#
 adventure
+adventurepath_in_focus,#
+adventurepath_in_focus_small,#
 adventurepath_placeholder
 al kharid
 alchemical hydra
@@ -23,6 +29,7 @@ ambience3
 ambience4
 ambient jungle
 ame_confirm_button,#
+ame_confirm_button_no_back,#
 amlodd
 ancient prison
 ancient_cavern
@@ -31,6 +38,7 @@ anywhere
 ap_border,#
 ap_path_banner,#
 ap_path_icon,#
+ap_sote_free_trial
 apple
 arabian
 arabian2
@@ -47,6 +55,8 @@ army of darkness
 arrival
 arrow,#
 arrowkeys
+arrows_25,#
+arrows_40,#
 arrows_curved,#
 artistry
 ascent
@@ -84,6 +94,7 @@ backtop1
 backvmid1
 backvmid2
 backvmid3
+badge_colosseum_modifiers01_64x64,#
 bait
 ballad of enchantment
 ballad of the basilisk
@@ -96,6 +107,7 @@ bank_bag
 bank_buttons,#
 bank_slot,#
 bank_tabs,#
+bankbutton_arrow_green
 bankbuttons,#
 banktab_icons,#
 banktabs,#
@@ -122,10 +134,13 @@ bloodbath
 bobs on holiday
 body parts
 body_builder
+bond_graphic_128x64
+bond_redemption_icons,#
 bone dance
 bone dry
 book of spells
 books
+border_map_compass
 borderland
 box_of_delights
 br_dark_varrock
@@ -275,18 +290,25 @@ clanliness
 clanwars
 claustrophobia
 clickcircle_filled
+clickcircle_filled_yellow_only
 clickcircle_outline
 clickcross,#
 close quarters
 close_arrows,#
 close_buttons,#
 close_buttons_v2,#
+cluequest_map
+coa_arrows,#
+coa_strips,#
+cobblestone01
+cobblestone02
 coil
 coins
 combat_autoretaliate,#
 combat_path_banner
 combat_path_icon
 combat_shield
+combatboxelong
 combatboxes,#
 combatboxes_large,#
 combatboxes_special_attack
@@ -299,7 +321,9 @@ combaticons3,#
 combination_lock
 combination_lock_arrows,#
 combination_lock_join,#
+combination_lock_symbols,#
 compass
+compass_outline
 compass_ring
 competition
 complication
@@ -360,9 +384,15 @@ dead can dance
 dead quiet
 deadlands
 deadman_deathtype,#
+deadman_sigil_combat_icons_large,#
+deadman_sigil_combat_icons_small,#
 deadman_sigil_icons,#
 deadman_sigil_icons_tli,#
+deadman_sigil_skilling_icons_large,#
+deadman_sigil_skilling_icons_small,#
 deadman_sigil_skulls,#
+deadman_sigil_utility_icons_large,#
+deadman_sigil_utility_icons_small,#
 deep down
 deep wildy
 delrith summoning
@@ -375,6 +405,9 @@ devils_may_care
 diango's little helpers
 dies_irae
 dimension x
+directional_lock
+directional_lock_2
+directional_lock_arrows,#
 distant land
 distillery hilarity
 dog_xmas
@@ -394,9 +427,11 @@ dragonkin ambience
 dragonkin temple
 dragontooth island
 dream
+dream_inv_brdr
 dream_monster_icon
 dreamstate
 drunken dwarf
+dt2_icons,#
 duel arena
 dunjun
 dusk in yu'biusk
@@ -498,6 +533,8 @@ fountain_base
 free_trial
 free_trial_button
 frenkenstrain's refrain
+frex_runes,#
+frex_ticks,#
 friends_changed_name
 friends_icons
 friends_line
@@ -506,6 +543,9 @@ fris_jingle_1
 frogland
 frostbite
 fruits de mer
+fsw_banner_large01
+fsw_banner_medium01
+fsw_banner_small01
 ful to the brim
 fullscreen_logout_button,#
 funny bunnies
@@ -528,7 +568,10 @@ gauntlet_minigame
 ge_backbutton
 ge_cancel,#
 ge_icons,#
+ge_itembackdrop,#
 ge_smallicons,#
+ge_textbackdrop,#
+ge_textbackdrop_tall,#
 gender_symbols,#
 getting down to business
 getting_a_grip_on_it
@@ -546,7 +589,9 @@ giants_foundry
 giants_foundry_hud_bar,#
 giants_foundry_moulds_big,#
 giants_foundry_moulds_small,#
+giants_foundry_quality_bar
 giants_foundry_tool_icon,#
+giants_foundry_tool_map_icon,#
 gill bill
 glyphs
 gnome king
@@ -563,10 +608,13 @@ golden touch
 grand_library
 gravestone_background
 greatness
+grim_musicalnotes,#
+grim_musicalnotes1
 grimly_fiendish
 grip of the talon
 grotto
 ground scape
+ground_items_plusminus,#
 ground_items_visibility,#
 group_icon
 group_icon,#
@@ -584,6 +632,16 @@ haunted mine
 have a blast
 have an ice day
 head to head
+headbar_blood_120,#
+headbar_blood_30,#
+headbar_blood_90,#
+headbar_heat_120,#
+headbar_heat_90,#
+headbar_ice_120,#
+headbar_ice_90,#
+headbar_olmtimer_100,#
+headbar_shield_100,#
+headbar_shooting_star_50,#
 headicons_hint
 headicons_pk
 headicons_pk_interface,#
@@ -594,11 +652,16 @@ hells bells
 hermit
 hespori
 hespori cave
+hieroglyphic_set1
+hieroglyphic_set2
 high seas
 high spirits
 highlight_border,#
 hint_headicons
 hint_mapedge
+hiscores_activities,#
+hiscores_bosses,#
+hiscores_icons,#
 hitmark,#
 hitmark_blocked
 hitmarks
@@ -617,13 +680,26 @@ hypnotized
 iban
 ice
 ice melody
+icon_activities_25x25,#
+icon_alchemy_chemicals01_18x18,#
+icon_alchemy_chemicals01_20x20,#
+icon_alchemy_chemicals01_27x27,#
+icon_alchemy_machines01_20x20,#
+icon_arrow_32x16,#
 icon_arrows
 icon_balance
 icon_bandit
+icon_bonds_30x30,#
 icon_bones
+icon_boss_25x25,#
+icon_boss_50x50,#
+icon_buffbar_32x32,#
 icon_cabbage
 icon_cat
 icon_coins
+icon_colosseum_modifiers01_64x64,#
+icon_colosseum_modifiers02_64x64,#
+icon_colosseum_modifiers03_64x64,#
 icon_comedy
 icon_compass
 icon_crown
@@ -634,14 +710,19 @@ icon_holy
 icon_hunter
 icon_iron_standard
 icon_iron_ultimate
+icon_prayer_zaros01_30x30,#
+icon_prayer_zaros02_30x30,#
 icon_ring
 icon_robin
 icon_rose
+icon_rune_32x32,#
 icon_shield
 icon_skull
+icon_stat_50x50,#
 icon_swords
 icon_tools
 icon_tools2
+icon_tracker_loot01_30x30,#
 icon_tragedy
 icon_unholy
 icon_wizard
@@ -718,6 +799,7 @@ land of the dwarves
 landlubber
 large_button
 large_button_highlight
+large_multi_use_icons
 lassar_undercity
 last stand
 last_man_standing
@@ -726,23 +808,110 @@ lava
 lava_animated
 lava_animated_red
 lava_animated_white
+leafy_acacia01
+leafy_stonepine01
 leafytree
 leafytree02
 leafytree_diseased
+leafytree_frosty
 leafytree_full
 leafytree_tiled
 leafytree_tiled02
+leafytree_tiled_frosty
 league_3_boss_icons,#
 league_3_button,#
 league_3_fragment_back,#
+league_3_fragment_bar_labels,#
 league_3_fragment_base,#
 league_3_fragment_glow,#
 league_3_icons_light,#
+league_3_numerals,#
 league_3_progress_bar,#
 league_3_relics,#
 league_3_relics_large,#
 league_3_relics_tli,#
+league_3_sparks_1,#
+league_3_triskele,#
 league_3_tutorial,#
+league_4_bloodthirsty_headicon
+league_4_largemap_desert_1
+league_4_largemap_desert_2
+league_4_largemap_desert_3
+league_4_largemap_kourend_1
+league_4_largemap_kourend_2
+league_4_largemap_kourend_3
+league_4_largemap_kourend_4
+league_4_map_asgarnia
+league_4_map_desert
+league_4_map_empty
+league_4_map_fremennik
+league_4_map_kandarin
+league_4_map_karamja
+league_4_map_kourend
+league_4_map_misthalin
+league_4_map_morytania
+league_4_map_names,#
+league_4_map_shields01,#
+league_4_map_shields02,#
+league_4_map_tirannwn
+league_4_map_wilderness
+league_4_progress_bar,#
+league_4_progress_bar_indicator
+league_4_relics,#
+league_4_relics_large,#
+league_4_relics_medium,#
+league_4_relics_medium_headicon
+league_4_relics_medium_off,#
+league_4_relics_off,#
+league_4_relics_tli,#
+league_5_combat_mastery_highlight_medium
+league_5_combat_mastery_highlight_medium_glow
+league_5_combat_mastery_highlight_small
+league_5_combat_mastery_highlight_small_glow
+league_5_combat_mastery_icon_large
+league_5_combat_mastery_icon_medium
+league_5_combat_mastery_large,#
+league_5_combat_mastery_large_off,#
+league_5_combat_mastery_medium,#
+league_5_combat_mastery_medium_off,#
+league_5_combat_mastery_small,#
+league_5_combat_mastery_small_off,#
+league_5_combat_mastery_tier_medium,#
+league_5_combat_mastery_tier_medium_off,#
+league_5_combat_mastery_tier_small,#
+league_5_combat_mastery_tier_small_off,#
+league_5_combat_mastery_tli,#
+league_5_largemap_varlamore_1
+league_5_largemap_varlamore_2
+league_5_largemap_varlamore_3
+league_5_largemap_varlamore_4
+league_5_largemap_varlamore_5
+league_5_map_asgarnia
+league_5_map_desert
+league_5_map_empty
+league_5_map_fremennik
+league_5_map_kandarin
+league_5_map_karamja
+league_5_map_kourend
+league_5_map_misthalin
+league_5_map_morytania
+league_5_map_names,#
+league_5_map_shields01,#
+league_5_map_shields02,#
+league_5_map_tirannwn
+league_5_map_varlamore
+league_5_map_wilderness
+league_5_progress_bar,#
+league_5_progress_bar_indicator
+league_5_relics,#
+league_5_relics_large,#
+league_5_relics_medium,#
+league_5_relics_medium_headicon
+league_5_relics_medium_off,#
+league_5_relics_off,#
+league_5_relics_tli,#
+league_5_sparks_1,#
+league_5_sparks_2,#
 league_map
 league_progress_bar,#
 league_progress_bar_indicator
@@ -750,10 +919,12 @@ league_relics,#
 league_relics_large,#
 league_relics_outline
 league_relics_outline,#
+league_relics_outline_60x60,#
 league_relics_tli,#
 league_task_tiers,#
 league_tiny_relic
 league_tiny_relic,#
+league_trophy_icons,#
 league_tutorial,#
 leagues_membership_banner
 leftarrow
@@ -771,6 +942,7 @@ little cave of horrors
 load
 loadingwheel,#
 lobby_buttons,#
+lockpicking,#
 login_cross
 login_icons
 login_tick
@@ -808,6 +980,7 @@ magic dance
 magic magic magic
 magic_necro_off,#
 magic_necro_on,#
+magic_spell_padlocks,#
 magical journey
 magicoff,#
 magicoff2,#
@@ -889,6 +1062,26 @@ miscgraphics2,#
 miscgraphics3,#
 miscgraphics4,#
 miscgraphics5,#
+miscgraphics_buttonmiddle_grey
+miscgraphics_buttonmiddle_red
+miscgraphics_buttontile_cc_grey
+miscgraphics_buttontile_cc_red
+miscgraphics_buttontile_ce_grey
+miscgraphics_buttontile_ce_red
+miscgraphics_buttontile_cw_grey
+miscgraphics_buttontile_cw_red
+miscgraphics_buttontile_nc_grey
+miscgraphics_buttontile_nc_red
+miscgraphics_buttontile_ne_grey
+miscgraphics_buttontile_ne_red
+miscgraphics_buttontile_nw_grey
+miscgraphics_buttontile_nw_red
+miscgraphics_buttontile_sc_grey
+miscgraphics_buttontile_sc_red
+miscgraphics_buttontile_se_grey
+miscgraphics_buttontile_se_red
+miscgraphics_buttontile_sw_grey
+miscgraphics_buttontile_sw_red
 misthalin_underground
 mithril_defence
 mobile_stones,#
@@ -907,11 +1100,14 @@ monkey trouble
 monster melee
 moody
 mor-ul-rek
+morse_code,#
+morse_code_singles,#
 morytania
 morytania_underground
 mosleharmless_cave
 mossy
 mossybricks
+mossybricks02
 mossydamage
 mouse trap
 mudskipper melody
@@ -921,6 +1117,7 @@ mutant medley
 my arms journey
 my2arm_boss_battle
 my2arm_love_theme_full
+myq5_tomb_buttons,#
 myths guild
 name_icons
 narnode's theme
@@ -1044,6 +1241,9 @@ nox_irae
 null
 null and void
 number_button
+number_pad_arrows,#
+number_pad_background
+number_pad_buttons,#
 nylocas ambience
 nylocas combat
 observatory telescope cutscene
@@ -1075,8 +1275,22 @@ orb_frame,#
 orb_icon,#
 orb_xp,#
 oriental
+osm_banner_large01
+osm_banner_medium01
+osm_banner_small01
+osm_chat_buttons,#
 osm_drag_camera
+osm_fn_mode_icons,#
+osm_function_buttons,#
+osm_press_fnmode
+osm_press_interact
+osm_press_minimise
 osm_status_icons,#
+osm_tap_interact
+osm_tap_press
+osrs_stretch_mapsurround
+osrs_stretch_side_columns,#
+osrs_stretch_side_topbottom,#
 otherlevel
 ourania
 out of the deep
@@ -1084,6 +1298,8 @@ over to nardah
 overlay_duel
 overlay_multiway
 overlay_multiway_big
+overlay_singleway_plus
+overlay_td_multiway,#
 overpass
 overture
 overview
@@ -1114,6 +1330,12 @@ piscarilius_sigil
 planks
 play_now_text
 player_kit_fancy,#
+pog_buttons,#
+pog_exchange_buttons,#
+pog_exchanger
+pog_machine
+pog_slots,#
+pog_windows,#
 poh_board_icons,#
 poh_doors,#
 poh_room_layouts,#
@@ -1200,6 +1422,7 @@ rising damp
 riverside
 roc and roll
 roll the bones
+roman_numerals,#
 romancing the crone
 romper chomper
 roof
@@ -1221,6 +1444,7 @@ sailing journey2
 sarachnis_lair
 sarcophagus
 sarim's vermin
+satisfaction_5scale,#
 save
 scales
 scape cave
@@ -1243,6 +1467,7 @@ scroll_body,#
 scroll_icon
 scroll_top,#
 scrollbar
+scrollbar_dragger_horizontal_v2,#
 scrollbar_dragger_v2,#
 scrollbar_dragger_v2_dark,#
 scrollbar_parchment_dragger_v2,#
@@ -1264,6 +1489,7 @@ serenade
 serene
 settings_slider,#
 settings_tabs,#
+settings_tabs_alt_active_end,#
 settlement
 settrans_chocolate
 shadowland
@@ -1354,6 +1580,9 @@ skillcape_water
 skillcape_woodcutting
 skin
 skulls01
+skulls02
+skulls03
+skulls04
 sl_arrows
 sl_back
 sl_button
@@ -1365,6 +1594,8 @@ slice of grand opening
 slice of silent movie
 slice of station
 slider_bobble
+sliding_cipher_inner,#
+sliding_cipher_outer,#
 slither and thither
 slug a bug ball
 small_button
@@ -1378,6 +1609,8 @@ sortarrows,#
 sos
 sotetseg ambience
 sotetseg combat
+sotn_cipher,#
+sotn_map
 soul wars
 soul_wars_gameicons,#
 soul_wars_staticons,#
@@ -1400,11 +1633,77 @@ square_button_large,#
 stagnant
 stand up and be counted
 standard_armour_#,#
+standard_armour_100,#
+standard_armour_120,#
+standard_armour_140,#
+standard_armour_160,#
+standard_armour_30,#
+standard_armour_40,#
+standard_armour_50,#
+standard_armour_60,#
+standard_armour_70,#
+standard_armour_80,#
+standard_armour_90,#
 standard_charge_#,#
+standard_charge_100,#
+standard_charge_120,#
+standard_charge_140,#
+standard_charge_160,#
+standard_charge_30,#
+standard_charge_40,#
+standard_charge_50,#
+standard_charge_60,#
+standard_charge_70,#
+standard_charge_80,#
+standard_charge_90,#
 standard_health_#,#
+standard_health_100,#
+standard_health_120,#
+standard_health_140,#
+standard_health_160,#
+standard_health_30,#
+standard_health_40,#
+standard_health_50,#
+standard_health_60,#
+standard_health_70,#
+standard_health_80,#
+standard_health_90,#
 standard_poison_#,#
+standard_poison_100,#
+standard_poison_120,#
+standard_poison_140,#
+standard_poison_160,#
+standard_poison_30,#
+standard_poison_40,#
+standard_poison_50,#
+standard_poison_60,#
+standard_poison_70,#
+standard_poison_80,#
+standard_poison_90,#
 standard_prayer_#,#
+standard_prayer_100,#
+standard_prayer_120,#
+standard_prayer_140,#
+standard_prayer_160,#
+standard_prayer_30,#
+standard_prayer_40,#
+standard_prayer_50,#
+standard_prayer_60,#
+standard_prayer_70,#
+standard_prayer_80,#
+standard_prayer_90,#
 standard_shield_#,#
+standard_shield_100,#
+standard_shield_120,#
+standard_shield_140,#
+standard_shield_160,#
+standard_shield_30,#
+standard_shield_40,#
+standard_shield_50,#
+standard_shield_60,#
+standard_shield_70,#
+standard_shield_80,#
+standard_shield_90,#
 starlight
 stars
 start
@@ -1422,6 +1721,8 @@ steelborder_divider,#
 sticks_and_stones
 still night
 stillness
+stone_brick01
+stone_brick02
 stone_tiles
 stoneborder_close_button,#
 stony_basalt,#
@@ -1444,7 +1745,10 @@ surok_king_battle_music
 suspicious
 sworddecor,#
 tabs,#
+tabs_etched_corner,#
 tabs_large,#
+tabs_modal_short,#
+tabs_modal_tall,#
 tabs_short,#
 tabs_split,#
 tabs_tall,#
@@ -1463,6 +1767,22 @@ temple of tribes
 tempoross
 tex_brown
 tex_red
+texture_stone01
+texture_test01
+tgod_garden_1_lake_map
+tgod_garden_1_plant_diagram
+tgod_garden_2_forest_map
+tgod_garden_2_poison_diagram
+tgod_garden_2_rune_diagram
+tgod_garden_3_bucket_diagram
+tgod_garden_3_carving_diagram
+tgod_garden_3_package_diagram
+tgod_garden_3_transfer_diagram
+tgod_garden_4_creature_diagram
+tgod_garden_4_delivery_diagram
+tgod_garden_4_light_diagram
+tgod_garden_4_recycling_diagram
+tgod_garden_4_rune_diagram
 that_sullen_hall
 thatched
 the adventurer
@@ -1523,9 +1843,21 @@ titlebutton_wide42,#
 titlescroll
 titlewide.jpg
 titlewide.png
+tli_button01_accordion_58x43,#
+tli_button01_orb01_34x34,#
+tli_button01_orbinfo_65x34,#
+tli_button01_rectangle_52x40,#
+tli_button01_rectangle_58x24,#
+tli_button01_rectangle_58x40,#
+tli_button01_square_40x40,#
+toa_difficulty_icons,#
 toa_grouping_icons,#
 toa_info_icon
 toa_invocation_icons,#
+toa_invocation_icons_black,#
+toa_invocation_icons_small,#
+toa_invocations_progres_bar,#
+toa_invocations_progress_bar_indicator
 toggle_box,#
 tolna
 tomb raider
@@ -1540,6 +1872,38 @@ tradebacking_beige
 tradebacking_dark
 tradebacking_grey
 tradebacking_light
+tradebacking_red
+trailblazer_largemap_asgarnia_1
+trailblazer_largemap_asgarnia_2
+trailblazer_largemap_asgarnia_3
+trailblazer_largemap_desert_1
+trailblazer_largemap_desert_2
+trailblazer_largemap_fremennik_1
+trailblazer_largemap_fremennik_2
+trailblazer_largemap_fremennik_3
+trailblazer_largemap_fremennik_4
+trailblazer_largemap_fremennik_5
+trailblazer_largemap_kandarin_1
+trailblazer_largemap_kandarin_2
+trailblazer_largemap_kandarin_3
+trailblazer_largemap_kandarin_4
+trailblazer_largemap_kandarin_5
+trailblazer_largemap_karamja_1
+trailblazer_largemap_karamja_2
+trailblazer_largemap_karamja_3
+trailblazer_largemap_misthalin_1
+trailblazer_largemap_misthalin_2
+trailblazer_largemap_misthalin_3
+trailblazer_largemap_misthalin_4
+trailblazer_largemap_morytania_1
+trailblazer_largemap_morytania_2
+trailblazer_largemap_morytania_3
+trailblazer_largemap_tirannwn_1
+trailblazer_largemap_tirannwn_2
+trailblazer_largemap_tirannwn_3
+trailblazer_largemap_wilderness_1
+trailblazer_largemap_wilderness_2
+trailblazer_largemap_wilderness_3
 trailblazer_map_asgarnia
 trailblazer_map_desert
 trailblazer_map_empty
@@ -1640,6 +2004,7 @@ upir likhyi
 upper_depths
 v
 v2_borders_slim,#
+v2_borders_slim_joins,#
 v2_small_button,#
 v2_stone_borders,#
 v2_stone_borders_alt,#
@@ -1697,6 +2062,7 @@ welcome_font_large
 welcome_font_small
 welcome_font_tiny
 welcome_title,#
+welcomescreen_banner_default
 well hallowed air
 well of voyage
 werewolves
@@ -1704,6 +2070,7 @@ where eagles lair
 whistle
 wiki_icon,#
 wild side
+wild_ditch_sign_button,#
 wilderness
 wilderness2
 wilderness3
@@ -1737,6 +2104,8 @@ worldmap_icon,#
 worldmap_icon_large,#
 worldmap_marker,#
 worldmap_marker_mini,#
+worldswitcher_filter
+worldswitcher_filtered
 worldswitcher_flags,#
 worldswitcher_stars,#
 wornicons,#
