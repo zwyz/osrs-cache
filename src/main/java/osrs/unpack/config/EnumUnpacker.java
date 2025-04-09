@@ -9,6 +9,7 @@ import java.util.List;
 
 public class EnumUnpacker {
     public static List<String> unpack(int id, byte[] data) {
+        var nextAutoIntIndex = 0;
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
         lines.add("[" + Unpacker.format(Type.ENUM, id) + "]");
@@ -19,6 +20,20 @@ public class EnumUnpacker {
                     throw new IllegalStateException("end of file not reached");
                 }
 
+                if (nextAutoIntIndex != -1 && false) {
+                    for (var i = 0; i < lines.size(); i++) {
+                        var line = lines.get(i);
+
+                        if (line.startsWith("inputtype=")) {
+                            lines.set(i, "inputtype=autoint");
+                        }
+
+                        if (line.startsWith("val=")) {
+                            lines.set(i, "val=" + line.substring(line.indexOf(",") + 1));
+                        }
+                    }
+                }
+
                 return lines;
             }
 
@@ -26,6 +41,10 @@ public class EnumUnpacker {
                 var type = packet.g1();
                 Unpacker.setEnumInputType(id, Type.byChar(type));
                 lines.add("inputtype=" + Unpacker.format(Type.TYPE, type));
+
+                if (Type.byChar(type) != Type.INT) {
+                    nextAutoIntIndex = -1;
+                }
             }
 
             case 2 -> {
@@ -41,7 +60,15 @@ public class EnumUnpacker {
                 var count = packet.g2();
 
                 for (var i = 0; i < count; ++i) {
-                    lines.add("val=" + Unpacker.format(Unpacker.getEnumInputType(id), packet.g4s()) + "," + packet.gjstr());
+                    var key = packet.g4s();
+                    var value = packet.gjstr();
+                    lines.add("val=" + Unpacker.format(Unpacker.getEnumInputType(id), key) + "," + value);
+
+                    if (nextAutoIntIndex != -1 && key == nextAutoIntIndex) {
+                        nextAutoIntIndex++;
+                    } else {
+                        nextAutoIntIndex = -1;
+                    }
                 }
             }
 
@@ -49,7 +76,15 @@ public class EnumUnpacker {
                 var count = packet.g2();
 
                 for (var i = 0; i < count; ++i) {
-                    lines.add("val=" + Unpacker.format(Unpacker.getEnumInputType(id), packet.g4s()) + "," + Unpacker.format(Unpacker.getEnumOutputType(id), packet.g4s()));
+                    var key = packet.g4s();
+                    var value = packet.g4s();
+                    lines.add("val=" + Unpacker.format(Unpacker.getEnumInputType(id), key) + "," + Unpacker.format(Unpacker.getEnumOutputType(id), value));
+
+                    if (nextAutoIntIndex != -1 && key == nextAutoIntIndex) {
+                        nextAutoIntIndex++;
+                    } else {
+                        nextAutoIntIndex = -1;
+                    }
                 }
             }
 

@@ -18,6 +18,7 @@ import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -39,7 +40,7 @@ public class Unpack {
     private static Js5MasterIndex MASTER_INDEX;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 225, "oldschool1.runescape.com", 43594, null);
+        unpackLive("unpacked/live", 230, "oldschool1.runescape.com", 43594, null);
 //        unpackOpenRS2("unpacked/beta", 223, "runescape", 1826);
     }
 
@@ -72,11 +73,24 @@ public class Unpack {
 //        Files.createDirectories(Path.of(path + "/maps"));
 
         // load names
-        loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES);
-        loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAMES::put);
-        loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAMES::put);
-        loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, Unpacker.MIDI_NAMES::put);
-        loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAMES::put);
+        loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME);
+        loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME::put);
+        loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAME::put);
+        loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, Unpacker.MIDI_NAME::put);
+        loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAME::put);
+        loadDebugNames(Js5DebugNamesGroup.OBJTYPES, Unpacker.OBJ_NAME);
+        loadDebugNames(Js5DebugNamesGroup.NPCTYPES, Unpacker.NPC_NAME);
+        loadDebugNames(Js5DebugNamesGroup.INVTYPES, Unpacker.INV_NAME);
+        loadDebugNames(Js5DebugNamesGroup.VARPTYPES, Unpacker.VARP_NAME);
+        loadDebugNames(Js5DebugNamesGroup.VARBITTYPES, Unpacker.VARBIT_NAME);
+        loadDebugNames(Js5DebugNamesGroup.LOCTYPES, Unpacker.LOC_NAME);
+        loadDebugNames(Js5DebugNamesGroup.SEQTYPES, Unpacker.SEQ_NAME);
+        loadDebugNames(Js5DebugNamesGroup.SPOTTYPES, Unpacker.SPOTANIM_NAME);
+        loadDebugNames(Js5DebugNamesGroup.ROWTYPES, Unpacker.DBROW_NAME);
+        loadDebugNames(Js5DebugNamesGroup.TABLETYPES, Unpacker.DBTABLE_NAME);
+        loadDebugNames(Js5DebugNamesGroup.SOUNDTYPES, Unpacker.JINGLE_NAME);
+        loadDebugNamesInterface();
+        loadDebugNamesDBTable();
 
         // things stuff depends on
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, path + "/config/dump.varbit");
@@ -477,12 +491,12 @@ public class Unpack {
         for (var group : archiveIndex.groupId) {
             var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
             var lines = new ArrayList<String>();
-
             boolean scripted = false;
+
             for (var file : files.keySet()) {
                 byte[] data = files.get(file);
                 scripted |= data[0] == -1;
-                lines.addAll(unpack.apply(file, data));
+                lines.addAll(unpack.apply((group << 16) | file, data));
                 lines.add("");
             }
 
@@ -501,25 +515,31 @@ public class Unpack {
 
     private static void unpackGroup(Js5Archive archive, int group, BiFunction<Integer, byte[], List<String>> unpack, String result) throws IOException {
         var lines = new ArrayList<String>();
+        var files = loadGroupFiles(archive, group);
 
+        if (files != null) {
+            for (var file : files.keySet()) {
+                lines.addAll(unpack.apply(file, files.get(file)));
+                lines.add("");
+            }
+
+            Files.write(Path.of(result), lines);
+        }
+    }
+
+    private static Map<Integer, byte[]> loadGroupFiles(Js5Archive archive, int group) {
         if (archive.id >= MASTER_INDEX.getArchiveCount() || MASTER_INDEX.getArchiveData(archive.id).getCrc() == 0) {
-            return; // empty archives don't get packed
+            return null;
         }
 
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
 
         if (Arrays.binarySearch(archiveIndex.groupId, group) < 0) {
-            return; // empty groups don't get packed
+            return null;
         }
 
         var files = Js5Util.unpackGroup(archiveIndex, group, PROVIDER.get(archive.id, group, false));
-
-        for (var file : files.keySet()) {
-            lines.addAll(unpack.apply(file, files.get(file)));
-            lines.add("");
-        }
-
-        Files.write(Path.of(result), lines);
+        return files;
     }
 
     private static void loadGroupNames(Path path, Js5Archive archive, BiConsumer<Integer, String> consumer) throws IOException {
@@ -536,13 +556,56 @@ public class Unpack {
         }
     }
 
+    private static void loadDebugNames(Js5DebugNamesGroup group, Map<Integer, String> names) {
+        var files = loadGroupFiles(JS5_DEBUGNAMES, group.id);
+
+        if (files != null) {
+            for (var file : files.keySet()) {
+                names.put(file, new String(files.get(file), StandardCharsets.UTF_8));
+            }
+        }
+    }
+
+    private static void loadDebugNamesInterface() {
+        var files = loadGroupFiles(JS5_DEBUGNAMES, Js5DebugNamesGroup.IFTYPES.id);
+
+        if (files != null) {
+            for (var itf : files.keySet()) {
+                var packet = new Packet(files.get(itf));
+                Unpacker.INTERFACE_NAME.put(itf, packet.gjstr());
+
+                for (var com = packet.g1(); com != 0xff; com = packet.g1()) {
+                    Unpacker.COMPONENT_NAME.put((itf << 16) | com, packet.gjstr());
+                }
+            }
+        }
+    }
+
+    private static void loadDebugNamesDBTable() {
+        var files = loadGroupFiles(JS5_DEBUGNAMES, Js5DebugNamesGroup.TABLETYPES.id);
+
+        if (files != null) {
+            for (var table : files.keySet()) {
+                var packet = new Packet(files.get(table));
+
+                if (packet.gBoolean()) {
+                    Unpacker.DBTABLE_NAME.put(table, packet.gjstr());
+                }
+
+                for (var column = 0; packet.gBoolean(); column++) {
+                    Unpacker.DBCOLUMN_NAME.put((table << 16) | column, packet.gjstr());
+                }
+            }
+        }
+    }
+
     private static void unpackBinaries(Path path) throws IOException {
         Files.createDirectories(path);
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_BINARY.id, false)));
 
         for (var group : archiveIndex.groupId) {
             var files = Js5Util.unpackGroup(archiveIndex, group, PROVIDER.get(JS5_BINARY.id, group, false));
-            Files.write(path.resolve(Unpacker.BINARY_NAMES.get(group)), files.get(0));
+            Files.write(path.resolve(Unpacker.BINARY_NAME.get(group)), files.get(0));
         }
     }
 }

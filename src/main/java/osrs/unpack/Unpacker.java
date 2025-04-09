@@ -9,12 +9,26 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Unpacker {
-    public static final HashMap<Integer, String> SCRIPT_NAMES = new HashMap<>();
-    public static final HashMap<Integer, String> GRAPHIC_NAMES = new HashMap<>();
-    public static final HashMap<Integer, String> MIDI_NAMES = new HashMap<>();
-    public static final HashMap<Integer, String> BINARY_NAMES = new HashMap<>();
-    public static final Map<Integer, String> WMA_NAMES = new HashMap<>();
-    public static final Map<Tuple2<Integer, Integer>, List<Type>> DBCOLUMN_TYPE = new HashMap<>();
+    public static final Map<Integer, String> SCRIPT_NAME = new HashMap<>();
+    public static final Map<Integer, String> GRAPHIC_NAME = new HashMap<>();
+    public static final Map<Integer, String> MIDI_NAME = new HashMap<>();
+    public static final Map<Integer, String> BINARY_NAME = new HashMap<>();
+    public static final Map<Integer, String> MAPAREA_NAME = new HashMap<>();
+    public static final Map<Integer, String> OBJ_NAME = new HashMap<>();
+    public static final Map<Integer, String> NPC_NAME = new HashMap<>();
+    public static final Map<Integer, String> INV_NAME = new HashMap<>();
+    public static final Map<Integer, String> VARP_NAME = new HashMap<>();
+    public static final Map<Integer, String> VARBIT_NAME = new HashMap<>();
+    public static final Map<Integer, String> LOC_NAME = new HashMap<>();
+    public static final Map<Integer, String> SEQ_NAME = new HashMap<>();
+    public static final Map<Integer, String> SPOTANIM_NAME = new HashMap<>();
+    public static final Map<Integer, String> DBROW_NAME = new HashMap<>();
+    public static final Map<Integer, String> DBTABLE_NAME = new HashMap<>();
+    public static final Map<Integer, String> DBCOLUMN_NAME = new HashMap<>();
+    public static final Map<Integer, String> JINGLE_NAME = new HashMap<>();
+    public static final Map<Integer, String> INTERFACE_NAME = new HashMap<>();
+    public static final Map<Integer, String> COMPONENT_NAME = new HashMap<>();
+    public static final Map<Integer, List<Type>> DBCOLUMN_TYPE = new HashMap<>();
     public static final Map<Integer, Type> PARAM_TYPE = new HashMap<>();
     public static final Map<Integer, Type> ENUM_INPUT_TYPE = new HashMap<>();
     public static final Map<Integer, Type> ENUM_OUTPUT_TYPE = new HashMap<>();
@@ -24,11 +38,11 @@ public class Unpacker {
     public static final Map<Integer, Type> VAR_CLIENT_TYPE = new HashMap<>();
 
     public static void reset() {
-        SCRIPT_NAMES.clear();
-        GRAPHIC_NAMES.clear();
-        MIDI_NAMES.clear();
-        BINARY_NAMES.clear();
-        WMA_NAMES.clear();
+        SCRIPT_NAME.clear();
+        GRAPHIC_NAME.clear();
+        MIDI_NAME.clear();
+        BINARY_NAME.clear();
+        MAPAREA_NAME.clear();
         DBCOLUMN_TYPE.clear();
         PARAM_TYPE.clear();
         ENUM_INPUT_TYPE.clear();
@@ -65,15 +79,21 @@ public class Unpacker {
 
             case TYPE -> Type.byChar(value).name;
 
-            case VARP -> {
-                if (value == -1) {
-                    yield "null";
-                }
-
-                yield format(Type.VAR_PLAYER, value);
-            }
-            case VAR_PLAYER -> "varplayer_" + value;
-            case VAR_PLAYER_BIT -> "varplayerbit_" + value;
+            case GRAPHIC, FONTMETRICS -> formatName(value, GRAPHIC_NAME, "graphic");
+            case MIDI -> formatName(value, MIDI_NAME, "midi");
+            case MAPAREA -> formatName(value, MAPAREA_NAME, "maparea");
+            case OBJ -> formatName(value, OBJ_NAME, "obj");
+            case NPC -> formatName(value, NPC_NAME, "npc");
+            case INV -> formatName(value, INV_NAME, "inv");
+            case LOC -> formatName(value, LOC_NAME, "loc");
+            case SEQ -> formatName(value, SEQ_NAME, "seq");
+            case SPOTANIM -> formatName(value, SPOTANIM_NAME, "spotanim");
+            case DBROW -> formatName(value, DBROW_NAME, "dbrow");
+            case DBTABLE -> formatName(value, DBTABLE_NAME, "dbtable");
+            case JINGLE -> formatName(value, JINGLE_NAME, "jingle");
+            case INTERFACE -> formatName(value, INTERFACE_NAME, "interface");
+            case VAR_PLAYER, VARP -> formatName(value, VARP_NAME, "varplayer");
+            case VAR_PLAYER_BIT -> formatName(value, VARBIT_NAME, "varplayerbit");
             case VAR_CLIENT -> "varclient_" + value;
             case VAR_CLIENT_STRING -> "varclientstring_" + value;
             case VAR_CLAN_SETTING -> "varclansetting" + getVarClanSettingType(value).name + "_" + value;
@@ -92,54 +112,15 @@ public class Unpacker {
                     yield "null";
                 }
 
-                yield "interface_" + (value >> 16) + ":com" + (value & 0xffff);
+                yield format(Type.INTERFACE, value >> 16) + ":" + COMPONENT_NAME.getOrDefault(value, "com" + (value & 0xffff));
             }
 
             case DBCOLUMN -> {
                 var table = value >>> 12;
                 var column = (value >>> 4) & 255;
                 var tuple = (value & 15) - 1;
-
-                if (tuple == -1) {
-                    yield format(Type.DBTABLE, table) + ":col" + column;
-                } else {
-                    yield format(Type.DBTABLE, table) + ":col" + column + ":" + tuple;
-                }
-            }
-
-            case GRAPHIC, FONTMETRICS -> {
-                if (value == -1) {
-                    yield "null";
-                }
-
-                var name = GRAPHIC_NAMES.getOrDefault(value, type.name + "_" + value);
-
-                if (name.contains(",")) {
-                    name = "\"" + name + "\"";
-                }
-
-                yield name;
-            }
-
-            case MIDI -> {
-                if (value == -1) {
-                    yield "null";
-                }
-
-                var name = MIDI_NAMES.getOrDefault(value, "midi_" + value);
-                if (name.contains(" ")) {
-                    name = "\"" + name + "\"";
-                }
-
-                yield name;
-            }
-
-            case MAPAREA -> {
-                if (value == -1) {
-                    yield "null";
-                }
-
-                yield WMA_NAMES.getOrDefault(value, "maparea_" + value);
+                var name = format(Type.DBTABLE, table) + ":" + DBCOLUMN_NAME.getOrDefault((table << 16) | column, "col" + column);
+                yield tuple == -1 ? name : name + ":" + tuple;
             }
 
             case MOVESPEED -> switch (value) {
@@ -587,6 +568,10 @@ public class Unpacker {
         };
     }
 
+    private static String formatName(int value, Map<Integer, String> names, String prefix) {
+        return value == -1 ? "null" : names.getOrDefault(value, prefix + "_" + value);
+    }
+
     public static String format(Type type, Long value) {
         return value + "L";
     }
@@ -655,11 +640,11 @@ public class Unpacker {
     }
 
     public static void setDBColumnType(int table, int column, List<Type> types) {
-        DBCOLUMN_TYPE.put(new Tuple2<>(table, column), types);
+        DBCOLUMN_TYPE.put((table << 16) | column, types);
     }
 
     private static List<Type> getDBColumnType(int table, int column) {
-        return Objects.requireNonNull(DBCOLUMN_TYPE.get(new Tuple2<>(table, column)));
+        return Objects.requireNonNull(DBCOLUMN_TYPE.get((table << 16) | column));
     }
 
     public static List<Type> getDBColumnTypeTuple(int table, int column, int tuple) {
@@ -725,7 +710,7 @@ public class Unpacker {
     }
 
     public static void setWorldMapAreaName(int id, String name) {
-        WMA_NAMES.put(id, name);
+        MAPAREA_NAME.put(id, name);
     }
 
     public static String formatWearPos(int slot) {
@@ -752,8 +737,8 @@ public class Unpacker {
         var trigger = ScriptUnpacker.SCRIPT_TRIGGERS.get(id);
         var name = "[" + (trigger != null ? trigger.name().toLowerCase() : "proc") + ",script" + id + "]";
 
-        if (SCRIPT_NAMES.containsKey(id)) {
-            name = SCRIPT_NAMES.get(id);
+        if (SCRIPT_NAME.containsKey(id)) {
+            name = SCRIPT_NAME.get(id);
         }
 
         return name;

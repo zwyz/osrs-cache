@@ -12,7 +12,7 @@ public class InterfaceUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[com" + id + "]");
+        lines.add("[" + Unpacker.COMPONENT_NAME.getOrDefault(id, "com_" + (id & 0xffff)) + "]");
 
         var version = packet.g1();
 
@@ -43,7 +43,13 @@ public class InterfaceUnpacker {
             line(lines, "ymode=", decodeYMode(packet.g1s()), "abs_top");
         }
 
-        line(lines, "layer=com", packet.g2null(), -1); // if_getlayer
+        var layerID = packet.g2null();
+
+        if (layerID != -1) {
+            layerID |= id & 0xffff0000;
+        }
+
+        line(lines, "layer=", Unpacker.COMPONENT_NAME.getOrDefault(layerID, "com" + (layerID & 0xffff)), -1); // if_getlayer
         line(lines, "hide=", packet.g1() == 1 ? "yes" : "no", "no"); // if_sethide
 
         switch (type) {
