@@ -49,7 +49,7 @@ public class InterfaceUnpacker {
             layerID |= id & 0xffff0000;
         }
 
-        line(lines, "layer=", Unpacker.COMPONENT_NAME.getOrDefault(layerID, "com" + (layerID & 0xffff)), -1); // if_getlayer
+        line(lines, "layer=", Unpacker.COMPONENT_NAME.getOrDefault(layerID, "com_" + (layerID & 0xffff)), -1); // if_getlayer
         line(lines, "hide=", packet.g1() == 1 ? "yes" : "no", "no"); // if_sethide
 
         switch (type) {

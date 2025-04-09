@@ -112,7 +112,7 @@ public class Unpacker {
                     yield "null";
                 }
 
-                yield format(Type.INTERFACE, value >> 16) + ":" + COMPONENT_NAME.getOrDefault(value, "com" + (value & 0xffff));
+                yield format(Type.INTERFACE, value >> 16) + ":" + COMPONENT_NAME.getOrDefault(value, "com_" + (value & 0xffff));
             }
 
             case DBCOLUMN -> {

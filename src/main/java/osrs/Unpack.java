@@ -87,7 +87,6 @@ public class Unpack {
         loadDebugNames(Js5DebugNamesGroup.SEQTYPES, Unpacker.SEQ_NAME);
         loadDebugNames(Js5DebugNamesGroup.SPOTTYPES, Unpacker.SPOTANIM_NAME);
         loadDebugNames(Js5DebugNamesGroup.ROWTYPES, Unpacker.DBROW_NAME);
-        loadDebugNames(Js5DebugNamesGroup.TABLETYPES, Unpacker.DBTABLE_NAME);
         loadDebugNames(Js5DebugNamesGroup.SOUNDTYPES, Unpacker.JINGLE_NAME);
         loadDebugNamesInterface();
         loadDebugNamesDBTable();
@@ -574,7 +573,7 @@ public class Unpack {
                 var packet = new Packet(files.get(itf));
                 Unpacker.INTERFACE_NAME.put(itf, packet.gjstr());
 
-                for (var com = packet.g1(); com != 0xff; com = packet.g1()) {
+                for (var com = 0; packet.g1() != 0xff; com++) {
                     Unpacker.COMPONENT_NAME.put((itf << 16) | com, packet.gjstr());
                 }
             }
@@ -592,7 +591,7 @@ public class Unpack {
                     Unpacker.DBTABLE_NAME.put(table, packet.gjstr());
                 }
 
-                for (var column = 0; packet.gBoolean(); column++) {
+                for (var column = 0; packet.g1() != 0; column++) {
                     Unpacker.DBCOLUMN_NAME.put((table << 16) | column, packet.gjstr());
                 }
             }

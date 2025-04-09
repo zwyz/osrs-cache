@@ -12,7 +12,7 @@ public class DBRowUnpacker {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
         lines.add("[" + Unpacker.format(Type.DBROW, id) + "]");
-
+        var table = -1;
 
         while (true) switch (packet.g1()) {
             case 0 -> {
@@ -26,8 +26,7 @@ public class DBRowUnpacker {
             case 3 -> {
                 var a = packet.g1();
 
-                for (var value = packet.g1(); value != 255; value = packet.g1()) {
-                    var column = value;
+                for (var column = packet.g1(); column != 255; column = packet.g1()) {
                     var elementCount = packet.g1();
                     var types = new Type[elementCount];
 
@@ -35,17 +34,16 @@ public class DBRowUnpacker {
                         types[j] = Type.byID(packet.gSmart1or2());
                     }
 
-                    var something = packet.gSmart1or2();
+                    var count = packet.gSmart1or2();
 
-                    for (var i = 0; i < something; i++) {
-                        var sb = new StringBuilder("data=" + Unpacker.DBCOLUMN_NAME.getOrDefault((id << 16) | column, "col" + column));
+                    for (var i = 0; i < count; i++) {
+                        var sb = new StringBuilder("data=" + Unpacker.DBCOLUMN_NAME.getOrDefault((table << 16) | column, "col" + column));
 
                         for (var type : types) {
                             sb.append(",").append(switch (type.baseType) {
                                 case INTEGER -> Unpacker.format(type, packet.g4s());
                                 case LONG -> Unpacker.format(type, packet.g8s());
                                 case STRING -> Unpacker.format(type, packet.gjstr());
-                                default -> throw new IllegalStateException();
                             });
                         }
 
@@ -54,7 +52,10 @@ public class DBRowUnpacker {
                 }
             }
 
-            case 4 -> lines.add("table=" + Unpacker.format(Type.DBTABLE, packet.gvarint2()));
+            case 4 -> {
+                table = packet.gvarint2();
+                lines.add("table=" + Unpacker.format(Type.DBTABLE, table));
+            }
 
             default -> throw new IllegalStateException("unknown opcode");
         }
