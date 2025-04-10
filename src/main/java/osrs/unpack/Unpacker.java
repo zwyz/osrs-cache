@@ -125,7 +125,7 @@ public class Unpacker {
                 var column = (value >>> 4) & 255;
                 var tuple = (value & 15) - 1;
                 var name = format(Type.DBTABLE, table) + ":" + DBCOLUMN_NAME.getOrDefault((table << 16) | column, "col" + column);
-                if (tuple == -1) name = name + ":" + tuple;
+                if (tuple != -1) name = name + ":" + tuple;
                 if (safe) name = quote(name);
                 yield name;
             }

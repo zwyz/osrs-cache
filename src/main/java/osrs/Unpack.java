@@ -73,11 +73,6 @@ public class Unpack {
 //        Files.createDirectories(Path.of(path + "/maps"));
 
         // load names
-        loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME);
-        loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME::put);
-        loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAME::put);
-        loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, Unpacker.MIDI_NAME::put);
-        loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAME::put);
         loadDebugNames(Js5DebugNamesGroup.OBJTYPES, Unpacker.OBJ_NAME);
         loadDebugNames(Js5DebugNamesGroup.NPCTYPES, Unpacker.NPC_NAME);
         loadDebugNames(Js5DebugNamesGroup.INVTYPES, Unpacker.INV_NAME);
@@ -90,6 +85,11 @@ public class Unpack {
         loadDebugNames(Js5DebugNamesGroup.SOUNDTYPES, Unpacker.JINGLE_NAME);
         loadDebugNamesInterface();
         loadDebugNamesDBTable();
+        loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME);
+        loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME::put);
+        loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAME::put);
+        loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, Unpacker.MIDI_NAME::put);
+        loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAME::put);
 
         // things stuff depends on
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, path + "/config/dump.varbit");
@@ -573,7 +573,9 @@ public class Unpack {
                 var packet = new Packet(files.get(itf));
                 Unpacker.INTERFACE_NAME.put(itf, packet.gjstr());
 
-                for (var com = 0; packet.g1() != 0xff; com++) {
+                // interfaces can have more than 255 components. thankfully the data exists
+                // in the buffer still, we just need to detect if there is additional data.
+                for (var com = 0; packet.g1() != 0xff || packet.arr[packet.pos] != 0; com++) {
                     Unpacker.COMPONENT_NAME.put((itf << 16) | com, packet.gjstr());
                 }
             }
