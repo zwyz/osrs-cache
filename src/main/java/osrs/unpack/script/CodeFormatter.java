@@ -149,12 +149,14 @@ public class CodeFormatter {
 
             case "push_array_int" -> {
                 var index = (int) expression.operand;
-                yield "$" + formatType(expression.type.get(0), false) + "array" + index + "(" + format(expression.arguments.get(0)) + ")";
+                var type = expression.type.get(0);
+                yield "$" + formatType(type.alias != null ? type.alias : type, false) + "array" + index + "(" + format(expression.arguments.get(0)) + ")";
             }
 
             case "pop_array_int" -> {
                 var index = (int) expression.operand;
-                yield "$" + formatType(expression.arguments.get(1).type.get(0), false) + "array" + index + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
+                var type = expression.arguments.get(1).type.get(0);
+                yield "$" + formatType(type.alias != null ? type.alias : type, false) + "array" + index + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
             }
 
             case "add" -> {
