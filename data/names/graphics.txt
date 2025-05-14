@@ -726,6 +726,7 @@ icon_tracker_loot01_30x30,#
 icon_tragedy
 icon_unholy
 icon_wizard
+icon_yama_34x34,#
 icy_basalt,#
 ii_impling_icons,#
 illusive
