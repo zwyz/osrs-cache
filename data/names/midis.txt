@@ -802,6 +802,7 @@ xarpus ambience
 xarpus combat
 xenophobe
 xmas_2021
+yama_combat
 yesteryear
 yuletide eve
 zalcano_combat
