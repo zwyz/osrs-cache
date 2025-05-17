@@ -24,7 +24,7 @@ public class LocUnpacker {
                 return lines;
             }
 
-            case 1 -> {
+            case 1 -> { // https://www.youtube.com/watch?v=vZ7oG1IDz1w 2:09:30
                 var count = packet.g1();
 
                 for (var i = 0; i < count; ++i) {
@@ -34,11 +34,12 @@ public class LocUnpacker {
 
             case 2 -> lines.add("name=" + packet.gjstr()); // https://www.youtube.com/watch?v=ovGBifJR4Fs 4:38:00
 
-            case 5 -> {
+            case 5 -> { // https://www.youtube.com/watch?v=vZ7oG1IDz1w 5:05:36
                 var count = packet.g1();
 
-                for (var i = 0; i < count; ++i) {
-                    lines.add("model=" + Unpacker.format(Type.MODEL, packet.g2())); // https://www.youtube.com/watch?v=vZ7oG1IDz1w 2:09:30
+                lines.add("model=" + Unpacker.format(Type.MODEL, packet.g2()));
+                for (var i = 1; i < count; ++i) {
+                    lines.add("model" + (i + 1) + "=" + Unpacker.format(Type.MODEL, packet.g2()));
                 }
             }
 
