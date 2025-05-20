@@ -127,7 +127,7 @@
 3304 [command,inv_size](inv $x1)(int)
 3305 [command,stat](stat $x1)(int)
 3306 [command,stat_base](stat $x1)(int)
-3307 [command,stat_xp](stat $x1)(int)
+3307 [command,stat_visible_xp](stat $x1)(int)
 3308 [command,coord]()(coord)
 3309 [command,coordx](coord $x1)(int)
 3310 [command,coordy](coord $x1)(int)
