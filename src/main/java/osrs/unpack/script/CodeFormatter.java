@@ -159,28 +159,38 @@ public class CodeFormatter {
                 yield "$" + formatType(type.alias != null ? type.alias : type, false) + "array" + index + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
             }
 
+            case "or" -> {
+                var s = formatBinary(prec, 50, " | ", expression.arguments.get(0), expression.arguments.get(1));
+                yield prec < 50 ? "calc(" + s + ")" : s;
+            }
+
+            case "and" -> {
+                var s = formatBinary(prec, 60, " & ", expression.arguments.get(0), expression.arguments.get(1));
+                yield prec < 50 ? "calc(" + s + ")" : s;
+            }
+
             case "add" -> {
-                var s = formatBinary(prec, 50, " + ", expression.arguments.get(0), expression.arguments.get(1));
+                var s = formatBinary(prec, 70, " + ", expression.arguments.get(0), expression.arguments.get(1));
                 yield prec < 50 ? "calc(" + s + ")" : s;
             }
 
             case "sub" -> {
-                var s = formatBinary(prec, 50, " - ", expression.arguments.get(0), expression.arguments.get(1));
+                var s = formatBinary(prec, 70, " - ", expression.arguments.get(0), expression.arguments.get(1));
                 yield prec < 50 ? "calc(" + s + ")" : s;
             }
 
             case "multiply" -> {
-                var s = formatBinary(prec, 60, " * ", expression.arguments.get(0), expression.arguments.get(1));
+                var s = formatBinary(prec, 80, " * ", expression.arguments.get(0), expression.arguments.get(1));
                 yield prec < 50 ? "calc(" + s + ")" : s;
             }
 
             case "divide" -> {
-                var s = formatBinary(prec, 60, " / ", expression.arguments.get(0), expression.arguments.get(1));
+                var s = formatBinary(prec, 80, " / ", expression.arguments.get(0), expression.arguments.get(1));
                 yield prec < 50 ? "calc(" + s + ")" : s;
             }
 
             case "modulo" -> {
-                var s = formatBinary(prec, 60, " % ", expression.arguments.get(0), expression.arguments.get(1));
+                var s = formatBinary(prec, 80, " % ", expression.arguments.get(0), expression.arguments.get(1));
                 yield prec < 50 ? "calc(" + s + ")" : s;
             }
 
