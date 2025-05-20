@@ -66,7 +66,7 @@ public class InterfaceUnpacker {
         var opcount = packet.g1();
 
         for (var i = 0; i < opcount; ++i) {
-            line(lines, "op" + i + "=", packet.gjstr(), ""); // if_setop
+            line(lines, "op" + (i + 1) + "=", packet.gjstr(), ""); // if_setop
         }
 
         line(lines, "dragdeadzone=", packet.g1(), 0); // if_setdragdeadzone
