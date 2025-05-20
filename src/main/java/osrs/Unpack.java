@@ -91,6 +91,9 @@ public class Unpack {
         loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, Unpacker.MIDI_NAME::put);
         loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAME::put);
 
+        // world map
+        unpackWorldMapGroup(DETAILS, path + "/config/dump.wma");
+
         // things stuff depends on
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, path + "/config/dump.varbit");
         unpackConfigGroup(VARPLAYER, VarPlayerUnpacker::unpack, path + "/config/dump.varp");
@@ -135,9 +138,6 @@ public class Unpack {
         unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, path + "/config/dump.gamelogevent"); // tfu
         unpackConfigGroup(WORLDENTITY, WorldEntityUnpacker::unpack, path + "/config/dump.worldentity");
         unpackConfigGroup(UNKNOWN71, Unknown71Unpacker::unpack, path + "/config/dump.unknown71");
-
-        // world map
-        unpackWorldMapGroup(DETAILS, path + "/config/dump.wma");
 
         // defaults
         unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");
