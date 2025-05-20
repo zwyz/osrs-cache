@@ -78,7 +78,7 @@
 
 1300 [command,cc_setop](int $x1, string $x2)
 1301 [command,cc_setdraggable](component $x1, int $x2)
-1302 [command,cc_setdraggablebehavior](int $x1)
+1302 [command,cc_setdragrenderbehaviour](int $x1)
 1303 [command,cc_setdragdeadzone](int $x1)
 1304 [command,cc_setdragdeadtime](int $x1)
 1305 [command,cc_setopbase](string $x1)
@@ -305,7 +305,7 @@
 
 2300 [command,if_setop](int $x1, string $x2, component $x3)
 2301 [command,if_setdraggable](component $x1, int $x2, component $x3)
-2302 [command,if_setdraggablebehavior](int $x1, component $x2)
+2302 [command,if_setdragrenderbehaviour](int $x1, component $x2)
 2303 [command,if_setdragdeadzone](int $x1, component $x2)
 2304 [command,if_setdragdeadtime](int $x1, component $x2)
 2305 [command,if_setopbase](string $x1, component $x2)
