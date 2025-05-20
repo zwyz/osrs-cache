@@ -518,6 +518,9 @@ public class Unpack {
 
         if (files != null) {
             for (var file : files.keySet()) {
+                if (Unpacker.DUMP_CONFIG_IDS) {
+                    lines.add("// " + file);
+                }
                 lines.addAll(unpack.apply(file, files.get(file)));
                 lines.add("");
             }

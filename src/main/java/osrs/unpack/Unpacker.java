@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class Unpacker {
+    public static final boolean DUMP_CONFIG_IDS = false;
+
     public static final Map<Integer, String> SCRIPT_NAME = new HashMap<>();
     public static final Map<Integer, String> GRAPHIC_NAME = new HashMap<>();
     public static final Map<Integer, String> MIDI_NAME = new HashMap<>();
