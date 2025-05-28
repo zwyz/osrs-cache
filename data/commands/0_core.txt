@@ -1,34 +1,37 @@
-0 [command,push_constant_int]todo
-1 [command,push_var]todo
-2 [command,pop_var]todo
+0 [command,push_constant_int]
+1 [command,push_var]
+2 [command,pop_var]
 3 [command,push_constant_string]()(string)
 6 [command,branch]
 7 [command,branch_not](unknown_int $x1, unknown_int $x2)
 8 [command,branch_equals](unknown_int $x1, unknown_int $x2)
 9 [command,branch_less_than](int $x1, int $x2)
 10 [command,branch_greater_than](int $x1, int $x2)
-21 [command,return]todo
+21 [command,return]
 25 [command,push_varbit]()(int)
 27 [command,pop_varbit](int $x1)
 31 [command,branch_less_than_or_equals](int $x1, int $x2)
 32 [command,branch_greater_than_or_equals](int $x1, int $x2)
 33 [command,push_int_local]()(unknown_int)
 34 [command,pop_int_local](unknown_int $x1)
-35 [command,push_string_local]()(string)
-36 [command,pop_string_local](string $x1)
-37 [command,join_string]todo
-38 [command,pop_int_discard]todo
-39 [command,pop_string_discard]todo
-40 [command,gosub_with_params]todo
-42 [command,push_varc_int]todo
-43 [command,pop_varc_int]todo
+35 [command,push_string_local]
+36 [command,pop_string_local]
+37 [command,join_string]
+38 [command,pop_int_discard]
+39 [command,pop_string_discard]
+40 [command,gosub_with_params]
+42 [command,push_varc_int]
+43 [command,pop_varc_int]
 44 [command,define_array](int $x1)
 45 [command,push_array_int](int $x1)(unknown_int)
+45 [command,push_array_int](int $x1)(unknown) 231
 46 [command,pop_array_int](int $x1, unknown_int $x2)
-47 [command,push_varc_string_old]todo
-48 [command,pop_varc_string_old]todo
-49 [command,push_varc_string]todo
-50 [command,pop_varc_string]todo
+46 [command,pop_array_int](int $x1, unknown $x2) 231
+47 [command,push_varc_string_old]
+48 [command,pop_varc_string_old]
+49 [command,push_varc_string]
+50 [command,pop_varc_string]
 60 [command,switch](unknown_int $x1)
-74 [command,push_varclansetting]todo
-76 [command,push_varclan]todo
+63 [command,push_constant_null]()(unknown_array)
+74 [command,push_varclansetting]
+76 [command,push_varclan]

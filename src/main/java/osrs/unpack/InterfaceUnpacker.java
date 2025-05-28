@@ -58,6 +58,7 @@ public class InterfaceUnpacker {
             case 5 -> decodeGraphic(lines, packet, version);
             case 6 -> decodeModel(lines, packet, version, widthmode, heightmode);
             case 9 -> decodeLine(lines, packet, version);
+            case 10 -> decodeArc(lines, packet, version);
             default -> throw new AssertionError("invalid type " + type);
         }
 
@@ -237,6 +238,19 @@ public class InterfaceUnpacker {
 
         if (Unpack.VERSION >= 79) {
             line(lines, "linedirection=", (packet.g1() == 1 ? "yes" : "no"), "no"); // if_setlinedirection
+        }
+    }
+
+    private static void decodeArc(ArrayList<String> lines, Packet packet, int version) {
+        line(lines, "colour=", Unpacker.formatColour(packet.g4s())); // if_setcolour
+        var fill = packet.g1() == 1;
+        line(lines, "fill=", (fill ? "yes" : "no"), "no"); // if_setfill
+        line(lines, "trans=", packet.g1(), 0); // if_settrans
+        line(lines, "arcstart=", packet.g2());
+        line(lines, "arcend=", packet.g2());
+
+        if (!fill) {
+            line(lines, "linewid=", packet.g1(), 1); // if_setlinewid
         }
     }
 

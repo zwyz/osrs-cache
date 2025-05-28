@@ -121,8 +121,8 @@ public enum Type {
     DBTABLE(118, 'Ø', BaseVarType.INTEGER),
 
     // Group 2
-    COMPONENTARRAY(200, 'X', BaseVarType.INTEGER),
-    INTARRAY(201, 'W', BaseVarType.INTEGER),
+    COMPONENTARRAY(200, 'X', BaseVarType.INTEGER), // todo 231: char reused for "string array"
+    INTARRAY(201, 'W', BaseVarType.INTEGER), // todo 231: char reused for "int-based array"
     LABEL(202, 'b', BaseVarType.INTEGER),
     QUEUE(203, 'B', BaseVarType.INTEGER),
     TIMER(204, '4', BaseVarType.INTEGER),
@@ -246,6 +246,9 @@ public enum Type {
     INT_OPMODE(-1, 0, BaseVarType.INTEGER, Type.INT, "opmode"),
     INT_CLAN(-1, 0, BaseVarType.INTEGER, Type.INT, "clan"),
 
+    // todo: add a generic array type system
+    STRINGARRAY(-1, 0, BaseVarType.ARRAY),
+
     // for decompiler
     HOOK,
     UNKNOWN,
@@ -253,8 +256,10 @@ public enum Type {
     UNKNOWN_INT_NOTBOOLEAN, // int-based, boolean impossible based on value set
     UNKNOWN_INT_NOTINT, // int-based, int impossible based on default return -1
     UNKNOWN_INT_NOTINT_NOTBOOLEAN, // int-based, both int and boolean impossible
-    CONDITION,
-    ;
+    UNKNOWN_OBJECT, // string or array
+    UNKNOWN_ARRAY, // array
+    UNKNOWN_ARRAY_INT, // array, element int-based
+    CONDITION;
 
     public final String name;
     public final int id;
@@ -330,10 +335,7 @@ public enum Type {
         }
 
         if (b == UNKNOWN_INT) {
-            return a.baseType == BaseVarType.INTEGER ||
-                   a == UNKNOWN_INT_NOTBOOLEAN ||
-                   a == UNKNOWN_INT_NOTINT ||
-                   a == UNKNOWN_INT_NOTINT_NOTBOOLEAN;
+            return a.baseType == BaseVarType.INTEGER || a == UNKNOWN_INT_NOTBOOLEAN || a == UNKNOWN_INT_NOTINT || a == UNKNOWN_INT_NOTINT_NOTBOOLEAN;
         }
 
         if (b == UNKNOWN_INT_NOTBOOLEAN) {
@@ -346,6 +348,18 @@ public enum Type {
 
         if (b == UNKNOWN_INT_NOTINT_NOTBOOLEAN) {
             return a.baseType == BaseVarType.INTEGER && !subtype(a, INT) && a != BOOLEAN;
+        }
+
+        if (b == UNKNOWN_OBJECT) {
+            return a.baseType == BaseVarType.STRING || subtype(a, UNKNOWN_ARRAY);
+        }
+
+        if (b == UNKNOWN_ARRAY) {
+            return a.baseType == BaseVarType.ARRAY || a == UNKNOWN_ARRAY_INT;
+        }
+
+        if (b == UNKNOWN_ARRAY_INT) {
+            return a.baseType == BaseVarType.ARRAY && a != STRINGARRAY;
         }
 
         if (a == OBJ && b == NAMEDOBJ) { // todo: return has different behavior

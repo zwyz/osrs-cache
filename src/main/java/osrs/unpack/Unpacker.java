@@ -467,6 +467,8 @@ public class Unpacker {
                 case 20 -> "^deviceoption_anti_aliasing_sample_level";
                 case 21 -> "^deviceoption_plugin_safe_mode";
                 case 22 -> "^deviceoption_is_sfx_8_bit";
+                case 23 -> "^deviceoption_afk_timeout";
+                case 24 -> "^deviceoption_anisotropy_exponent";
                 default -> "^deviceoption_" + value;
             };
 

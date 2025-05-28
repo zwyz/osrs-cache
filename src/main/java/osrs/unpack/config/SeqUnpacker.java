@@ -206,6 +206,7 @@ public class SeqUnpacker {
             }
 
             case 18 -> lines.add("debugname=" + packet.gjstr());
+            case 19 -> lines.add("crossworldsound=yes");
 
             default -> throw new IllegalStateException("unknown opcode");
         }

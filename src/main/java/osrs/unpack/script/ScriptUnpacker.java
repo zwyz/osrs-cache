@@ -19,6 +19,7 @@ public class ScriptUnpacker {
     public static final boolean FORMAT_HOOKS = true;
     public static final boolean CHECK_NONEMPTY_STACK = true;
     public static final boolean CHECK_EMPTY_ARGUMENT = true;
+    public static final boolean IGNORE_HOOK_TYPE_INFO = false;
     public static final Map<Integer, CompiledScript> SCRIPTS = new HashMap<>();
     public static final Map<Integer, List<Expression>> SCRIPTS_DECOMPILED = new HashMap<>();
     public static final Map<Integer, Integer> SCRIPT_PARAMETER_COUNT = new HashMap<>();
@@ -131,6 +132,7 @@ public class ScriptUnpacker {
             if (type == Type.UNKNOWN_INT_NOTINT) return Type.BOOLEAN;
             if (type == Type.UNKNOWN_INT_NOTINT_NOTBOOLEAN) return Type.INT_INT; // todo: can format this specially
             if (type == Type.UNKNOWN_INT_NOTBOOLEAN) return Type.INT_INT;
+            if (type == Type.UNKNOWN_OBJECT) return Type.STRING;
             if (type == Type.INT) return Type.INT_INT;
         }
 

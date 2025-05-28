@@ -44,6 +44,7 @@ public class DBRowUnpacker {
                                 case INTEGER -> Unpacker.format(type, packet.g4s());
                                 case LONG -> Unpacker.format(type, packet.g8s());
                                 case STRING -> Unpacker.format(type, packet.gjstr());
+                                case ARRAY -> throw new IllegalStateException("invalid");
                             });
                         }
 

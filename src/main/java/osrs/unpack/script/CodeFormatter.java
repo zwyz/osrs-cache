@@ -22,14 +22,14 @@ public class CodeFormatter {
         var declaredLocals = new HashSet<LocalReference>();
 
         for (var type : parameterTypes) {
-            if (type == Type.INTARRAY || type == Type.COMPONENTARRAY) {
+            if (Unpack.VERSION < 231 && (type == Type.INTARRAY || type == Type.COMPONENTARRAY)) {
                 declaredLocals.add(new LocalReference(LocalDomain.INTEGER, 0));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, 0), type));
                 indexInt++;
             } else if (Type.subtype(type, Type.UNKNOWN_INT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.INTEGER, indexInt));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, indexInt++), type));
-            } else if (type == Type.STRING) {
+            } else if (Type.subtype(type, Type.UNKNOWN_OBJECT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.STRING, indexObject));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.STRING, indexObject++), type));
             } else {
@@ -243,8 +243,6 @@ public class CodeFormatter {
                 yield "\"" + result + "\"";
             }
 
-            case "db_find", "db_find_with_count", "db_find_refine", "db_find_refine_with_count" -> expression.command.name + "(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ")";
-
             case "cc_create" -> {
                 var args = expression.arguments;
                 var dot = expression.operand instanceof Integer i && i == 1;
@@ -328,7 +326,10 @@ public class CodeFormatter {
                 if (expression.arguments.isEmpty()) {
                     yield (dot ? "." : "") + expression.command.name + operand;
                 } else {
-                    var arguments = expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
+                    var arguments = expression.arguments.stream()
+                            .filter(arg -> arg.type.get(0) != Type.BASEVARTYPE) // these are auto-generated to let the client know which stack to pop from
+                            .map(CodeFormatter::format)
+                            .collect(Collectors.joining(", "));
 
                     if (ScriptUnpacker.FORMAT_HOOKS && expression.command.hasHook()) {
                         var hookStart = 0;

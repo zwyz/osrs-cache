@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.Unpack;
 import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
@@ -135,19 +136,51 @@ public class TypePropagator {
             }
         }
 
+        // enums
+        if (expression.command == ENUM) {
+            var inputtype = expression.arguments.get(0);
+            var outputtype = expression.arguments.get(1);
+            var key = expression.arguments.get(3);
+            bound(type(key, 0), Type.byChar((int) inputtype.operand));
+            bound(type(expression, 0), Type.byChar((int) outputtype.operand));
+        }
+
+        if (expression.command == ENUM_STRING) {
+            var enum_ = expression.arguments.get(0);
+            var key = expression.arguments.get(1);
+            bound(type(key, 0), Unpacker.getEnumInputType((int) enum_.operand));
+        }
+
+        // params todo: can use a node to allow alias propagation through params
+        if (expression.command == NC_PARAM || expression.command == LC_PARAM || expression.command == OC_PARAM || expression.command == STRUCT_PARAM) {
+            var param = expression.arguments.get(1);
+            bound(type(expression, 0), Unpacker.getParamType((int) param.operand));
+        }
+
+        // dbtables todo: can use a node to allow alias propagation through dbtables
+        if (expression.command == DB_FIND || expression.command == DB_FIND_WITH_COUNT || expression.command == DB_FIND_REFINE || expression.command == DB_FIND_REFINE_WITH_COUNT) {
+            var column = (int) expression.arguments.get(0).operand;
+            var value = expression.arguments.get(1);
+            bound(type(value, 0), Unpacker.getDBColumnTypeTupleAssertSingle(column >>> 12, (column >>> 4) & 255, (column & 15) - 1));
+        }
+
         // arrays
-        if (expression.command == PUSH_ARRAY_INT) {
-            merge(type(expression, 0), array(script, (int) expression.operand));
-        }
+        if (Unpack.VERSION < 231) {
+            if (expression.command == PUSH_ARRAY_INT) {
+                merge(type(expression, 0), array(script, (int) expression.operand));
+            }
 
-        if (expression.command == POP_ARRAY_INT) {
-            merge(arg(expression, 1), array(script, (int) expression.operand));
-        }
+            if (expression.command == POP_ARRAY_INT) {
+                merge(arg(expression, 1), array(script, (int) expression.operand));
+            }
 
-        if (expression.command == DEFINE_ARRAY) {
-            var index = (int) expression.operand >> 16;
-            var type = Type.byChar((int) expression.operand & 0xffff);
-            bound(array(script, index), type);
+            if (expression.command == DEFINE_ARRAY) {
+                var index = (int) expression.operand >> 16;
+                var type = Type.byChar((int) expression.operand & 0xffff);
+                bound(array(script, index), type);
+            }
+        } else {
+            // todo: propagation for 231+ arrays
         }
 
         // equality
@@ -161,7 +194,7 @@ public class TypePropagator {
 
     public void finish(Set<Integer> scripts) {
         // infer arrays
-        if (ScriptUnpacker.INFER_ARRAYS) {
+        if (ScriptUnpacker.INFER_ARRAYS && Unpack.VERSION < 231) {
             runArrayInference(scripts);
         }
 
@@ -180,7 +213,7 @@ public class TypePropagator {
                 }
 
                 for (var i = 0; i < parameterCountString; i++) {
-                    bound(parameter(script, index++), Type.STRING);
+                    bound(parameter(script, index++), Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING);
                 }
             }
 
@@ -192,13 +225,13 @@ public class TypePropagator {
 
                 // if only one kind of parameter is left, that confirms all the end kinds
                 if (indexString == parameterCountString) bound(parameter, Type.UNKNOWN_INT);
-                if (indexInt == parameterCountInt) bound(parameter, Type.STRING);
+                if (indexInt == parameterCountInt) bound(parameter, Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING);
 
                 var type = find(parameter).type;
 
                 if (Type.subtype(type, Type.UNKNOWN_INT)) {
                     merge(parameter, local(script, LocalDomain.INTEGER, indexInt++));
-                } else if (Type.subtype(type, Type.STRING)) {
+                } else if (Type.subtype(type, Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING)) {
                     merge(parameter, local(script, LocalDomain.STRING, indexString++));
                 } else {
                     System.err.println("unable to infer parameter order for " + script);
