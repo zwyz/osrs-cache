@@ -3354,6 +3354,7 @@
 [clientscript,snapshot_main_exit_v1]
 [clientscript,snapshot_main_load]
 [clientscript,snapshot_mute]
+[clientscript,snapshot_mutetoggle]
 [clientscript,snapshot_name_update]
 [clientscript,snapshot_onkey]
 [clientscript,snapshot_open]
