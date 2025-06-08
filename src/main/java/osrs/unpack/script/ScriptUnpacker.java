@@ -1,5 +1,6 @@
 package osrs.unpack.script;
 
+import osrs.Unpack;
 import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
@@ -10,8 +11,6 @@ import static osrs.unpack.script.Command.*;
 
 public class ScriptUnpacker {
     public static final boolean DISASSEMBLE_ONLY = false;
-    public static final boolean PROPAGATE_TYPES = true;
-    public static final boolean INFER_ARRAYS = true;
     public static final boolean KEEP_LABELS = false;
     public static final boolean ASSUME_UNKNOWN_TYPES_ARE_BASE = true;
     public static final boolean OUTPUT_TYPE_ALIASES = false;
@@ -20,12 +19,15 @@ public class ScriptUnpacker {
     public static final boolean CHECK_NONEMPTY_STACK = true;
     public static final boolean CHECK_EMPTY_ARGUMENT = true;
     public static final boolean IGNORE_HOOK_TYPE_INFO = false;
+    public static final boolean ERROR_ON_TYPE_CONFLICT = true;
     public static final Map<Integer, CompiledScript> SCRIPTS = new HashMap<>();
     public static final Map<Integer, List<Expression>> SCRIPTS_DECOMPILED = new HashMap<>();
     public static final Map<Integer, Integer> SCRIPT_PARAMETER_COUNT = new HashMap<>();
     public static final Map<Integer, List<Type>> SCRIPT_RETURN_TYPES = new HashMap<>();
     public static final Map<Integer, List<Type>> SCRIPT_PARAMETERS = new HashMap<>();
     public static final Map<Integer, List<Type>> SCRIPT_RETURNS = new HashMap<>();
+    public static final Map<Integer, Integer> SCRIPT_LEGACY_ARRAY_PARAMETER = new HashMap<>();
+    public static final Map<Integer, Map<LocalReference, Type>> SCRIPT_LOCALS = new HashMap<>();
     public static final Set<Integer> CALLED = new LinkedHashSet<>();
     public static final Map<Integer, ScriptTrigger> SCRIPT_TRIGGERS = new LinkedHashMap<>();
 
@@ -53,6 +55,7 @@ public class ScriptUnpacker {
         return switch (domain) {
             case INTEGER -> SCRIPTS.get(script).argumentCountInt;
             case STRING -> SCRIPTS.get(script).argumentCountObject;
+            case ARRAY -> 0;
         };
     }
 
@@ -82,6 +85,8 @@ public class ScriptUnpacker {
                     }
                 } else if (command == PUSH_CONSTANT_STRING) {
                     returnTypes.addFirst(Type.STRING);
+                } else if (command == PUSH_CONSTANT_NULL) {
+                    returnTypes.addFirst(Type.UNKNOWN_ARRAY);
                 } else {
                     break;
                 }
@@ -98,18 +103,20 @@ public class ScriptUnpacker {
         }
 
         // propagate types
-        if (PROPAGATE_TYPES) {
-            var propagation = new TypePropagator();
-
-            for (var id : SCRIPTS_DECOMPILED.keySet()) {
-                var script = SCRIPTS_DECOMPILED.get(id);
-                propagation.run(id, script);
-            }
-
-            propagation.finish(SCRIPTS_DECOMPILED.keySet());
+        if (Unpack.VERSION < 231) {
+            new LegacyArrayParameterInference().run(SCRIPTS_DECOMPILED.keySet());
         }
 
+        var propagator = new TypePropagator();
+
+        for (var id : SCRIPTS_DECOMPILED.keySet()) {
+            var script = SCRIPTS_DECOMPILED.get(id);
+            propagator.run(id, script);
+        }
+
+        propagator.finish(SCRIPTS_DECOMPILED.keySet());
         var triggerInference = new TriggerInference();
+
         for (var id : SCRIPTS_DECOMPILED.keySet()) {
             var script = SCRIPTS_DECOMPILED.get(id);
             triggerInference.run(id, script);
@@ -123,7 +130,7 @@ public class ScriptUnpacker {
             return List.of();
         }
 
-        return CodeFormatter.formatScript(Unpacker.getScriptName(id), SCRIPT_PARAMETERS.get(id), SCRIPT_RETURNS.get(id), script).lines().toList();
+        return CodeFormatter.formatScript(Unpacker.getScriptName(id), SCRIPT_PARAMETERS.get(id), SCRIPT_RETURNS.get(id), SCRIPT_LOCALS.get(id), script).lines().toList();
     }
 
     public static Type chooseDisplayType(Type type) {
@@ -134,6 +141,8 @@ public class ScriptUnpacker {
             if (type == Type.UNKNOWN_INT_NOTBOOLEAN) return Type.INT_INT;
             if (type == Type.UNKNOWN_OBJECT) return Type.STRING;
             if (type == Type.INT) return Type.INT_INT;
+            if (type == Type.UNKNOWN_INTARRAY) return Type.INTARRAY;
+            if (type == Type.UNKNOWN_ARRAY) return Type.INTARRAY;
         }
 
         return type;

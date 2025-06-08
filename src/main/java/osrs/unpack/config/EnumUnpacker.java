@@ -42,7 +42,7 @@ public class EnumUnpacker {
                 Unpacker.setEnumInputType(id, Type.byChar(type));
                 lines.add("inputtype=" + Unpacker.format(Type.TYPE, type));
 
-                if (Type.byChar(type) != Type.INT) {
+                if (Type.byChar(type) != Type.INT_INT) {
                     nextAutoIntIndex = -1;
                 }
             }

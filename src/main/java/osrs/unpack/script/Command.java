@@ -104,6 +104,7 @@ public class Command {
     public static Command PUSH_VARC_STRING;
     public static Command POP_VARC_STRING;
     public static Command SWITCH;
+    public static Command PUSH_CONSTANT_NULL;
     public static Command PUSH_VARCLANSETTING;
     public static Command PUSH_VARCLAN;
 
@@ -169,8 +170,8 @@ public class Command {
                     if (missingTypes) {
                         defineCommand(name, id, null, null);
                     } else {
-                        var arguments = matcher.group("arguments") == null ? List.<Type>of() : Arrays.stream(matcher.group("arguments").split(",")).map(s -> parseType(s.trim().split(" ")[0])).toList();
-                        var returns = matcher.group("returns") == null ? List.<Type>of() : Arrays.stream(matcher.group("returns").split(",")).map(s -> parseType(s.trim())).toList();
+                        var arguments = matcher.group("arguments") == null ? List.<Type>of() : Arrays.stream(matcher.group("arguments").split(",")).map(s -> Type.byName(s.trim().split(" ")[0])).toList();
+                        var returns = matcher.group("returns") == null ? List.<Type>of() : Arrays.stream(matcher.group("returns").split(",")).map(s -> Type.byName(s.trim())).toList();
                         defineCommand(name, id, arguments, returns);
                     }
                 }
@@ -211,6 +212,7 @@ public class Command {
         PUSH_VARC_STRING = findCommand("push_varc_string");
         POP_VARC_STRING = findCommand("pop_varc_string");
         SWITCH = findCommand("switch");
+        PUSH_CONSTANT_NULL = findCommand("push_constant_null");
         PUSH_VARCLANSETTING = findCommand("push_varclansetting");
         PUSH_VARCLAN = findCommand("push_varclan");
 
@@ -231,18 +233,6 @@ public class Command {
         DB_FIND_REFINE = findCommand("db_find_refine");
         DB_FIND_REFINE_WITH_COUNT = findCommand("db_find_refine_with_count");
         DB_GETFIELD = findCommand("db_getfield");
-    }
-
-    private static Type parseType(String name) {
-        for (var type : Type.values()) {
-            if (type == Type.INT) continue; // subdivided, int refers to int_int
-
-            if (Objects.equals(type.name, name)) {
-                return type;
-            }
-        }
-
-        throw new IllegalStateException("invalid type: " + name);
     }
 
     public boolean hasHook() {
@@ -307,6 +297,6 @@ public class Command {
     }
 
     public enum LocalDomain {
-        INTEGER, STRING
+        INTEGER, STRING, ARRAY
     }
 }

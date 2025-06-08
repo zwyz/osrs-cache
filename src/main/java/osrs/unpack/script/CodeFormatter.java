@@ -13,8 +13,10 @@ import static osrs.unpack.script.Command.*;
 // converts ast to code
 public class CodeFormatter {
     private static final Pattern DIRECT_STRING_PATTERN = Pattern.compile("[a-z_0-9]+");
+    private static Map<LocalReference, Type> localTypes;
 
-    public static String formatScript(String name, List<Type> parameterTypes, List<Type> returnTypes, List<Expression> script) {
+    public static String formatScript(String name, List<Type> parameterTypes, List<Type> returnTypes, Map<LocalReference, Type> localTypes, List<Expression> script) {
+        CodeFormatter.localTypes = localTypes;
         var parameters = new ArrayList<String>();
         var returns = new ArrayList<String>();
         var indexInt = 0;
@@ -22,16 +24,16 @@ public class CodeFormatter {
         var declaredLocals = new HashSet<LocalReference>();
 
         for (var type : parameterTypes) {
-            if (Unpack.VERSION < 231 && (type == Type.INTARRAY || type == Type.COMPONENTARRAY)) {
-                declaredLocals.add(new LocalReference(LocalDomain.INTEGER, 0));
-                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, 0), type));
+            if (Unpack.VERSION < 231 && Type.subtype(type, Type.UNKNOWN_ARRAY)) {
+                declaredLocals.add(new LocalReference(LocalDomain.ARRAY, 0));
+                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.ARRAY, 0)));
                 indexInt++;
             } else if (Type.subtype(type, Type.UNKNOWN_INT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.INTEGER, indexInt));
-                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, indexInt++), type));
+                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, indexInt++)));
             } else if (Type.subtype(type, Type.UNKNOWN_OBJECT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.STRING, indexObject));
-                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.STRING, indexObject++), type));
+                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.STRING, indexObject++)));
             } else {
                 throw new IllegalStateException("unknown parameter local");
             }
@@ -92,18 +94,14 @@ public class CodeFormatter {
                     yield expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
                 } else {
                     var left = new ArrayList<String>();
-                    var types = expression.arguments.stream().flatMap(a -> a.type.stream()).toList();
-                    var typeIndex = 0;
 
                     for (var target : targets) {
                         switch (target) {
                             case LocalReference local -> {
-                                var type = types.get(typeIndex);
-
                                 if (declaredLocals != null && declaredLocals.add(local)) {
-                                    left.add("def_" + formatType(type, true) + " " + formatLocal(local, type));
+                                    left.add("def_" + formatLocalType(local, true) + " " + formatLocal(local));
                                 } else {
-                                    left.add(formatLocal(local, type));
+                                    left.add(formatLocal(local));
                                 }
                             }
 
@@ -116,20 +114,18 @@ public class CodeFormatter {
                             case null -> left.add("$_");
                             default -> throw new IllegalStateException("invalid assign target type");
                         }
-
-                        typeIndex++;
                     }
 
                     yield String.join(", ", left) + " = " + expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
                 }
             }
 
-            case "flow_load" -> formatLoadTarget(expression.operand, expression.type.get(0));
+            case "flow_load" -> formatLoadTarget(expression.operand);
 
-            case "flow_preinc" -> "++" + formatLoadTarget(expression.operand, Type.INT_INT);
-            case "flow_predec" -> "--" + formatLoadTarget(expression.operand, Type.INT_INT);
-            case "flow_postinc" -> formatLoadTarget(expression.operand, Type.INT_INT) + "++";
-            case "flow_postdec" -> formatLoadTarget(expression.operand, Type.INT_INT) + "--";
+            case "flow_preinc" -> "++" + formatLoadTarget(expression.operand);
+            case "flow_predec" -> "--" + formatLoadTarget(expression.operand);
+            case "flow_postinc" -> formatLoadTarget(expression.operand) + "++";
+            case "flow_postdec" -> formatLoadTarget(expression.operand) + "--";
 
             case "gosub_with_params" -> {
                 var script = formatConstant(Type.CLIENTSCRIPT, expression.operand);
@@ -144,19 +140,20 @@ public class CodeFormatter {
             case "define_array" -> {
                 var index = (int) expression.operand >> 16;
                 var type = Type.byChar((int) expression.operand & 0xffff);
-                yield "def_" + formatType(type, true) + " $" + formatType(type, false) + "array" + index + "(" + format(expression.arguments.get(0)) + ")";
+                var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+                yield "def_" + formatType(type, true) + " " + formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
             }
 
             case "push_array_int" -> {
                 var index = (int) expression.operand;
-                var type = expression.type.get(0);
-                yield "$" + formatType(type.alias != null ? type.alias : type, false) + "array" + index + "(" + format(expression.arguments.get(0)) + ")";
+                var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+                yield formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
             }
 
             case "pop_array_int" -> {
                 var index = (int) expression.operand;
-                var type = expression.arguments.get(1).type.get(0);
-                yield "$" + formatType(type.alias != null ? type.alias : type, false) + "array" + index + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
+                var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+                yield formatLocal(local) + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
             }
 
             case "or" -> {
@@ -347,9 +344,9 @@ public class CodeFormatter {
         };
     }
 
-    private static String formatLoadTarget(Object operand, Type type) {
+    private static String formatLoadTarget(Object operand) {
         return switch (operand) {
-            case LocalReference local -> formatLocal(local, type);
+            case LocalReference local -> formatLocal(local);
             case VarPlayerReference var -> formatVarPlayer(var);
             case VarPlayerBitReference var -> formatVarPlayerBit(var);
             case VarClientReference var -> formatVarClient(var);
@@ -437,6 +434,10 @@ public class CodeFormatter {
             return "\"" + escape(s) + "\"";
         }
 
+        if (Unpack.VERSION < 231 && type.element() != null) {
+            return type.name + value;
+        }
+
         if (value instanceof Integer i) return Unpacker.format(type, i);
         if (value instanceof String s) return Unpacker.format(type, s);
         throw new IllegalStateException("invalid constant");
@@ -452,8 +453,12 @@ public class CodeFormatter {
         return type.name;
     }
 
-    private static String formatLocal(LocalReference local, Type type) {
-        return "$" + formatType(type, false) + local.local();
+    private static String formatLocal(LocalReference local) {
+        return "$" + formatLocalType(local, false) + local.local();
+    }
+
+    private static String formatLocalType(LocalReference local, boolean real) {
+        return formatType(localTypes == null ? Type.UNKNOWN : localTypes.getOrDefault(local, Type.UNKNOWN), real);
     }
 
     private static String formatVarPlayer(VarPlayerReference var) {

@@ -103,6 +103,7 @@ public class SyntaxBuilder {
                     case LocalReference local -> argumentTypes.add(switch (local.domain()) {
                         case INTEGER -> Type.UNKNOWN_INT;
                         case STRING -> Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING;
+                        case ARRAY -> throw new AssertionError();
                     });
 
                     case null -> argumentTypes.add(Type.UNKNOWN); // discards can pop stacks in different order
@@ -242,7 +243,7 @@ public class SyntaxBuilder {
                         case 'i' -> Type.UNKNOWN_INT;
                         case 's' -> Type.STRING;
                         case 'X' -> Type.STRINGARRAY;
-                        case 'W' -> Type.UNKNOWN_ARRAY_INT;
+                        case 'W' -> Type.UNKNOWN_INTARRAY;
                         case 'Y' -> Type.TRANSMIT_LIST;
                         default -> throw new IllegalStateException("unexpected hook type " + c);
                     };

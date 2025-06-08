@@ -7,11 +7,11 @@ import osrs.util.Packet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Unknown71Unpacker {
+public class Config71Unpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.UNKNOWN71, id, false) + "]");
+        lines.add("[" + Unpacker.format(Type.CONFIG71, id, false) + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {

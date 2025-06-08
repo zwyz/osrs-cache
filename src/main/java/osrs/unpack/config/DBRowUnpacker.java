@@ -37,18 +37,21 @@ public class DBRowUnpacker {
                     var count = packet.gSmart1or2();
 
                     for (var i = 0; i < count; i++) {
-                        var sb = new StringBuilder("data=" + Unpacker.DBCOLUMN_NAME.getOrDefault((table << 16) | column, "col" + column));
+                        var s = "data=" + Unpacker.DBCOLUMN_NAME.getOrDefault((table << 16) | column, "col" + column);
 
                         for (var type : types) {
-                            sb.append(",").append(switch (type.baseType) {
-                                case INTEGER -> Unpacker.format(type, packet.g4s());
-                                case LONG -> Unpacker.format(type, packet.g8s());
-                                case STRING -> Unpacker.format(type, packet.gjstr());
-                                case ARRAY -> throw new IllegalStateException("invalid");
-                            });
+                            if (Type.subtype(type, Type.UNKNOWN_INT)) {
+                                s += "," + Unpacker.format(type, packet.g4s());
+                            } else if (Type.subtype(type, Type.UNKNOWN_LONG)) {
+                                s += "," + Unpacker.format(type, packet.g8s());
+                            } else if (Type.subtype(type, Type.STRING)) {
+                                s += "," + Unpacker.format(type, packet.gjstr());
+                            } else {
+                                throw new IllegalStateException("invalid");
+                            }
                         }
 
-                        lines.add(sb.toString());
+                        lines.add(s);
                     }
                 }
             }

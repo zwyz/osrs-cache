@@ -137,7 +137,7 @@ public class Unpack {
         unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, path + "/config/dump.dbtable");
         unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, path + "/config/dump.gamelogevent"); // tfu
         unpackConfigGroup(WORLDENTITY, WorldEntityUnpacker::unpack, path + "/config/dump.worldentity");
-        unpackConfigGroup(UNKNOWN71, Unknown71Unpacker::unpack, path + "/config/dump.unknown71");
+        unpackConfigGroup(CONFIG71, Config71Unpacker::unpack, path + "/config/dump.config71");
 
         // defaults
         unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");
@@ -192,13 +192,19 @@ public class Unpack {
                 }
 
                 // type trigger
-                var maxType = switch (trigger.type) {
-                    case NPC -> archiveIndexConfig.groupMaxFileId[NPCTYPE.id];
-                    case LOC -> archiveIndexConfig.groupMaxFileId[LOCTYPE.id];
-                    case OBJ -> archiveIndexConfig.groupMaxFileId[OBJTYPE.id];
-                    case MAPELEMENT -> MELTYPE.id >= archiveIndexConfig.groupMaxFileId.length ? 0 : archiveIndexConfig.groupMaxFileId[MELTYPE.id];
-                    default -> throw new AssertionError("todo");
-                };
+                int maxType;
+
+                if (trigger.type == Type.NPC) {
+                    maxType = archiveIndexConfig.groupMaxFileId[NPCTYPE.id];
+                } else if (trigger.type == Type.LOC) {
+                    maxType = archiveIndexConfig.groupMaxFileId[LOCTYPE.id];
+                } else if (trigger.type == Type.OBJ) {
+                    maxType = archiveIndexConfig.groupMaxFileId[OBJTYPE.id];
+                } else if (trigger.type == Type.MAPELEMENT) {
+                    maxType = MELTYPE.id >= archiveIndexConfig.groupMaxFileId.length ? 0 : archiveIndexConfig.groupMaxFileId[MELTYPE.id];
+                } else {
+                    throw new AssertionError("todo");
+                }
 
                 for (var type = 0; type < maxType; type++) {
                     var key3 = String.valueOf((type << 8) + trigger.id);
