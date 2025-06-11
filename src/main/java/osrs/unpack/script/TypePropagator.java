@@ -298,7 +298,7 @@ public class TypePropagator {
 
         // propagate again with newly generated constraints
         propagateUntilStable();
-        printConnectedComponent(local(969, LocalDomain.STRING, 0));
+//        printConnectedComponent(local(969, LocalDomain.STRING, 0));
 
         // output script signatures
         for (var script : scripts) {
