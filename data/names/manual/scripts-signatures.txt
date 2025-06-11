@@ -329,3 +329,5 @@
 [clientscript,zmi_bank_payment_selection_reset](int $int0, int $int1, component $component2, component $component3, int $int4, boolean $boolean5) 2329
 [proc,2d_intarray_init](intarray $intarray0, int $int1, int $int2) 2329
 [proc,2d_intarray_set](intarray $intarray0, int $int1, int $int2, int $int3) 2329
+[proc,pickaxe_checker]()(obj) 1571
+[proc,script6658](dbrow $dbrow0)(dbrow) 1769
