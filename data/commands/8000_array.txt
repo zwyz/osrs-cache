@@ -1,5 +1,7 @@
-8000 [command,array_sort](intarray $x1, unknown_array $x2)
-8001 [command,array_randomise](unknown_array $x1)
+8000 [command,array_sort](intarray $x1)
+8000 [command,array_sort](unknown_array $x1, unknown_array $x2) 231
+8001 [command,array_randomise](intarray $x1, int $seed1, int $seed2)
+8001 [command,array_randomise](unknown_array $x1, int $seed1, int $seed2) 231
 8002 [command,array_isnull](unknown_array $x1)(boolean)
 8003 [command,array_length](unknown_array $x1)(int)
 8004 [command,array_compare](unknown_array $x1, unknown_array $x2)(int)
@@ -24,7 +26,7 @@
 8023 [command,array_resize](unknown_array $x1, int $size)
 8024 [command,array_push](unknown_array $x1, unknown $value, basevartype $x3)
 8025 [command,array_insert](unknown_array $x1, unknown $value, int $index, basevartype $x4)
-8026 [command,array_delete](unknown_array $x1, int $index)
+8026 [command,array_delete](unknown_array $x1, int $index)(unknown)
 8027 [command,array_pushall](unknown_array $x1, unknown_array $x2)
 8028 [command,array_insertall](unknown_array $x1, unknown_array $x2, int $index)
 8029 [command,array_deleteall](unknown_array $x1, int $count, int $index)
