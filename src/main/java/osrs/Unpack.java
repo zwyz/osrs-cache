@@ -431,6 +431,10 @@ public class Unpack {
         ScriptUnpacker.decompile();
 
         for (var group : archiveIndex.groupId) {
+            if (archiveIndex.groupNameHash[group] == "version.dat".hashCode()) {
+                continue;
+            }
+
             var lines = new ArrayList<>(ScriptUnpacker.unpack(group));
             lines.addFirst("// " + group);
             Files.write(path.resolve(Unpacker.getScriptName(group) + ".cs2"), lines);
