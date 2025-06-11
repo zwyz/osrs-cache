@@ -421,6 +421,18 @@ public class Type {
         return result;
     }
 
+    /**
+     * Version of {@link #byName(String)} that returns an alias-enabled version of `int` and `intarray`.
+     */
+    public static Type byNameAlias(String name) {
+        if (name.equals("int")) {
+            return Type.INT;
+        } else if (name.equals("intarray")) {
+            return Type.INTARRAY;
+        }
+        return byName(name);
+    }
+
     public static Type byID(int id) {
         return switch (id) {
             case 0 -> INT;

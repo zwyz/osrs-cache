@@ -212,6 +212,37 @@ public class TypePropagator {
     }
 
     public void finish(Set<Integer> scripts) {
+        if (ScriptUnpacker.OVERRIDE_SIGNATURES) {
+            // apply signature overrides
+            for (var script : scripts) {
+                var name = Unpacker.getScriptName(script);
+                var overrides = ScriptUnpacker.SCRIPT_OVERRIDES.get(name);
+                if (overrides == null) {
+                    // no overrides for this script
+                    continue;
+                }
+
+                // basic check for if the override is out of date. does not catch all cases.
+                if (ScriptUnpacker.getParameterCount(script) != overrides.parameters().size()
+                        || ScriptUnpacker.getReturnTypes(script).size() != overrides.results().size()) {
+                    System.out.println("WARNING: " + name + " override is outdated. CLIENTSCRIPTS_VERSION=" + Unpack.CLIENTSCRIPTS_VERSION);
+                    continue;
+                }
+
+                for (int i = 0; i < overrides.parameters().size(); i++) {
+                    var override = overrides.parameters().get(i);
+                    var parameter = parameter(script, i);
+                    emitEqual(parameter, override);
+                }
+
+                for (int i = 0; i < overrides.results().size(); i++) {
+                    var override = overrides.results().get(i);
+                    var result = result(script, i);
+                    emitEqual(result, override);
+                }
+            }
+        }
+
         // propagate types
         propagateUntilStable();
 

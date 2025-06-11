@@ -5,7 +5,12 @@ import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static osrs.unpack.script.Command.*;
 
@@ -20,6 +25,7 @@ public class ScriptUnpacker {
     public static final boolean CHECK_EMPTY_ARGUMENT = true;
     public static final boolean IGNORE_HOOK_TYPE_INFO = false;
     public static final boolean ERROR_ON_TYPE_CONFLICT = true;
+    public static final boolean OVERRIDE_SIGNATURES = true;
     public static final Map<Integer, CompiledScript> SCRIPTS = new HashMap<>();
     public static final Map<Integer, List<Expression>> SCRIPTS_DECOMPILED = new HashMap<>();
     public static final Map<Integer, Integer> SCRIPT_PARAMETER_COUNT = new HashMap<>();
@@ -28,8 +34,11 @@ public class ScriptUnpacker {
     public static final Map<Integer, List<Type>> SCRIPT_RETURNS = new HashMap<>();
     public static final Map<Integer, Integer> SCRIPT_LEGACY_ARRAY_PARAMETER = new HashMap<>();
     public static final Map<Integer, Map<LocalReference, Type>> SCRIPT_LOCALS = new HashMap<>();
+    public static final Map<String, ScriptOverride> SCRIPT_OVERRIDES = new HashMap<>();
     public static final Set<Integer> CALLED = new LinkedHashSet<>();
     public static final Map<Integer, ScriptTrigger> SCRIPT_TRIGGERS = new LinkedHashMap<>();
+
+    private static final Pattern OVERRIDE_PATTERN = Pattern.compile("\\[(?<trigger>[a-zA-Z0-9_]+),(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
 
     public static void reset() {
         SCRIPTS.clear();
@@ -43,6 +52,37 @@ public class ScriptUnpacker {
         SCRIPT_OVERRIDES.clear();
         CALLED.clear();
         SCRIPT_TRIGGERS.clear();
+
+        try {
+            for (var line : Files.readAllLines(Path.of("data/names/manual/scripts-signatures.txt"))) {
+                if (line.isBlank() || line.startsWith("//")) {
+                    continue;
+                }
+
+                var matcher = OVERRIDE_PATTERN.matcher(line);
+                if (!matcher.matches()) {
+                    throw new IllegalStateException("invalid line " + line);
+                }
+
+                if (matcher.group("version") != null) {
+                    var version = Integer.parseInt(matcher.group("version"));
+
+                    if (version > Unpack.CLIENTSCRIPTS_VERSION) {
+                        continue; // overrides for higher versions
+                    }
+                }
+
+                var trigger = matcher.group("trigger");
+                var name = matcher.group("name");
+                var arguments = matcher.group("arguments") == null ? List.<Type>of() : Arrays.stream(matcher.group("arguments").split(",")).map(s -> Type.byNameAlias(s.trim().split(" ")[0])).toList();
+                var returns = matcher.group("returns") == null ? List.<Type>of() : Arrays.stream(matcher.group("returns").split(",")).map(s -> Type.byNameAlias(s.trim())).toList();
+
+                var fullName = "[" + trigger + "," + name + "]";
+                SCRIPT_OVERRIDES.put(fullName, new ScriptOverride(arguments, returns));
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
     }
 
     public static void load(int id, byte[] data) {
