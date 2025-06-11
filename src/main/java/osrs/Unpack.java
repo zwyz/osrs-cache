@@ -592,7 +592,7 @@ public class Unpack {
 
                 // interfaces can have more than 255 components. thankfully the data exists
                 // in the buffer still, we just need to detect if there is additional data.
-                for (var com = 0; packet.g1() != 0xff || packet.arr[packet.pos] != 0; com++) {
+                for (var com = 0; packet.g1() != 0xff || (packet.pos < packet.arr.length && packet.arr[packet.pos] != 0); com++) {
                     Unpacker.COMPONENT_NAME.put((itf << 16) | com, packet.gjstr());
                 }
             }
