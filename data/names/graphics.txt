@@ -750,6 +750,7 @@ into the abyss
 intrepid
 invback
 invent_guild
+invisible_font
 iowerths_lament
 iron_icons,#
 island life
@@ -1306,6 +1307,8 @@ overture
 overview
 p11_full
 p12_full
+p12_full_monospace
+p12_full_monospace_characters
 painting1
 painting2
 panel_main
@@ -2014,6 +2017,7 @@ venture
 venture2
 verdana_11pt_bold
 verdana_11pt_regular
+verdana_11pt_regular_multiline
 verdana_13pt_bold
 verdana_13pt_regular
 verdana_15pt_regular
@@ -2061,6 +2065,8 @@ welcomescreen_banner_default
 well hallowed air
 well of voyage
 werewolves
+wgs_font_scratch
+wgs_font_scratch_large
 where eagles lair
 whistle
 wiki_icon,#
