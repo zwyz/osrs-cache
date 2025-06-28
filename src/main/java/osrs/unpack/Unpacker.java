@@ -95,6 +95,9 @@ public class Unpacker {
         if (type == Type.DBTABLE) return formatName(value, DBTABLE_NAME, "dbtable", safe);
         if (type == Type.JINGLE) return formatName(value, JINGLE_NAME, "jingle", safe);
         if (type == Type.INTERFACE) return formatName(value, INTERFACE_NAME, "interface", safe);
+        if (type == Type.TOPLEVELINTERFACE) return formatName(value, INTERFACE_NAME, "toplevelinterface", safe);
+        if (type == Type.OVERLAYINTERFACE) return formatName(value, INTERFACE_NAME, "overlayinterface", safe);
+        if (type == Type.CLIENTINTERFACE) return formatName(value, INTERFACE_NAME, "clientinterface", safe);
         if (type == Type.VAR_PLAYER || type == Type.VARP) return formatName(value, VARP_NAME, "varplayer", safe);
         if (type == Type.VAR_PLAYER_BIT) return formatName(value, VARBIT_NAME, "varplayerbit", safe);
         if (type == Type.VAR_CLIENT) return "varclient_" + value;
