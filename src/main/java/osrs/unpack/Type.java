@@ -1,334 +1,370 @@
 package osrs.unpack;
 
 import osrs.Unpack;
+import osrs.util.Lattice;
 
 import java.util.*;
 
 // todo: clean this up
 public class Type {
+    private static final List<Type> TYPES = new ArrayList<>();
     private static final Map<String, Type> BY_NAME = new HashMap<>();
 
-    // type sets
-    public static final Type UNKNOWN = new Type("unknown", List.of()); // any type
-    public static final Type UNKNOWN_INT = new Type("unknown_int", List.of(UNKNOWN)); // any int stack type
-    public static final Type UNKNOWN_INT_NOTBOOLEAN = new Type("unknown_int_notboolean", List.of(UNKNOWN_INT)); // any int stack type except boolean
-    public static final Type UNKNOWN_INT_NOTINT = new Type("unknown_int_notint", List.of(UNKNOWN_INT)); // any int stack type except int
-    public static final Type UNKNOWN_INT_NOTINT_NOTBOOLEAN = new Type("unknown_int_notint_notboolean", List.of(UNKNOWN_INT_NOTINT, UNKNOWN_INT_NOTBOOLEAN)); // any int stack type except int or boolean
-    public static final Type UNKNOWN_LONG = new Type("unknown_long", List.of(UNKNOWN)); // any long stack type
-    public static final Type UNKNOWN_OBJECT = new Type("unknown_object", List.of(UNKNOWN)); // any object stack type
-    public static final Type UNKNOWN_ARRAY = new Type("unknown_array", List.of(Unpack.VERSION < 231 ? UNKNOWN_INT : UNKNOWN_OBJECT)); // any array type
-    public static final Type CONFLICT = new Type("conflict", List.of(UNKNOWN)); // no type possible
-
-    // real types
-    public static final Type INT = new Type("int", List.of(UNKNOWN_INT_NOTBOOLEAN));
-    public static final Type BOOLEAN = new Type("boolean", List.of(UNKNOWN_INT_NOTINT));
-    public static final Type HASH32 = new Type("hash32", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type QUEST = new Type("quest", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type QUESTHELP = new Type("questhelp", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CURSOR = new Type("cursor", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SEQ = new Type("seq", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type COLOUR = new Type("colour", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type LOC_SHAPE = new Type("locshape", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type COMPONENT = new Type("component", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type IDKIT = new Type("idkit", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MIDI = new Type("midi", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type NPC_MODE = new Type("npc_mode", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SYNTH = new Type("synth", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type AI_QUEUE = new Type("ai_queue", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type AREA = new Type("area", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type STAT = new Type("stat", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type NPC_STAT = new Type("npc_stat", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type WRITEINV = new Type("writeinv", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MESH = new Type("mesh", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MAPAREA = new Type("wma", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type COORDGRID = new Type("coord", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type GRAPHIC = new Type("graphic", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CHATPHRASE = new Type("chatphrase", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type FONTMETRICS = new Type("fontmetrics", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type ENUM = new Type("enum", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type HUNT = new Type("hunt", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type JINGLE = new Type("jingle", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CHATCAT = new Type("chatcat", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type LOC = new Type("loc", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MODEL = new Type("model", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type NPC = new Type("npc", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type OBJ = new Type("obj", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type NAMEDOBJ = new Type("namedobj", List.of(OBJ));
-    public static final Type PLAYER_UID = new Type("player_uid", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type REGION_UID = new Type("region_uid", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type STRING = new Type("string", List.of(UNKNOWN_OBJECT));
-    public static final Type SPOTANIM = new Type("spotanim", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type NPC_UID = new Type("npc_uid", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type INV = new Type("inv", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TEXTURE = new Type("texture", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CATEGORY = new Type("category", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CHAR = new Type("char", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type LASER = new Type("laser", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type BAS = new Type("bas", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CONTROLLER = new Type("controller", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type COLLISION_GEOMETRY = new Type("collision_geometry", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PHYSICS_MODEL = new Type("physics_model", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PHYSICS_CONTROL_MODIFIER = new Type("physics_control_modifier", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLANHASH = new Type("clanhash", List.of(UNKNOWN_LONG));
-    public static final Type CUTSCENE = new Type("cutscene", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type ITEMCODE = new Type("itemcode", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PVPKILLS = new Type("pvpkills", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MAPSCENEICON = new Type("msi", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLANFORUMQFC = new Type("clanforumqfc", List.of(UNKNOWN_LONG));
-    public static final Type VORBIS = new Type("vorbis", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VERIFY_OBJECT = new Type("verifyobj", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MAPELEMENT = new Type("mapelement", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CATEGORYTYPE = new Type("categorytype", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SOCIAL_NETWORK = new Type("socialnetwork", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type HITMARK = new Type("hitmark", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PACKAGE = new Type("package", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PARTICLE_EFFECTOR = new Type("pef", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CONTROLLER_UID = new Type("controller_uid", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PARTICLE_EMITTER = new Type("pem", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PLOGTYPE = new Type("plog", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNSIGNED_INT = new Type("unsigned_int", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SKYBOX = new Type("skybox", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SKYDECOR = new Type("skydecor", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type HASH64 = new Type("hash64", List.of(UNKNOWN_LONG));
-    public static final Type INPUTTYPE = new Type("inputtype", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type STRUCT = new Type("struct", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type DBROW = new Type("dbrow", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type STORABLELABEL = new Type("storablelabel", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type STORABLEPROC = new Type("storableproc", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type GAMELOGEVENT = new Type("gamelogevent", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type ANIMATIONCLIP = new Type("animationclip", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SKELETON = new Type("skeleton", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type REGIONVISIBILITY = new Type("region_visibility", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type FMODHANDLE = new Type("fmodhandle", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type REGION_ALLOWLOGIN = new Type("region_allowlogin", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type REGION_INFO = new Type("region_info", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type REGION_INFO_FAILURE = new Type("region_info_failure", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SERVER_ACCOUNT_CREATION_STEP = new Type("server_account_creation_step", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENT_ACCOUNT_CREATION_STEP = new Type("client_account_creation_step", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type LOBBY_ACCOUNT_CREATION_STEP = new Type("lobby_account_creation_step", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type GWC_PLATFORM = new Type("gwc_platform", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CURRENCY = new Type("currency", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type KEYBOARD_KEY = new Type("keyboard_key", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MOUSEEVENT = new Type("mouseevent", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type HEADBAR = new Type("headbar", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type BUG_TEMPLATE = new Type("bugtemplate", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type BILLING_AUTH_FLAG = new Type("billingauthflag", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type ACCOUNT_FEATURE_FLAG = new Type("accountfeatureflag", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type INTERFACE = new Type("interface", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TOPLEVELINTERFACE = new Type("toplevelinterface", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type OVERLAYINTERFACE = new Type("overlayinterface", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENTINTERFACE = new Type("clientinterface", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MOVESPEED = new Type("movespeed", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MATERIAL = new Type("material", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SEQGROUP = new Type("seqgroup", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TEMP_HISCORE = new Type("TEMPHISCORE", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TEMP_HISCORE_LENGTH_TYPE = new Type("temphiscorelengthtype", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TEMP_HISCORE_DISPLAY_TYPE = new Type("temphiscoretype", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TEMP_HISCORE_CONTRIBUTE_RESULT = new Type("temphiscorecontributeresult", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type AUDIOGROUP = new Type("audiogroup", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type AUDIOMIXBUSS = new Type("audiobuss", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type LONG = new Type("long", List.of(UNKNOWN_LONG));
-    public static final Type CRM_CHANNEL = new Type("crm_channel", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type HTTP_IMAGE = new Type("http_image", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type POP_UP_DISPLAY_BEHAVIOUR = new Type("popupdisplaybehaviour", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type POLL = new Type("poll", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MTXN_PACKAGE = new Type("mtxn_package", List.of(UNKNOWN_LONG));
-    public static final Type MTXN_PRICE_POINT = new Type("mtxn_price_point", List.of(UNKNOWN_LONG));
-    public static final Type ENTITYOVERLAY = new Type("entityoverlay", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type DBTABLE = new Type("dbtable", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
+    public static final Type INT = new Type("int", BaseVarType.INTEGER);
+    public static final Type BOOLEAN = new Type("boolean", BaseVarType.INTEGER);
+    public static final Type HASH32 = new Type("hash32", BaseVarType.INTEGER);
+    public static final Type QUEST = new Type("quest", BaseVarType.INTEGER);
+    public static final Type QUESTHELP = new Type("questhelp", BaseVarType.INTEGER);
+    public static final Type CURSOR = new Type("cursor", BaseVarType.INTEGER);
+    public static final Type SEQ = new Type("seq", BaseVarType.INTEGER);
+    public static final Type COLOUR = new Type("colour", BaseVarType.INTEGER);
+    public static final Type LOC_SHAPE = new Type("locshape", BaseVarType.INTEGER);
+    public static final Type COMPONENT = new Type("component", BaseVarType.INTEGER);
+    public static final Type IDKIT = new Type("idkit", BaseVarType.INTEGER);
+    public static final Type MIDI = new Type("midi", BaseVarType.INTEGER);
+    public static final Type NPC_MODE = new Type("npc_mode", BaseVarType.INTEGER);
+    public static final Type SYNTH = new Type("synth", BaseVarType.INTEGER);
+    public static final Type AI_QUEUE = new Type("ai_queue", BaseVarType.INTEGER);
+    public static final Type AREA = new Type("area", BaseVarType.INTEGER);
+    public static final Type STAT = new Type("stat", BaseVarType.INTEGER);
+    public static final Type NPC_STAT = new Type("npc_stat", BaseVarType.INTEGER);
+    public static final Type WRITEINV = new Type("writeinv", BaseVarType.INTEGER);
+    public static final Type MESH = new Type("mesh", BaseVarType.INTEGER);
+    public static final Type MAPAREA = new Type("wma", BaseVarType.INTEGER);
+    public static final Type COORDGRID = new Type("coord", BaseVarType.INTEGER);
+    public static final Type GRAPHIC = new Type("graphic", BaseVarType.INTEGER);
+    public static final Type CHATPHRASE = new Type("chatphrase", BaseVarType.INTEGER);
+    public static final Type FONTMETRICS = new Type("fontmetrics", BaseVarType.INTEGER);
+    public static final Type ENUM = new Type("enum", BaseVarType.INTEGER);
+    public static final Type HUNT = new Type("hunt", BaseVarType.INTEGER);
+    public static final Type JINGLE = new Type("jingle", BaseVarType.INTEGER);
+    public static final Type CHATCAT = new Type("chatcat", BaseVarType.INTEGER);
+    public static final Type LOC = new Type("loc", BaseVarType.INTEGER);
+    public static final Type MODEL = new Type("model", BaseVarType.INTEGER);
+    public static final Type NPC = new Type("npc", BaseVarType.INTEGER);
+    public static final Type OBJ = new Type("obj", BaseVarType.INTEGER);
+    public static final Type NAMEDOBJ = new Type("namedobj", BaseVarType.INTEGER);
+    public static final Type PLAYER_UID = new Type("player_uid", BaseVarType.INTEGER);
+    public static final Type REGION_UID = new Type("region_uid", BaseVarType.INTEGER);
+    public static final Type STRING = new Type("string", BaseVarType.STRING);
+    public static final Type SPOTANIM = new Type("spotanim", BaseVarType.INTEGER);
+    public static final Type NPC_UID = new Type("npc_uid", BaseVarType.INTEGER);
+    public static final Type INV = new Type("inv", BaseVarType.INTEGER);
+    public static final Type TEXTURE = new Type("texture", BaseVarType.INTEGER);
+    public static final Type CATEGORY = new Type("category", BaseVarType.INTEGER);
+    public static final Type CHAR = new Type("char", BaseVarType.INTEGER);
+    public static final Type LASER = new Type("laser", BaseVarType.INTEGER);
+    public static final Type BAS = new Type("bas", BaseVarType.INTEGER);
+    public static final Type CONTROLLER = new Type("controller", BaseVarType.INTEGER);
+    public static final Type COLLISION_GEOMETRY = new Type("collision_geometry", BaseVarType.INTEGER);
+    public static final Type PHYSICS_MODEL = new Type("physics_model", BaseVarType.INTEGER);
+    public static final Type PHYSICS_CONTROL_MODIFIER = new Type("physics_control_modifier", BaseVarType.INTEGER);
+    public static final Type CLANHASH = new Type("clanhash", BaseVarType.LONG);
+    public static final Type CUTSCENE = new Type("cutscene", BaseVarType.INTEGER);
+    public static final Type ITEMCODE = new Type("itemcode", BaseVarType.INTEGER);
+    public static final Type PVPKILLS = new Type("pvpkills", BaseVarType.INTEGER);
+    public static final Type MAPSCENEICON = new Type("msi", BaseVarType.INTEGER);
+    public static final Type CLANFORUMQFC = new Type("clanforumqfc", BaseVarType.LONG);
+    public static final Type VORBIS = new Type("vorbis", BaseVarType.INTEGER);
+    public static final Type VERIFY_OBJECT = new Type("verifyobj", BaseVarType.INTEGER);
+    public static final Type MAPELEMENT = new Type("mapelement", BaseVarType.INTEGER);
+    public static final Type CATEGORYTYPE = new Type("categorytype", BaseVarType.INTEGER);
+    public static final Type SOCIAL_NETWORK = new Type("socialnetwork", BaseVarType.INTEGER);
+    public static final Type HITMARK = new Type("hitmark", BaseVarType.INTEGER);
+    public static final Type PACKAGE = new Type("package", BaseVarType.INTEGER);
+    public static final Type PARTICLE_EFFECTOR = new Type("pef", BaseVarType.INTEGER);
+    public static final Type CONTROLLER_UID = new Type("controller_uid", BaseVarType.INTEGER);
+    public static final Type PARTICLE_EMITTER = new Type("pem", BaseVarType.INTEGER);
+    public static final Type PLOGTYPE = new Type("plog", BaseVarType.INTEGER);
+    public static final Type UNSIGNED_INT = new Type("unsigned_int", BaseVarType.INTEGER);
+    public static final Type SKYBOX = new Type("skybox", BaseVarType.INTEGER);
+    public static final Type SKYDECOR = new Type("skydecor", BaseVarType.INTEGER);
+    public static final Type HASH64 = new Type("hash64", BaseVarType.LONG);
+    public static final Type INPUTTYPE = new Type("inputtype", BaseVarType.INTEGER);
+    public static final Type STRUCT = new Type("struct", BaseVarType.INTEGER);
+    public static final Type DBROW = new Type("dbrow", BaseVarType.INTEGER);
+    public static final Type STORABLELABEL = new Type("storablelabel", BaseVarType.INTEGER);
+    public static final Type STORABLEPROC = new Type("storableproc", BaseVarType.INTEGER);
+    public static final Type GAMELOGEVENT = new Type("gamelogevent", BaseVarType.INTEGER);
+    public static final Type ANIMATIONCLIP = new Type("animationclip", BaseVarType.INTEGER);
+    public static final Type SKELETON = new Type("skeleton", BaseVarType.INTEGER);
+    public static final Type REGIONVISIBILITY = new Type("region_visibility", BaseVarType.INTEGER);
+    public static final Type FMODHANDLE = new Type("fmodhandle", BaseVarType.INTEGER);
+    public static final Type REGION_ALLOWLOGIN = new Type("region_allowlogin", BaseVarType.INTEGER);
+    public static final Type REGION_INFO = new Type("region_info", BaseVarType.INTEGER);
+    public static final Type REGION_INFO_FAILURE = new Type("region_info_failure", BaseVarType.INTEGER);
+    public static final Type SERVER_ACCOUNT_CREATION_STEP = new Type("server_account_creation_step", BaseVarType.INTEGER);
+    public static final Type CLIENT_ACCOUNT_CREATION_STEP = new Type("client_account_creation_step", BaseVarType.INTEGER);
+    public static final Type LOBBY_ACCOUNT_CREATION_STEP = new Type("lobby_account_creation_step", BaseVarType.INTEGER);
+    public static final Type GWC_PLATFORM = new Type("gwc_platform", BaseVarType.INTEGER);
+    public static final Type CURRENCY = new Type("currency", BaseVarType.INTEGER);
+    public static final Type KEYBOARD_KEY = new Type("keyboard_key", BaseVarType.INTEGER);
+    public static final Type MOUSEEVENT = new Type("mouseevent", BaseVarType.INTEGER);
+    public static final Type HEADBAR = new Type("headbar", BaseVarType.INTEGER);
+    public static final Type BUG_TEMPLATE = new Type("bugtemplate", BaseVarType.INTEGER);
+    public static final Type BILLING_AUTH_FLAG = new Type("billingauthflag", BaseVarType.INTEGER);
+    public static final Type ACCOUNT_FEATURE_FLAG = new Type("accountfeatureflag", BaseVarType.INTEGER);
+    public static final Type INTERFACE = new Type("interface", BaseVarType.INTEGER);
+    public static final Type TOPLEVELINTERFACE = new Type("toplevelinterface", BaseVarType.INTEGER);
+    public static final Type OVERLAYINTERFACE = new Type("overlayinterface", BaseVarType.INTEGER);
+    public static final Type CLIENTINTERFACE = new Type("clientinterface", BaseVarType.INTEGER);
+    public static final Type MOVESPEED = new Type("movespeed", BaseVarType.INTEGER);
+    public static final Type MATERIAL = new Type("material", BaseVarType.INTEGER);
+    public static final Type SEQGROUP = new Type("seqgroup", BaseVarType.INTEGER);
+    public static final Type TEMP_HISCORE = new Type("TEMPHISCORE", BaseVarType.INTEGER);
+    public static final Type TEMP_HISCORE_LENGTH_TYPE = new Type("temphiscorelengthtype", BaseVarType.INTEGER);
+    public static final Type TEMP_HISCORE_DISPLAY_TYPE = new Type("temphiscoretype", BaseVarType.INTEGER);
+    public static final Type TEMP_HISCORE_CONTRIBUTE_RESULT = new Type("temphiscorecontributeresult", BaseVarType.INTEGER);
+    public static final Type AUDIOGROUP = new Type("audiogroup", BaseVarType.INTEGER);
+    public static final Type AUDIOMIXBUSS = new Type("audiobuss", BaseVarType.INTEGER);
+    public static final Type LONG = new Type("long", BaseVarType.LONG);
+    public static final Type CRM_CHANNEL = new Type("crm_channel", BaseVarType.INTEGER);
+    public static final Type HTTP_IMAGE = new Type("http_image", BaseVarType.INTEGER);
+    public static final Type POP_UP_DISPLAY_BEHAVIOUR = new Type("popupdisplaybehaviour", BaseVarType.INTEGER);
+    public static final Type POLL = new Type("poll", BaseVarType.INTEGER);
+    public static final Type MTXN_PACKAGE = new Type("mtxn_package", BaseVarType.LONG);
+    public static final Type MTXN_PRICE_POINT = new Type("mtxn_price_point", BaseVarType.LONG);
+    public static final Type ENTITYOVERLAY = new Type("entityoverlay", BaseVarType.INTEGER);
+    public static final Type DBTABLE = new Type("dbtable", BaseVarType.INTEGER);
 
     // Group 2
-    public static final Type LABEL = new Type("label", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type QUEUE = new Type("queue", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TIMER = new Type("timer", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type WEAKQUEUE = new Type("weakqueue", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type SOFTTIMER = new Type("softtimer", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type OBJVAR = new Type("objvar", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type WALKTRIGGER = new Type("walktrigger", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
+    public static final Type LABEL = new Type("label", BaseVarType.INTEGER);
+    public static final Type QUEUE = new Type("queue", BaseVarType.INTEGER);
+    public static final Type TIMER = new Type("timer", BaseVarType.INTEGER);
+    public static final Type WEAKQUEUE = new Type("weakqueue", BaseVarType.INTEGER);
+    public static final Type SOFTTIMER = new Type("softtimer", BaseVarType.INTEGER);
+    public static final Type OBJVAR = new Type("objvar", BaseVarType.INTEGER);
+    public static final Type WALKTRIGGER = new Type("walktrigger", BaseVarType.INTEGER);
 
     // Group 3
-    public static final Type UNKNOWN1 = new Type("unknown1", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN2 = new Type("unknown2", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN3 = new Type("unknown3", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN4 = new Type("unknown4", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN5 = new Type("unknown5", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN6 = new Type("unknown6", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN7 = new Type("unknown7", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VARP = new Type("varp", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN)); // 214
-    public static final Type UNKNOWN9 = new Type("unknown9", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN10 = new Type("unknown10", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN11 = new Type("unknown11", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN12 = new Type("unknown12", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN13 = new Type("unknown13", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN14 = new Type("unknown14", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN15 = new Type("unknown15", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN16 = new Type("unknown16", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN17 = new Type("unknown17", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN18 = new Type("unknown18", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN19 = new Type("unknown19", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN20 = new Type("unknown20", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN21 = new Type("unknown21", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN22 = new Type("unknown22", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN23 = new Type("unknown23", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN24 = new Type("unknown24", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN25 = new Type("unknown25", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type TRANSMIT_LIST = new Type("transmit_list", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN27 = new Type("unknown27", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN28 = new Type("unknown28", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN29 = new Type("unknown29", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN30 = new Type("unknown30", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN31 = new Type("unknown31", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN32 = new Type("unknown32", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN33 = new Type("unknown33", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN34 = new Type("unknown34", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN35 = new Type("unknown35", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN36 = new Type("unknown36", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN37 = new Type("unknown37", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN38 = new Type("unknown38", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN39 = new Type("unknown39", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN40 = new Type("unknown40", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN41 = new Type("unknown41", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN42 = new Type("unknown42", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN43 = new Type("unknown43", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN44 = new Type("unknown44", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN45 = new Type("unknown45", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNKNOWN46 = new Type("unknown46", List.of(UNKNOWN));
-    public static final Type UNKNOWN47 = new Type("unknown47", List.of(UNKNOWN));
-    public static final Type UNKNOWN48 = new Type("unknown48", List.of(UNKNOWN));
-    public static final Type UNKNOWN49 = new Type("unknown49", List.of(UNKNOWN));
-    public static final Type UNKNOWN50 = new Type("unknown50", List.of(UNKNOWN));
+    public static final Type UNKNOWN1 = new Type("unknown1", BaseVarType.INTEGER);
+    public static final Type UNKNOWN2 = new Type("unknown2", BaseVarType.INTEGER);
+    public static final Type UNKNOWN3 = new Type("unknown3", BaseVarType.INTEGER);
+    public static final Type UNKNOWN4 = new Type("unknown4", BaseVarType.INTEGER);
+    public static final Type UNKNOWN5 = new Type("unknown5", BaseVarType.INTEGER);
+    public static final Type UNKNOWN6 = new Type("unknown6", BaseVarType.INTEGER);
+    public static final Type UNKNOWN7 = new Type("unknown7", BaseVarType.INTEGER);
+    public static final Type VARP = new Type("varp", BaseVarType.INTEGER); // 214
+    public static final Type UNKNOWN9 = new Type("unknown9", BaseVarType.INTEGER);
+    public static final Type UNKNOWN10 = new Type("unknown10", BaseVarType.INTEGER);
+    public static final Type UNKNOWN11 = new Type("unknown11", BaseVarType.INTEGER);
+    public static final Type UNKNOWN12 = new Type("unknown12", BaseVarType.INTEGER);
+    public static final Type UNKNOWN13 = new Type("unknown13", BaseVarType.INTEGER);
+    public static final Type UNKNOWN14 = new Type("unknown14", BaseVarType.INTEGER);
+    public static final Type UNKNOWN15 = new Type("unknown15", BaseVarType.INTEGER);
+    public static final Type UNKNOWN16 = new Type("unknown16", BaseVarType.INTEGER);
+    public static final Type UNKNOWN17 = new Type("unknown17", BaseVarType.INTEGER);
+    public static final Type UNKNOWN18 = new Type("unknown18", BaseVarType.INTEGER);
+    public static final Type UNKNOWN19 = new Type("unknown19", BaseVarType.INTEGER);
+    public static final Type UNKNOWN20 = new Type("unknown20", BaseVarType.INTEGER);
+    public static final Type UNKNOWN21 = new Type("unknown21", BaseVarType.INTEGER);
+    public static final Type UNKNOWN22 = new Type("unknown22", BaseVarType.INTEGER);
+    public static final Type UNKNOWN23 = new Type("unknown23", BaseVarType.INTEGER);
+    public static final Type UNKNOWN24 = new Type("unknown24", BaseVarType.INTEGER);
+    public static final Type UNKNOWN25 = new Type("unknown25", BaseVarType.INTEGER);
+    public static final Type TRANSMIT_LIST = new Type("transmit_list", BaseVarType.INTEGER);
+    public static final Type UNKNOWN27 = new Type("unknown27", BaseVarType.INTEGER);
+    public static final Type UNKNOWN28 = new Type("unknown28", BaseVarType.INTEGER);
+    public static final Type UNKNOWN29 = new Type("unknown29", BaseVarType.INTEGER);
+    public static final Type UNKNOWN30 = new Type("unknown30", BaseVarType.INTEGER);
+    public static final Type UNKNOWN31 = new Type("unknown31", BaseVarType.INTEGER);
+    public static final Type UNKNOWN32 = new Type("unknown32", BaseVarType.INTEGER);
+    public static final Type UNKNOWN33 = new Type("unknown33", BaseVarType.INTEGER);
+    public static final Type UNKNOWN34 = new Type("unknown34", BaseVarType.INTEGER);
+    public static final Type UNKNOWN35 = new Type("unknown35", BaseVarType.INTEGER);
+    public static final Type UNKNOWN36 = new Type("unknown36", BaseVarType.INTEGER);
+    public static final Type UNKNOWN37 = new Type("unknown37", BaseVarType.INTEGER);
+    public static final Type UNKNOWN38 = new Type("unknown38", BaseVarType.INTEGER);
+    public static final Type UNKNOWN39 = new Type("unknown39", BaseVarType.INTEGER);
+    public static final Type UNKNOWN40 = new Type("unknown40", BaseVarType.INTEGER);
+    public static final Type UNKNOWN41 = new Type("unknown41", BaseVarType.INTEGER);
+    public static final Type UNKNOWN42 = new Type("unknown42", BaseVarType.INTEGER);
+    public static final Type UNKNOWN43 = new Type("unknown43", BaseVarType.INTEGER);
+    public static final Type UNKNOWN44 = new Type("unknown44", BaseVarType.INTEGER);
+    public static final Type UNKNOWN45 = new Type("unknown45", BaseVarType.INTEGER);
+    public static final Type UNKNOWN46 = new Type("unknown46");
+    public static final Type UNKNOWN47 = new Type("unknown47");
+    public static final Type UNKNOWN48 = new Type("unknown48");
+    public static final Type UNKNOWN49 = new Type("unknown49");
+    public static final Type UNKNOWN50 = new Type("unknown50");
 
     // unknown id
-    public static final Type STRINGVECTOR = new Type("stringvector", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN)); // added in 202
-    public static final Type WORLDENTITY = new Type("worldentity", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CONFIG71 = new Type("config71", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type MESANIM = new Type("mesanim", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type UNDERLAY = new Type("underlay", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type OVERLAY = new Type("overlay", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type WORLD_AREA = new Type("world_area", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
+    public static final Type STRINGVECTOR = new Type("stringvector", BaseVarType.INTEGER); // added in 202
+    public static final Type WORLDENTITY = new Type("worldentity", BaseVarType.INTEGER);
+    public static final Type CONFIG71 = new Type("config71", BaseVarType.INTEGER);
+    public static final Type MESANIM = new Type("mesanim", BaseVarType.INTEGER);
+    public static final Type UNDERLAY = new Type("underlay", BaseVarType.INTEGER);
+    public static final Type OVERLAY = new Type("overlay", BaseVarType.INTEGER);
+    public static final Type WORLD_AREA = new Type("world_area", BaseVarType.INTEGER);
 
     // special
-    public static final Type TYPE = new Type("type", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type BASEVARTYPE = new Type("basevartype", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type PARAM = new Type("param", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENTSCRIPT = new Type("clientscript", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENTOPNPC = new Type("clientopnpc", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENTOPLOC = new Type("clientoploc", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENTOPOBJ = new Type("clientopobj", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENTOPPLAYER = new Type("clientopplayer", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type CLIENTOPTILE = new Type("clientoptile", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type DBCOLUMN = new Type("dbcolumn", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_PLAYER = new Type("var_player", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_PLAYER_BIT = new Type("var_player_bit", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_CLIENT = new Type("var_client", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_CLIENT_STRING = new Type("var_client_string", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_CLAN_SETTING = new Type("var_clan_setting", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_CLAN = new Type("var_clan", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_CONTROLLER = new Type("var_controller", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_CONTROLLER_BIT = new Type("var_controller_bit", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_GLOBAL = new Type("var_global", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_NPC = new Type("var_npc", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_NPC_BIT = new Type("var_npc_bit", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_OBJ = new Type("var_obj", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_SHARED = new Type("var_shared", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
-    public static final Type VAR_SHARED_STRING = new Type("var_shared_string", List.of(UNKNOWN_INT_NOTINT_NOTBOOLEAN));
+    public static final Type TYPE = new Type("type", BaseVarType.INTEGER);
+    public static final Type BASEVARTYPE = new Type("basevartype", BaseVarType.INTEGER);
+    public static final Type PARAM = new Type("param", BaseVarType.INTEGER);
+    public static final Type CLIENTSCRIPT = new Type("clientscript", BaseVarType.INTEGER);
+    public static final Type CLIENTOPNPC = new Type("clientopnpc", BaseVarType.INTEGER);
+    public static final Type CLIENTOPLOC = new Type("clientoploc", BaseVarType.INTEGER);
+    public static final Type CLIENTOPOBJ = new Type("clientopobj", BaseVarType.INTEGER);
+    public static final Type CLIENTOPPLAYER = new Type("clientopplayer", BaseVarType.INTEGER);
+    public static final Type CLIENTOPTILE = new Type("clientoptile", BaseVarType.INTEGER);
+    public static final Type DBCOLUMN = new Type("dbcolumn", BaseVarType.INTEGER);
+    public static final Type VAR_PLAYER = new Type("var_player", BaseVarType.INTEGER);
+    public static final Type VAR_PLAYER_BIT = new Type("var_player_bit", BaseVarType.INTEGER);
+    public static final Type VAR_CLIENT = new Type("var_client", BaseVarType.INTEGER);
+    public static final Type VAR_CLIENT_STRING = new Type("var_client_string", BaseVarType.INTEGER);
+    public static final Type VAR_CLAN_SETTING = new Type("var_clan_setting", BaseVarType.INTEGER);
+    public static final Type VAR_CLAN = new Type("var_clan", BaseVarType.INTEGER);
+    public static final Type VAR_CONTROLLER = new Type("var_controller", BaseVarType.INTEGER);
+    public static final Type VAR_CONTROLLER_BIT = new Type("var_controller_bit", BaseVarType.INTEGER);
+    public static final Type VAR_GLOBAL = new Type("var_global", BaseVarType.INTEGER);
+    public static final Type VAR_NPC = new Type("var_npc", BaseVarType.INTEGER);
+    public static final Type VAR_NPC_BIT = new Type("var_npc_bit", BaseVarType.INTEGER);
+    public static final Type VAR_OBJ = new Type("var_obj", BaseVarType.INTEGER);
+    public static final Type VAR_SHARED = new Type("var_shared", BaseVarType.INTEGER);
+    public static final Type VAR_SHARED_STRING = new Type("var_shared_string", BaseVarType.INTEGER);
 
     // type aliases (act as normal types, except that on conflict they propagate int_int, and type name is formatted as base type)
-    public static final Type INT_INT = new Type("int", List.of(INT));
-    public static final Type INT_BOOLEAN = new Type("intbool", Type.INT, List.of(INT));
-    public static final Type INT_CHATFILTER = new Type("chatfilter", Type.INT, List.of(INT));
-    public static final Type INT_CHATTYPE = new Type("chattype", Type.INT, List.of(INT));
-    public static final Type INT_CLIENTTYPE = new Type("clienttype", Type.INT, List.of(INT));
-    public static final Type INT_PLATFORMTYPE = new Type("platformtype", Type.INT, List.of(INT));
-    public static final Type INT_IFTYPE = new Type("iftype", Type.INT, List.of(INT));
-    public static final Type INT_KEY = new Type("key", Type.INT, List.of(INT));
-    public static final Type INT_SETPOSH = new Type("setposh", Type.INT, List.of(INT));
-    public static final Type INT_SETPOSV = new Type("setposv", Type.INT, List.of(INT));
-    public static final Type INT_SETSIZE = new Type("setsize", Type.INT, List.of(INT));
-    public static final Type INT_SETTEXTALIGNH = new Type("settextalignh", Type.INT, List.of(INT));
-    public static final Type INT_SETTEXTALIGNV = new Type("settextalignv", Type.INT, List.of(INT));
-    public static final Type INT_WINDOWMODE = new Type("windowmode", Type.INT, List.of(INT));
-    public static final Type INT_GAMEOPTION = new Type("gameoption", Type.INT, List.of(INT));
-    public static final Type INT_DEVICEOPTION = new Type("deviceoption", Type.INT, List.of(INT));
-    public static final Type INT_MENUENTRYTYPE = new Type("menuentrytype", Type.INT, List.of(INT));
-    public static final Type INT_GRADIENTMODE = new Type("gradientmode", Type.INT, List.of(INT));
-    public static final Type INT_OBJOWNER = new Type("objowner", Type.INT, List.of(INT));
-    public static final Type INT_RGB = new Type("rgb", Type.INT, List.of(INT));
-    public static final Type INT_OPKIND = new Type("opkind", Type.INT, List.of(INT));
-    public static final Type INT_OPMODE = new Type("opmode", Type.INT, List.of(INT));
-    public static final Type INT_CLAN = new Type("clan", Type.INT, List.of(INT));
+    public static final Type INT_INT = new Type("int", Type.INT);
+    public static final Type INT_BOOLEAN = new Type("intbool", Type.INT);
+    public static final Type INT_CHATFILTER = new Type("chatfilter", Type.INT);
+    public static final Type INT_CHATTYPE = new Type("chattype", Type.INT);
+    public static final Type INT_CLIENTTYPE = new Type("clienttype", Type.INT);
+    public static final Type INT_PLATFORMTYPE = new Type("platformtype", Type.INT);
+    public static final Type INT_IFTYPE = new Type("iftype", Type.INT);
+    public static final Type INT_KEY = new Type("key", Type.INT);
+    public static final Type INT_SETPOSH = new Type("setposh", Type.INT);
+    public static final Type INT_SETPOSV = new Type("setposv", Type.INT);
+    public static final Type INT_SETSIZE = new Type("setsize", Type.INT);
+    public static final Type INT_SETTEXTALIGNH = new Type("settextalignh", Type.INT);
+    public static final Type INT_SETTEXTALIGNV = new Type("settextalignv", Type.INT);
+    public static final Type INT_WINDOWMODE = new Type("windowmode", Type.INT);
+    public static final Type INT_GAMEOPTION = new Type("gameoption", Type.INT);
+    public static final Type INT_DEVICEOPTION = new Type("deviceoption", Type.INT);
+    public static final Type INT_MENUENTRYTYPE = new Type("menuentrytype", Type.INT);
+    public static final Type INT_GRADIENTMODE = new Type("gradientmode", Type.INT);
+    public static final Type INT_OBJOWNER = new Type("objowner", Type.INT);
+    public static final Type INT_RGB = new Type("rgb", Type.INT);
+    public static final Type INT_OPKIND = new Type("opkind", Type.INT);
+    public static final Type INT_OPMODE = new Type("opmode", Type.INT);
+    public static final Type INT_CLAN = new Type("clan", Type.INT);
+
+    // type sets
+    public static final Type UNKNOWN = new Type("unknown"); // any type
+    public static final Type UNKNOWN_INT = new Type("unknown_int"); // any int stack type
+    public static final Type UNKNOWN_INT_NOTBOOLEAN = new Type("unknown_int_notboolean"); // any int stack type except boolean
+    public static final Type UNKNOWN_INT_NOTINT = new Type("unknown_int_notint"); // any int stack type except int
+    public static final Type UNKNOWN_INT_NOTINT_NOTBOOLEAN = new Type("unknown_int_notint_notboolean"); // any int stack type except int or boolean
+    public static final Type UNKNOWN_LONG = new Type("unknown_long"); // any long stack type
+    public static final Type UNKNOWN_OBJECT = new Type("unknown_object"); // any object stack type
+    public static final Type CONFLICT = new Type("conflict"); // no type possible
 
     // a few arrays referenced by unpacker
+    public static final Type UNKNOWNARRAY = UNKNOWN.array(); // new Type("unknownarray", List.of(Unpack.VERSION < 231 ? UNKNOWN_INT : UNKNOWN_OBJECT)); // any array type
     public static final Type UNKNOWN_INTARRAY = UNKNOWN_INT.array();
     public static final Type INTARRAY = INT.array();
     public static final Type COMPONENTARRAY = COMPONENT.array();
     public static final Type STRINGARRAY = STRING.array();
 
     // fake types used by unpacker
-    public static final Type HOOK = new Type("hook", List.of(UNKNOWN));
-    public static final Type CONDITION = new Type("condition", List.of(UNKNOWN));
+    public static final Type HOOK = new Type("hook");
+    public static final Type CONDITION = new Type("condition");
+
+    // information about which types are more specific than other types to pick which
+    // to propagate during type inference (this is not a subtyping relation, namedobjarray
+    // is more specific than objarray, but not a subtype)
+    public static final Lattice<Type> LATTICE = new Lattice<>();
 
     static {
-        for (var type : BY_NAME.values()) {
-            CONFLICT.supertypes.add(type);
-            type.subtypes.add(CONFLICT);
+        for (var type : TYPES) {
+            if (type.base == BaseVarType.INTEGER) {
+                if (type.alias == INT) {
+                    LATTICE.add(type, INT);
+                    LATTICE.add(INT_INT, type);
+                } else if (type == INT) {
+                    LATTICE.add(type, UNKNOWN_INT_NOTBOOLEAN);
+                } else if (type == BOOLEAN) {
+                    LATTICE.add(type, UNKNOWN_INT_NOTINT);
+                } else {
+                    LATTICE.add(type, UNKNOWN_INT_NOTINT_NOTBOOLEAN);
+                }
+            } else if (type.base == BaseVarType.LONG) {
+                LATTICE.add(type, UNKNOWN_LONG);
+            } else {
+                LATTICE.add(type, UNKNOWN);
+            }
+        }
+
+        LATTICE.add(UNKNOWN_INT, UNKNOWN);
+        LATTICE.add(UNKNOWN_OBJECT, UNKNOWN);
+        LATTICE.add(UNKNOWN_LONG, UNKNOWN);
+        LATTICE.add(UNKNOWNARRAY, Unpack.VERSION >= 231 ? UNKNOWN_OBJECT : UNKNOWN_INT);
+        LATTICE.add(UNKNOWN_INT_NOTINT, UNKNOWN_INT);
+        LATTICE.add(UNKNOWN_INT_NOTBOOLEAN, UNKNOWN_INT);
+        LATTICE.add(UNKNOWN_INT_NOTINT_NOTBOOLEAN, UNKNOWN_INT_NOTINT);
+        LATTICE.add(UNKNOWN_INT_NOTINT_NOTBOOLEAN, UNKNOWN_INT_NOTBOOLEAN);
+        LATTICE.add(STRING, UNKNOWN_OBJECT);
+        LATTICE.add(NAMEDOBJ, OBJ);
+
+        // mirror the lattice for arrays
+        for (var x : TYPES) {
+            for (var y : LATTICE.upper(x)) {
+                LATTICE.add(x.array(), y.array());
+            }
+        }
+
+        // add bottom type
+        for (var type : TYPES) {
+            LATTICE.add(CONFLICT, type);
         }
     }
 
     public final String name;
     public final Type alias;
-    public final SequencedSet<Type> supertypes = new LinkedHashSet<>();
-    public final SequencedSet<Type> subtypes = new LinkedHashSet<>();
-    private Type array;
-    private Type element;
+    public final BaseVarType base; // only defined for real types
+    public final Type array;
+    public final Type element;
 
-    private Type(String name, List<Type> supertypes) {
-        this(name, null, supertypes);
+    private Type(String name) {
+        this.name = name;
+        this.alias = null;
+        this.base = null;
+        this.array = new Type(this);
+        this.element = null;
+        BY_NAME.put(name, this);
+        TYPES.add(this);
     }
 
-    private Type(String name, Type alias, List<Type> supertypes) {
-        this.subtypes.add(this);
-        this.supertypes.add(this);
-
-        for (var supertype : supertypes) {
-            this.supertypes.add(supertype);
-            supertype.subtypes.add(this);
-
-            for (var recursiveSupertype : supertype.supertypes) {
-                this.supertypes.add(recursiveSupertype);
-                recursiveSupertype.subtypes.add(this);
-            }
-        }
-
-        this.alias = alias;
-        this.name = name;
+    private Type(Type element) {
+        this.name = element.name + "array";
+        this.alias = null;
+        this.base = Unpack.VERSION < 231 ? BaseVarType.INTEGER : BaseVarType.ARRAY;
+        this.array = null;
+        this.element = element;
         BY_NAME.put(name, this);
+        TYPES.add(this);
+    }
+
+    private Type(String name, BaseVarType base) {
+        this.name = name;
+        this.alias = null;
+        this.base = base;
+        this.array = new Type(this);
+        this.element = null;
+        BY_NAME.put(name, this);
+        TYPES.add(this);
+    }
+
+    private Type(String name, Type alias) {
+        this.name = name;
+        this.alias = alias;
+        this.base = alias.base;
+        this.array = new Type(this);
+        this.element = null;
+        BY_NAME.put(name, this);
+        TYPES.add(this);
     }
 
     public Type array() {
-        if (array == null) {
-            array = new Type(name + "array", List.of());
-            array.element = this;
-
-            for (var supertype : supertypes) {
-                if (supertype != this) {
-                    array.supertypes.addAll(supertype.array().supertypes);
-                    supertype.array().subtypes.add(array);
-                }
-            }
-
-            if (subtype(this, UNKNOWN_INT) && UNKNOWN_INTARRAY != null) {
-                array.supertypes.addAll(UNKNOWN_INTARRAY.supertypes);
-                UNKNOWN_INTARRAY.subtypes.add(array);
-            } else {
-                array.supertypes.addAll(UNKNOWN_ARRAY.supertypes);
-                UNKNOWN_ARRAY.subtypes.add(array);
-            }
-
-            CONFLICT.supertypes.addAll(array.supertypes);
-            array.subtypes.add(CONFLICT);
-        }
-
         return array;
     }
 
@@ -341,84 +377,8 @@ public class Type {
         return name;
     }
 
-    public static boolean subtype(Type a, Type b) {
-        return a.supertypes.contains(b);
-    }
-
-    public static Type meet(Type a, Type b) {
-        if (subtype(a, b)) return a; // optimization
-        if (subtype(b, a)) return b; // optimization
-        return Type.meet(List.of(a, b));
-    }
-
-    public static Type meet(List<Type> types) {
-        if (types.isEmpty()) {
-            return UNKNOWN;
-        }
-
-        // intersect all subtypes
-        var possible = new ArrayList<>(types.get(0).subtypes);
-
-        for (var type : types) {
-            possible.removeIf(t -> !type.subtypes.contains(t));
-        }
-
-        // choose max
-        if (possible.isEmpty()) {
-            System.out.println();
-        }
-
-        var max = possible.getFirst();
-
-        for (var type : possible) {
-            if (subtype(max, type)) {
-                max = type;
-            }
-        }
-
-        return max;
-    }
-
-    public static Type join(Type a, Type b) {
-        return Type.join(List.of(a, b));
-    }
-
-    public static Type join(List<Type> types) {
-        if (types.isEmpty()) {
-            return UNKNOWN;
-        }
-
-        // intersect all supertypes
-        var possible = new ArrayList<>(types.get(0).supertypes);
-
-        for (var type : types) {
-            possible.removeIf(t -> !type.supertypes.contains(t));
-        }
-
-        // choose min
-        var min = possible.getFirst();
-
-        for (var type : possible) {
-            if (subtype(type, min)) {
-                min = type;
-            }
-        }
-
-        return min;
-    }
-
     public static Type byName(String name) {
-        var result = BY_NAME.get(name);
-
-        if (result == null) {
-            if (name.endsWith("array")) {
-                return byName(name.substring(0, name.length() - "array".length())).array();
-            }
-
-            throw new IllegalArgumentException("invalid type name '" + name + "'");
-        }
-
-        return result;
+        return BY_NAME.get(name);
     }
 
     /**
@@ -430,6 +390,7 @@ public class Type {
         } else if (name.equals("intarray")) {
             return Type.INTARRAY;
         }
+
         return byName(name);
     }
 

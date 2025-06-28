@@ -306,11 +306,11 @@ public class SyntaxBuilder {
                     var expectedType = remainingTypes.removeLast();
 
                     if (expectedType != currentType) {
-                        var meet = Type.meet(expectedType, currentType);
+                        var meet = Type.LATTICE.meet(expectedType, currentType);
 
                         if (meet != null) {
                             expressionTypes.set(i, meet); // propagate down
-                        } else if (!Type.subtype(currentType, expectedType)) { // incomparable types
+                        } else if (!Type.LATTICE.test(currentType, expectedType)) { // incomparable types
                             throw new IllegalStateException("type mismatch in script " + currentScript + ", assigning " + expectedType + " to " + currentType + ", context: " + List.of(code).subList(0, index + 1));
                         }
                     }

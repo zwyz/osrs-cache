@@ -224,7 +224,7 @@ public class TypePropagator {
 
                 // basic check for if the override is out of date. does not catch all cases.
                 if (ScriptUnpacker.getParameterCount(script) != overrides.parameters().size()
-                        || ScriptUnpacker.getReturnTypes(script).size() != overrides.results().size()) {
+                    || ScriptUnpacker.getReturnTypes(script).size() != overrides.results().size()) {
                     System.out.println("WARNING: " + name + " override is outdated. CLIENTSCRIPTS_VERSION=" + Unpack.CLIENTSCRIPTS_VERSION);
                     continue;
                 }
@@ -261,7 +261,7 @@ public class TypePropagator {
                 if (indexString == parameterCountString) { // only ints left, it's an int
                     if (Unpack.VERSION < 231 && ScriptUnpacker.SCRIPT_LEGACY_ARRAY_PARAMETER.getOrDefault(script, -1) == indexInt) {
                         emitEqual(parameter, local(script, LocalDomain.ARRAY, 0));
-                        emitEqual(parameter, Type.UNKNOWN_ARRAY);
+                        emitEqual(parameter, Type.UNKNOWNARRAY);
                     }
 
                     emitEqual(parameter, local(script, LocalDomain.INTEGER, indexInt++));
@@ -272,21 +272,21 @@ public class TypePropagator {
                 } else {
                     var type = typeof(parameter);
 
-                    if (Type.subtype(type, Type.UNKNOWN_INT)) { // inferred it's an int
+                    if (Type.LATTICE.test(type, Type.UNKNOWN_INT)) { // inferred it's an int
                         if (Unpack.VERSION < 231 && ScriptUnpacker.SCRIPT_LEGACY_ARRAY_PARAMETER.getOrDefault(script, -1) == indexInt) {
                             emitEqual(parameter, local(script, LocalDomain.ARRAY, 0));
-                            emitEqual(parameter, Type.UNKNOWN_ARRAY);
+                            emitEqual(parameter, Type.UNKNOWNARRAY);
                         }
 
                         emitEqual(parameter, local(script, LocalDomain.INTEGER, indexInt++));
                         emitEqual(parameter, Type.UNKNOWN_INT);
-                    } else if (Type.subtype(type, Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING)) { // inferred it's a string
+                    } else if (Type.LATTICE.test(type, Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING)) { // inferred it's a string
                         emitEqual(parameter, local(script, LocalDomain.STRING, indexString++));
                         emitEqual(parameter, Type.UNKNOWN_OBJECT);
                     } else { // not enough info (script not called, guess int)
                         if (Unpack.VERSION < 231 && ScriptUnpacker.SCRIPT_LEGACY_ARRAY_PARAMETER.getOrDefault(script, -1) == indexInt) {
                             emitEqual(parameter, local(script, LocalDomain.ARRAY, 0));
-                            emitEqual(parameter, Type.UNKNOWN_ARRAY);
+                            emitEqual(parameter, Type.UNKNOWNARRAY);
                         }
 
                         emitEqual(parameter, local(script, LocalDomain.INTEGER, indexInt++));
@@ -437,29 +437,12 @@ public class TypePropagator {
             if (kind == ConstraintKind.ASSIGN || kind == ConstraintKind.COMPARE) {
                 if (typeA == typeB) {
                     // nothing to do
-                } else if (Type.subtype(typeA, typeB)) {
-                    if (typeA == Type.NAMEDOBJ) {
-                        // only propagate `namedobj -> ?` to `namedobj -> obj` as assignment allows upcasting
-                        // note that array types are invariant (upcasting a namedobjarray to an objarray would
-                        // be unsafe since it allows us to store an obj and then read it as a namedobj)
-                        typeB = Type.OBJ;
-                    } else {
-                        typeB = typeA; // a is more specific, propagate to b
-                    }
-                } else if (Type.subtype(typeB, typeA)) {
-                    if (kind == ConstraintKind.COMPARE && typeB == Type.NAMEDOBJ) {
-                        typeA = Type.OBJ; // comparison requires one to subtype the other, so only propagate obj across it
-                    } else {
-                        typeA = typeB; // b is more specific, propagate to a
-                    }
-                } else if (Type.subtype(typeA, Type.INT) && Type.subtype(typeB, Type.INT)) {
-                    // when an alias conflict is detected, such as `rgb -> chattype`, replace with `int -> int` (and then
-                    // recursively `rgb -> int` will also replace to `int -> int` reverting the entire connected component
-                    // back to int)
-                    typeA = Type.INT_INT;
-                    typeB = Type.INT_INT;
+                } else if (typeA == Type.NAMEDOBJ && Type.LATTICE.test(typeA, typeB)) {
+                    typeB = Type.OBJ;
+                } else if (typeB == Type.NAMEDOBJ && Type.LATTICE.test(typeB, typeA) && kind == ConstraintKind.COMPARE) {
+                    typeA = Type.OBJ; // comparison requires one to subtype the other, so only propagate obj across it
                 } else {
-                    var meet = Type.meet(typeA, typeB);
+                    var meet = Type.LATTICE.meet(typeA, typeB);
 
                     if (ScriptUnpacker.ERROR_ON_TYPE_CONFLICT && meet == Type.CONFLICT) {
                         System.err.println("Types " + typeA + " and " + typeB + " conflict. Paste the following into graphviz to see the data flow graph:");
@@ -477,7 +460,7 @@ public class TypePropagator {
                     elementTypeA = Type.UNKNOWN;
                 }
 
-                var meet = Type.meet(elementTypeA, typeB);
+                var meet = Type.LATTICE.meet(elementTypeA, typeB);
 
                 if (ScriptUnpacker.ERROR_ON_TYPE_CONFLICT && meet == Type.CONFLICT) {
                     System.err.println("Types " + typeA + " and " + typeB + " conflict. Paste the following into graphviz to see the data flow graph:");

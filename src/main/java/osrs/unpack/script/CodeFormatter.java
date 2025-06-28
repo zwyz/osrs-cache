@@ -24,14 +24,14 @@ public class CodeFormatter {
         var declaredLocals = new HashSet<LocalReference>();
 
         for (var type : parameterTypes) {
-            if (Unpack.VERSION < 231 && Type.subtype(type, Type.UNKNOWN_ARRAY)) {
+            if (Unpack.VERSION < 231 && Type.LATTICE.test(type, Type.UNKNOWNARRAY)) {
                 declaredLocals.add(new LocalReference(LocalDomain.ARRAY, 0));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.ARRAY, 0)));
                 indexInt++;
-            } else if (Type.subtype(type, Type.UNKNOWN_INT)) {
+            } else if (Type.LATTICE.test(type, Type.UNKNOWN_INT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.INTEGER, indexInt));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, indexInt++)));
-            } else if (Type.subtype(type, Type.UNKNOWN_OBJECT)) {
+            } else if (Type.LATTICE.test(type, Type.UNKNOWN_OBJECT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.STRING, indexObject));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.STRING, indexObject++)));
             } else {

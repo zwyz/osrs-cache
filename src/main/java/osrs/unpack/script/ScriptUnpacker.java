@@ -129,7 +129,7 @@ public class ScriptUnpacker {
                 } else if (command == PUSH_CONSTANT_STRING) {
                     returnTypes.addFirst(Type.STRING);
                 } else if (command == PUSH_CONSTANT_NULL) {
-                    returnTypes.addFirst(Type.UNKNOWN_ARRAY);
+                    returnTypes.addFirst(Type.UNKNOWNARRAY);
                 } else {
                     break;
                 }
@@ -185,7 +185,7 @@ public class ScriptUnpacker {
             if (type == Type.UNKNOWN_OBJECT) return Type.STRING;
             if (type == Type.INT) return Type.INT_INT;
             if (type == Type.UNKNOWN_INTARRAY) return Type.INTARRAY;
-            if (type == Type.UNKNOWN_ARRAY) return Type.INTARRAY;
+            if (type == Type.UNKNOWNARRAY) return Type.INTARRAY;
         }
 
         return type;

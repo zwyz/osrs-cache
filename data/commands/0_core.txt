@@ -32,6 +32,6 @@
 49 [command,push_varc_string]
 50 [command,pop_varc_string]
 60 [command,switch](unknown_int $x1)
-63 [command,push_constant_null]()(unknown_array)
+63 [command,push_constant_null]()(unknownarray)
 74 [command,push_varclansetting]
 76 [command,push_varclan]

@@ -46,15 +46,12 @@ public class DBTableUnpacker {
                             var s = "default=" + Unpacker.DBCOLUMN_NAME.getOrDefault((id << 16) | column, "col" + column);
 
                             for (var type : types) {
-                                if (Type.subtype(type, Type.UNKNOWN_INT)) {
-                                    s += "," + Unpacker.format(type, packet.g4s());
-                                } else if (Type.subtype(type, Type.UNKNOWN_LONG)) {
-                                    s += "," + Unpacker.format(type, packet.g8s());
-                                } else if (Type.subtype(type, Type.STRING)) {
-                                    s += "," + Unpacker.format(type, packet.gjstr());
-                                } else {
-                                    throw new IllegalStateException("invalid");
-                                }
+                                s += "," + switch (type.base) {
+                                    case INTEGER -> Unpacker.format(type, packet.g4s());
+                                    case LONG -> Unpacker.format(type, packet.g8s());
+                                    case STRING -> Unpacker.format(type, packet.gjstr());
+                                    default -> throw new IllegalStateException("invalid");
+                                };
                             }
 
                             lines.add(s);
