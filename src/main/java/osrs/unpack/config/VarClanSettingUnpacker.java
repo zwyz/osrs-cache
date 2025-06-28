@@ -28,7 +28,7 @@ public class VarClanSettingUnpacker {
                 lines.add("type=" + Unpacker.format(Type.TYPE, type));
             }
 
-            case 2 -> lines.add("unknown2=" + packet.g1());
+            case 2 -> lines.add("lifetime=" + packet.g1());
             case 10 -> lines.add("debugname=" + packet.gjstr2());
 
             default -> throw new IllegalStateException("unknown opcode");
