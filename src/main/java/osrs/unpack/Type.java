@@ -207,6 +207,7 @@ public class Type {
     public static final Type CLIENTOPOBJ = new Type("clientopobj", BaseVarType.INTEGER);
     public static final Type CLIENTOPPLAYER = new Type("clientopplayer", BaseVarType.INTEGER);
     public static final Type CLIENTOPTILE = new Type("clientoptile", BaseVarType.INTEGER);
+    public static final Type IF_SCRIPT = new Type("if_script", BaseVarType.INTEGER);
     public static final Type DBCOLUMN = new Type("dbcolumn", BaseVarType.INTEGER);
     public static final Type VAR_PLAYER = new Type("var_player", BaseVarType.INTEGER);
     public static final Type VAR_PLAYER_BIT = new Type("var_player_bit", BaseVarType.INTEGER);
@@ -266,7 +267,7 @@ public class Type {
     public static final Type STRINGARRAY = STRING.array();
 
     // fake types used by unpacker
-    public static final Type HOOK = new Type("hook");
+    public static final Type ARGUMENT_LIST = new Type("argument_list");
     public static final Type CONDITION = new Type("condition");
 
     // information about which types are more specific than other types to pick which

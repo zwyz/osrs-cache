@@ -224,8 +224,8 @@ public class SyntaxBuilder {
             throw new IllegalStateException("missing types for command: " + command.name);
         }
 
-        while (argumentTypes.contains(Type.HOOK)) {
-            var hookIndex = argumentTypes.lastIndexOf(Type.HOOK);
+        while (argumentTypes.contains(Type.ARGUMENT_LIST)) {
+            var hookIndex = argumentTypes.lastIndexOf(Type.ARGUMENT_LIST);
 
             var signature = ((String) stack.get(stack.size() - (argumentTypes.size() - hookIndex)).operand).codePoints().mapToObj(c -> {
                 if (Unpack.VERSION < 231) {
@@ -251,7 +251,6 @@ public class SyntaxBuilder {
             }).toList();
 
             var result = new ArrayList<>(argumentTypes.subList(0, hookIndex));
-            result.add(Type.CLIENTSCRIPT);
 
             if (signature.isEmpty() || signature.get(signature.size() - 1) != Type.TRANSMIT_LIST) {
                 result.addAll(signature);

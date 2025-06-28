@@ -251,6 +251,13 @@ public class CodeFormatter {
                 yield (dot ? "." : "") + "cc_create(" + args.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
             }
 
+            case "if_runscript" -> {
+                var dot = expression.operand instanceof Integer i && i == 1;
+                var args1 = expression.arguments.subList(0, 3);
+                var args2 = expression.arguments.subList(3, expression.arguments.size() - 1);
+                yield (dot ? "." : "") + "if_runscript*(" + args1.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")(" + args2.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
+            }
+
             // control flow
             case "flow_ne" -> formatBinary(prec, 40, " ! ", expression.arguments.get(0), expression.arguments.get(1));
             case "flow_eq" -> formatBinary(prec, 40, " = ", expression.arguments.get(0), expression.arguments.get(1));
@@ -330,7 +337,7 @@ public class CodeFormatter {
 
                     if (ScriptUnpacker.FORMAT_HOOKS && expression.command.hasHook()) {
                         var hookStart = 0;
-                        var hookEnd = expression.arguments.size() - (expression.command.arguments.size() - 1);
+                        var hookEnd = expression.arguments.size() - (expression.command.arguments.size() - 2);
                         arguments = formatHook(expression.arguments.subList(hookStart, hookEnd));
 
                         if (expression.arguments.size() != hookEnd) {

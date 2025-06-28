@@ -236,7 +236,7 @@ public class Command {
     }
 
     public boolean hasHook() {
-        return arguments != null && arguments.contains(Type.HOOK);
+        return name.contains("_seton");
     }
 
     public record Instruction(Command command, Object operand) {
