@@ -751,13 +751,14 @@ public class Unpacker {
     }
 
     public static String getScriptName(int id) {
-        var trigger = ScriptUnpacker.SCRIPT_TRIGGERS.get(id);
-        var name = "[" + (trigger != null ? trigger.name().toLowerCase() : "proc") + ",script" + id + "]";
-
         if (SCRIPT_NAME.containsKey(id)) {
-            name = SCRIPT_NAME.get(id);
+            return SCRIPT_NAME.get(id);
         }
 
-        return name;
+        var trigger = ScriptUnpacker.SCRIPT_TRIGGERS.get(id);
+        if (trigger == null) {
+            trigger = !ScriptUnpacker.CALLED.contains(id) && ScriptUnpacker.getReturnTypes(id).isEmpty() ? ScriptTrigger.CLIENTSCRIPT : ScriptTrigger.PROC;
+        }
+        return "[" + trigger.name().toLowerCase() + ",script" + id + "]";
     }
 }
