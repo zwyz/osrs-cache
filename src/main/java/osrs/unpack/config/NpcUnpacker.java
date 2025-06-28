@@ -137,6 +137,7 @@ public class NpcUnpacker {
             case 122 -> lines.add("follower=yes");
             case 123 -> lines.add("lowpriorityops=yes");
             case 124 -> lines.add("overlayheight=" + packet.g2());
+            case 126 -> lines.add("footprintsize=" + packet.g2());
 
             case 118 -> {
                 var multivarbit = packet.g2null();
