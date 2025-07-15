@@ -468,6 +468,7 @@ public class Unpacker {
             case 22 -> "^deviceoption_is_sfx_8_bit";
             case 23 -> "^deviceoption_afk_timeout";
             case 24 -> "^deviceoption_anisotropy_exponent";
+            case 25 -> "^deviceoption_force_disable_rseven";
             default -> "^deviceoption_" + value;
         };
 

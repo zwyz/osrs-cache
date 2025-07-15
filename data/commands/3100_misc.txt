@@ -118,6 +118,7 @@
 3224 [command,rt7_sd]
 3225 [command,rt7_hd]
 3226 [command,unknown_command_3226](boolean $x1)
+3227 [command,rt7_getenabled]()(boolean)
 
 // Misc 3
 3300 [command,clientclock]()(int)
