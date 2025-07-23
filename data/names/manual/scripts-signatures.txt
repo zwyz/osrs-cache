@@ -7,6 +7,7 @@
 [clientscript,autocast_tooltip_runecount](boolean $boolean0, obj $obj1, int $int2, component $component3, int $int4, int $int5) 2329
 [clientscript,bank_payment_draw](component $component0, int $int1, boolean $boolean2) 2329
 [clientscript,bankpin_button_mouseover](boolean $boolean0, component $component1, int $int2, int $int3) 2329
+[clientscript,bcs_pillar_setbutton](component $component0, graphic $graphic1, string $string0, boolean $boolean2) 2329
 [clientscript,blast_furnace_helper](boolean $boolean0) 2329
 [clientscript,br_lobbyoverlay_drawsettings](boolean $boolean0, component $component1) 2329
 [clientscript,buff_bar_position_review](component $component0, component $component1, component $component2, component $component3, int $int4) 2329
@@ -32,6 +33,7 @@
 [clientscript,clan_sidepanel_op](string $string0, int $int0, int $int1, boolean $boolean2, int $int3, int $int4, int $int5) 2329
 [clientscript,clan_storage_main_drawcoins](boolean $boolean0, component $component1, int $int2, int $int3) 2329
 [clientscript,close_mouse_interact](component $component0, boolean $boolean1, int $int2) 2329
+[clientscript,collection_draw_combatachievements](component $component0, boolean $boolean1) 2329
 [clientscript,collection_hover_tab](component $component0, boolean $boolean1) 2329
 [clientscript,collection_searchbar_keypress](int $key0, char $char1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7) 2329
 [clientscript,collection_searchbar_op](component $component0, component $component1) 2329
@@ -39,6 +41,7 @@
 [clientscript,colosseum_intermission_init](int $int0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, component $component14, component $component15, component $component16, int $int17, int $int18, int $int19, boolean $boolean20, component $component21, component $component22, component $component23, component $component24) 2329
 [clientscript,colosseum_loot_hover](component $component0, boolean $boolean1, int $int2) 2329
 [clientscript,colosseum_modifier_hover](boolean $boolean0, component $component1, int $int2, int $int3, int $int4, int $int5) 2329
+[clientscript,colosseum_modifier_op](int $int0, component $component1, int $int2, int $int3, int $int4, int $int5, int $int6, boolean $boolean7) 2329
 [clientscript,combat_interface_info_toggle](boolean $boolean0) 2329
 [clientscript,combat_wilderness_transmit](boolean $boolean0) 106
 [clientscript,cr_ui_list_entry_set_hovered](boolean $boolean0, boolean $boolean1, int $int2, int $int3, int $int4, component $component5) 2329
@@ -54,7 +57,9 @@
 [clientscript,directional_lock_setbutton](component $component0, graphic $graphic1, string $string0, boolean $boolean2) 2329
 [clientscript,displayname_button_draw](component $component0, string $string0, boolean $boolean1) 2329
 [clientscript,dizanas_quiver_op](component $component0, int $int1, int $int2, boolean $boolean3) 2329
+[clientscript,dt2_infection_bar_movement](boolean $boolean0, component $component1, int $int2, component $component3, int $int4, component $component5) 2329
 [clientscript,dt2_infection_init](component $component0, component $component1, boolean $boolean2) 2329
+[clientscript,dt2_survival_bar_movement](boolean $boolean0, component $component1, int $int2) 2329
 [clientscript,eaa_shameometer_update](component $component0, component $component1, component $component2, component $component3, boolean $boolean4) 2329
 [clientscript,examine_item](obj $obj0, int $int1, string $string0, boolean $boolean2, int $int3, boolean $boolean4, int $int5, int $int6) 1679
 [clientscript,farming_tools_main_recreate](component $component0, obj $obj1, string $string0, int $int2, boolean $boolean3) 2329
@@ -196,10 +201,7 @@
 [clientscript,script1681](component $component0, boolean $boolean1) 2329
 [clientscript,script1755](boolean $boolean0, component $component1, int $int2, int $int3, int $int4, int $int5) 2329
 [clientscript,script1756](int $int0, coord $coord1, boolean $boolean2) 2329
-[clientscript,script1805](component $component0, graphic $graphic1, string $string0, boolean $boolean2) 2329
-[clientscript,script1840](boolean $boolean0, component $component1, int $int2, component $component3, int $int4, component $component5) 2329
 [clientscript,script1845](component $component0, component $component1) 2329
-[clientscript,script1855](boolean $boolean0, component $component1, int $int2) 2329
 [clientscript,script1925](string $string0, graphic $graphic0, coord $coord1, component $component2) 2032
 [clientscript,script1933](boolean $boolean0, boolean $boolean1, component $component2) 2329
 [clientscript,script1963](component $component0, string $string0, boolean $boolean1, boolean $boolean2) 2329
@@ -231,13 +233,11 @@
 [clientscript,script4212](string $string0, component $component0) 1427
 [clientscript,script4520](component $component0, int $int1, boolean $boolean2) 2329
 [clientscript,script4730](component $component0, component $component1, int $int2, int $setposh3, int $setposv4, boolean $boolean5, int $int6, int $int7, int $int8, int $int9, int $int10) 2329
-[clientscript,script4852](component $component0, boolean $boolean1) 2329
 [clientscript,script4871](boolean $boolean0) 2329
 [clientscript,script4878](boolean $boolean0, component $component1, int $int2, int $int3, int $int4) 2329
 [clientscript,script4888](boolean $boolean0, component $component1) 2329
 [clientscript,script4911](boolean $boolean0, component $component1, int $int2, graphic $graphic3, int $int4, int $int5) 2329
 [clientscript,script4915](component $component0, boolean $boolean1, string $string0, int $rgb2) 2329
-[clientscript,script4966](int $int0, component $component1, int $int2, int $int3, int $int4, int $int5, int $int6, boolean $boolean7) 2329
 [clientscript,script5006](string $string0, model $model0, string $string1, int $int1, int $int2, int $int3, int $int4, int $int5, int $int6, boolean $boolean7) 2101
 [clientscript,script5088](boolean $boolean0) 2329
 [clientscript,script5099](boolean $boolean0, component $component1, int $int2) 2329
@@ -252,7 +252,6 @@
 [clientscript,script5986](int $int0, boolean $boolean1) 2329
 [clientscript,script6033](component $component0, graphic $graphic1, string $string0, boolean $boolean2) 2329
 [clientscript,script6035](component $component0, graphic $graphic1, string $string0, int $int2, boolean $boolean3) 2329
-[clientscript,script6036](component $component0, graphic $graphic1, string $string0, boolean $boolean2) 2329
 [clientscript,script6041](component $component0, component $component1, component $component2, component $component3, component $component4, int $int5, int $int6, int $int7, int $int8, boolean $boolean9) 2329
 [clientscript,script6183](boolean $boolean0, graphic $graphic1, int $int2, component $component3) 2329
 [clientscript,script6316](boolean $boolean0, component $component1) 2329
@@ -260,11 +259,10 @@
 [clientscript,script6431](boolean $boolean0, component $component1, int $int2, obj $obj3, obj $obj4, obj $obj5) 2329
 [clientscript,script6590](string $string0, int $int0, int $int1, int $int2, struct $struct3, struct $struct4, int $int5, int $int6, boolean $boolean7) 1811
 [clientscript,script6645](component $component0, dbrow $dbrow1, boolean $boolean2, boolean $boolean3, boolean $boolean4, string $string0, int $int5) 2329
-[clientscript,script6780](boolean $boolean0, component $component1) 2329
 [clientscript,script6845](boolean $boolean0, int $int1) 1827
 [clientscript,script6860](boolean $boolean0, int $int1, int $int2, int $int3, int $int4, int $int5, component $component6) 2329
+[clientscript,script6860](boolean $boolean0, int $int1, int $int2, int $int3, int $int4, int $int5, component $component6, boolean $boolean7) 2347
 [clientscript,script6922](boolean $boolean0, boolean $boolean1, component $component2) 2329
-[clientscript,script6947](boolean $boolean0, string $string0, component $component1) 2329
 [clientscript,script6970](component $component0, string $string0, int $int1, boolean $boolean2) 2329
 [clientscript,script6988](component $component0, string $string0, int $int1, boolean $boolean2) 2329
 [clientscript,script7002](component $component0, string $string0, int $int1, boolean $boolean2) 2329
@@ -291,6 +289,7 @@
 [clientscript,skillmulti_setup](int $int0, string $string0, int $int1, obj $obj2, obj $obj3, obj $obj4, obj $obj5, obj $obj6, obj $obj7, obj $obj8, obj $obj9, obj $obj10, obj $obj11, int $int12) 664
 [clientscript,slayer_rewards_confirm_back](boolean $boolean0, int $int1, component $component2, component $component3, component $component4, component $component5, component $component6) 2329
 [clientscript,slayer_rewards_unlock_confirm](boolean $boolean0, int $int1, string $string0, component $component2, component $component3, component $component4, component $component5, component $component6, int $int7) 2329
+[clientscript,sliding_cipher_setbutton](component $component0, graphic $graphic1, string $string0, boolean $boolean2) 2329
 [clientscript,speedrunning_button_draw](component $component0, string $string0, boolean $boolean1, boolean $boolean2) 2329
 [clientscript,speedrunning_reward_confirm_back](int $int0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, component $component14) 2329
 [clientscript,speedrunning_reward_shop_buy](int $int0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, component $component14) 2329
@@ -307,7 +306,9 @@
 [clientscript,teletab_button_draw](boolean $boolean0, enum $enum1, string $string0, int $int2, component $component3, boolean $boolean4) 2329
 [clientscript,teletab_confirm_draw](boolean $boolean0, string $string0, component $component1) 2329
 [clientscript,tempoross_hud_bar_movement](boolean $boolean0, component $component1, int $int2) 2329
+[clientscript,tgod_translations_draw_button](boolean $boolean0, string $string0, component $component1) 2329
 [clientscript,toa_hud_draw](boolean $boolean0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, component $component14, component $component15, component $component16, component $component17, component $component18, component $component19, component $component20, component $component21, component $component22, component $component23, component $component24, component $component25, component $component26, component $component27, component $component28, component $component29, component $component30) 2329
+[clientscript,toa_midraidloot_button_hover](boolean $boolean0, component $component1) 2329
 [clientscript,toa_partydetails_sortmember](int $int0, boolean $boolean1) 2329
 [clientscript,toa_speedrun_time_update](int $int0, boolean $boolean1) 1811
 [clientscript,tob_hud_draw](boolean $boolean0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, component $component14, component $component15, component $component16, component $component17, component $component18, component $component19, component $component20) 2329
@@ -329,6 +330,7 @@
 [clientscript,zmi_bank_payment_selection_reset](int $int0, int $int1, component $component2, component $component3, int $int4, boolean $boolean5) 2329
 [proc,2d_intarray_init](intarray $intarray0, int $int1, int $int2) 2329
 [proc,2d_intarray_set](intarray $intarray0, int $int1, int $int2, int $int3) 2329
+[proc,jigsaw_progress_variable_reset](dbrow $dbrow0) 2347
 [proc,keypress_permit](interface $interface0, overlayinterface $overlayinterface1)(boolean) 591
 [proc,pickaxe_checker]()(obj) 1571
 [proc,script6658](dbrow $dbrow0)(dbrow) 1769
