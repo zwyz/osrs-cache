@@ -43,7 +43,7 @@ public enum Js5ConfigGroup {
     GAMELOGEVENT(70),
     CONFIG71(71),
     WORLDENTITY(72),
-    ;
+    WATERTYPE(73);
 
     public final int id;
 

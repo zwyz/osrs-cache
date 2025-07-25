@@ -142,6 +142,7 @@ public class Unpack {
         unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, path + "/config/dump.gamelogevent"); // tfu
         unpackConfigGroup(WORLDENTITY, WorldEntityUnpacker::unpack, path + "/config/dump.worldentity");
         unpackConfigGroup(CONFIG71, Config71Unpacker::unpack, path + "/config/dump.config71");
+        unpackConfigGroup(WATERTYPE, WaterUnpacker::unpack, path + "/config/dump.water");
 
         // defaults
         unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");

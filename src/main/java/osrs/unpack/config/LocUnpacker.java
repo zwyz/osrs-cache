@@ -170,6 +170,7 @@ public class LocUnpacker {
             case 82 -> lines.add("mapicon=" + Unpacker.format(Type.MAPELEMENT, packet.g2()));
             case 89 -> lines.add("randomanimframe=no"); // https://twitter.com/JagexAsh/status/1773322757041766706
             case 90 -> lines.add("fixlocanimafterlocchange=yes"); // https://twitter.com/JagexAsh/status/1811003169498882524
+            case 91 -> lines.add("bgsounddropoffeasing=" + packet.g1());
 
             case 92 -> {
                 var multivarbit = packet.g2null();
@@ -200,6 +201,8 @@ public class LocUnpacker {
                     }
                 }
             }
+
+            case 93 -> lines.add("bgsoundfade=" + packet.g1() + "," + packet.g2() + "," + packet.g2() + "," + packet.g2()); // easeintype,easeinduration,easeouttype,easeoutduration
 
             case 249 -> {
                 var count = packet.g1();

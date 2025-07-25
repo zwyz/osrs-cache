@@ -75,6 +75,8 @@
 1210 [command,cc_setplayermodel_bodytype](int $x1)
 1212 [command,cc_setobject_alwaysnum](obj $x1, int $x2)
 1213 [command,cc_setobject_nummode](obj $x1, int $x2, int $x3)
+1214 [command,cc_setlocmodel](loc $x1)
+1215 [command,cc_setnpcmodel](npc $x1)
 
 1300 [command,cc_setop](int $x1, string $x2)
 1301 [command,cc_setdraggable](component $x1, int $x2)
@@ -302,6 +304,8 @@
 1210 [command,if_setplayermodel_bodytype](int $x1, component $x2)
 2212 [command,if_setobject_alwaysnum](obj $x1, int $x2, component $x3, component $x4)
 2213 [command,if_setobject_nummode](obj $x1, int $x2, int $x3, component $x4)
+1214 [command,if_setlocmodel](loc $x1, component $x2)
+1215 [command,if_setnpcmodel](npc $x1, component $x2)
 
 2300 [command,if_setop](int $x1, string $x2, component $x3)
 2301 [command,if_setdraggable](component $x1, int $x2, component $x3)

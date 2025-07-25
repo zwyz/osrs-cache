@@ -27,7 +27,7 @@ public class FloorOverlayUnpacker {
             case 5 -> lines.add("occlude=no");
             case 7 -> lines.add("mapcolour=0x" + Integer.toHexString(packet.g3()));
             case 8 -> lines.add("unknown8=yes");
-            case 9 -> lines.add("unknown9=" + packet.g1());
+            case 9 -> lines.add("water=" + Unpacker.format(Type.WATER, packet.g1()));
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

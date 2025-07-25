@@ -192,8 +192,10 @@ public class SeqUnpacker {
             case 16 -> {
                 if (Unpack.VERSION < 226) {
                     lines.add("keyframerange=" + packet.g2() + "," + packet.g2());
-                } else {
+                } else if (Unpack.VERSION < 232) {
                     throw new IllegalStateException("invalid");
+                } else {
+                    lines.add("unknown16=" + packet.g1());
                 }
             }
 
