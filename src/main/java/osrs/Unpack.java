@@ -41,7 +41,7 @@ public class Unpack {
     public static int CLIENTSCRIPTS_VERSION;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 230, "oldschool1.runescape.com", 43594, null);
+        unpackLive("unpacked/live", 232, "oldschool1.runescape.com", 43594, null);
 //        unpackOpenRS2("unpacked/beta", 223, "runescape", 1826);
     }
 
@@ -87,6 +87,7 @@ public class Unpack {
         loadDebugNames(Js5DebugNamesGroup.SPOTTYPES, Unpacker.SPOTANIM_NAME);
         loadDebugNames(Js5DebugNamesGroup.ROWTYPES, Unpacker.DBROW_NAME);
         loadDebugNames(Js5DebugNamesGroup.SOUNDTYPES, Unpacker.JINGLE_NAME);
+        loadDebugNames(Js5DebugNamesGroup.VARCTYPES, Unpacker.VARC_NAME);
         loadDebugNamesInterface();
         loadDebugNamesDBTable();
         loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME);
@@ -584,6 +585,23 @@ public class Unpack {
     }
 
     private static void loadDebugNamesInterface() {
+        var filesV2 = loadGroupFiles(JS5_DEBUGNAMES, Js5DebugNamesGroup.IFTYPES_V2.id);
+
+        if (filesV2 != null) {
+            for (var itf : filesV2.keySet()) {
+                var packet = new Packet(filesV2.get(itf));
+                Unpacker.INTERFACE_NAME.put(itf, packet.gjstr());
+
+                while (true) {
+                    int com = packet.g2();
+                    if (com == 0xffff) break;
+                    Unpacker.COMPONENT_NAME.put((itf << 16) | com, packet.gjstr());
+                }
+            }
+
+            return;
+        }
+
         var files = loadGroupFiles(JS5_DEBUGNAMES, Js5DebugNamesGroup.IFTYPES.id);
 
         if (files != null) {

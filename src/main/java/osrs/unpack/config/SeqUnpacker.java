@@ -195,7 +195,7 @@ public class SeqUnpacker {
                 } else if (Unpack.VERSION < 232) {
                     throw new IllegalStateException("invalid");
                 } else {
-                    lines.add("unknown16=" + packet.g1());
+                    lines.add("heightoffset=" + packet.g1());
                 }
             }
 

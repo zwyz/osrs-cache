@@ -19,6 +19,7 @@ public class Unpacker {
     public static final Map<Integer, String> NPC_NAME = new HashMap<>();
     public static final Map<Integer, String> INV_NAME = new HashMap<>();
     public static final Map<Integer, String> VARP_NAME = new HashMap<>();
+    public static final Map<Integer, String> VARC_NAME = new HashMap<>();
     public static final Map<Integer, String> VARBIT_NAME = new HashMap<>();
     public static final Map<Integer, String> LOC_NAME = new HashMap<>();
     public static final Map<Integer, String> SEQ_NAME = new HashMap<>();
@@ -100,7 +101,7 @@ public class Unpacker {
         if (type == Type.CLIENTINTERFACE) return formatName(value, INTERFACE_NAME, "clientinterface", safe);
         if (type == Type.VAR_PLAYER || type == Type.VARP) return formatName(value, VARP_NAME, "varplayer", safe);
         if (type == Type.VAR_PLAYER_BIT) return formatName(value, VARBIT_NAME, "varplayerbit", safe);
-        if (type == Type.VAR_CLIENT) return "varclient_" + value;
+        if (type == Type.VAR_CLIENT) return formatName(value, VARC_NAME, "varclient", safe);
         if (type == Type.VAR_CLIENT_STRING) return "varclientstring_" + value;
         if (type == Type.VAR_CLAN_SETTING) return "varclansetting" + getVarClanSettingType(value).name + "_" + value;
         if (type == Type.VAR_CLAN) return "varclan" + getVarClanType(value).name + "_" + value;
