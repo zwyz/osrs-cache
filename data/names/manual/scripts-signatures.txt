@@ -148,6 +148,7 @@
 [clientscript,poh_bookcase_hover](boolean $boolean0, component $component1, int $int2) 2329
 [clientscript,poh_costumes_init](enum $enum0, boolean $boolean1, boolean $boolean2) 1229
 [clientscript,poh_furniture_creation_entry](int $int0, obj $obj1, int $int2, string $string0, boolean $boolean3) 479
+[clientscript,poh_furniture_creation_entry](int $int0, dbrow $dbrow1, int $int2, string $string0, boolean $boolean3) 2363
 [clientscript,poh_jewellery_box_init](int $int0, string $string0, int $int1) 567
 [clientscript,poh_viewer_opbutton](int $int0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, component $component14, component $component15, component $component16) 2329
 [clientscript,poh_viewer_room_hover](boolean $boolean0, component $component1, int $int2, string $string0) 2329
@@ -333,4 +334,5 @@
 [proc,jigsaw_progress_variable_reset](dbrow $dbrow0) 2347
 [proc,keypress_permit](interface $interface0, overlayinterface $overlayinterface1)(boolean) 591
 [proc,pickaxe_checker]()(obj) 1571
+[proc,script3833](dbrow $dbrow0, obj $obj1)(stat, int) 2363
 [proc,script6658](dbrow $dbrow0)(dbrow) 1769
