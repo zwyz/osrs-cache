@@ -38,6 +38,8 @@ attack4
 attack5
 attack6
 attention
+auburn_valley
+auburn_valley_2
 autumn in bridgelum
 autumn voyage
 avium_savannah
@@ -133,6 +135,7 @@ crystal cave
 crystal sword
 cryws
 cursed
+custodia_mountains
 dagannoth dawn
 dance of death
 dance of the undead
@@ -164,6 +167,7 @@ distillery hilarity
 dogs of war
 domain of the vampyres
 don't panic zanik
+doom_boss
 doorways
 dorgeshun city
 dorgeshun deep
@@ -238,6 +242,8 @@ fear and loathing
 fenkenstrain's refrain
 fight of the basilisk
 fight or flight
+final_dawn_combat_1
+final_dawn_combat_2
 find my way
 fire and brimstone
 fishing
@@ -362,6 +368,7 @@ jungly2
 jungly3
 kanon of khalith
 karamja jam
+kastori
 kingdom
 knightly
 knightmare
@@ -430,6 +437,7 @@ melodrama
 melzars maze
 meridian
 method of madness
+metzli_boss
 miles away
 mind over matter
 mined out
@@ -437,6 +445,7 @@ miracle dance
 mirage
 miscellania
 mistrock
+mokhaiotl
 molch
 monarch waltz
 monkey badness
@@ -611,6 +620,7 @@ spookyjungle
 spy games
 spymaster
 stagnant
+stalker_dungeon
 stand up and be counted
 starlight
 start
@@ -629,6 +639,7 @@ sunset_coast
 superstition
 surok_king_battle_music
 suspicious
+tal_teklan
 tale of keldagrim
 talking forest
 tears of guthix
@@ -696,6 +707,7 @@ time out
 time to mine
 tiptoe
 title fight
+tlati_rainforest
 toa_ambience
 toa_boss_akkha
 toa_boss_baba
