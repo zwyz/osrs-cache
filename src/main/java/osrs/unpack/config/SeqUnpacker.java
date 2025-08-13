@@ -48,7 +48,7 @@ public class SeqUnpacker {
                 }
             }
 
-            case 2 -> lines.add("loopframes=" + packet.g2());
+            case 2 -> lines.add("loops=" + packet.g2());
 
             case 3 -> {
                 var count = packet.g1();
@@ -66,18 +66,18 @@ public class SeqUnpacker {
 
             case 6 -> {
                 var value = packet.g2();
-                lines.add("lefthand=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
+                lines.add("replaceheldleft=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
             }
 
             case 7 -> {
                 var value = packet.g2();
-                lines.add("righthand=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
+                lines.add("replaceheldright=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
             }
 
-            case 8 -> lines.add("loopcount=" + packet.g1());
+            case 8 -> lines.add("maxloops=" + packet.g1());
             case 9 -> lines.add("preanim_move=" + Unpacker.getPreanimMoveName(packet.g1()));
             case 10 -> lines.add("postanim_move=" + Unpacker.getPostanimMoveName(packet.g1()));
-            case 11 -> lines.add("replacemode=" + Unpacker.getReplaceModeName(packet.g1()));
+            case 11 -> lines.add("duplicatebehaviour=" + Unpacker.getDuplicateBehaviourName(packet.g1()));
 
             case 12 -> {
                 var count = packet.g1();

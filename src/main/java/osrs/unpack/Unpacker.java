@@ -607,7 +607,7 @@ public class Unpacker {
         };
     }
 
-    public static String getReplaceModeName(int id) {
+    public static String getDuplicateBehaviourName(int id) {
         return switch (id) {
             case 0 -> "ignore"; // continues the current animation
             case 1 -> "reset"; // resets frame and loop counter
