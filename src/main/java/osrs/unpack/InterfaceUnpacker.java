@@ -254,38 +254,38 @@ public class InterfaceUnpacker {
         }
     }
 
-    public static String decodeSizeMode(int widthmode) {
-        return switch (widthmode) {
+    public static String decodeSizeMode(int sizemode) {
+        return switch (sizemode) {
             case 0 -> "abs";
             case 1 -> "minus";
-            case 2 -> "mode_2";
+            case 2 -> "rel";
             case 3 -> "mode_3";
             case 4 -> "mode_4";
-            default -> throw new IllegalStateException("Unexpected value: " + widthmode);
+            default -> throw new IllegalStateException("Unexpected value: " + sizemode);
         };
     }
 
-    public static String decodeXMode(int widthmode) {
-        return switch (widthmode) {
+    public static String decodeXMode(int xmode) {
+        return switch (xmode) {
             case 0 -> "abs_left";
             case 1 -> "abs_centre";
             case 2 -> "abs_right";
-            case 3 -> "xmode_3";
-            case 4 -> "xmode_4";
-            case 5 -> "xmode_5";
-            default -> throw new IllegalStateException("Unexpected value: " + widthmode);
+            case 3 -> "rel_left";
+            case 4 -> "rel_centre";
+            case 5 -> "rel_right";
+            default -> throw new IllegalStateException("Unexpected value: " + xmode);
         };
     }
 
-    public static String decodeYMode(int widthmode) {
-        return switch (widthmode) {
+    public static String decodeYMode(int ymode) {
+        return switch (ymode) {
             case 0 -> "abs_top";
             case 1 -> "abs_centre";
             case 2 -> "abs_bottom";
-            case 3 -> "ymode_3";
-            case 4 -> "ymode_4";
-            case 5 -> "ymode_5";
-            default -> throw new IllegalStateException("Unexpected value: " + widthmode);
+            case 3 -> "rel_top";
+            case 4 -> "rel_centre";
+            case 5 -> "rel_bottom";
+            default -> throw new IllegalStateException("Unexpected value: " + ymode);
         };
     }
 

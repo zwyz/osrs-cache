@@ -401,9 +401,9 @@ public class Unpacker {
             case 0 -> "^setpos_abs_left";
             case 1 -> "^setpos_abs_centre";
             case 2 -> "^setpos_abs_right";
-            case 3 -> "^setpos_proportion_left";
-            case 4 -> "^setpos_proportion_centre";
-            case 5 -> "^setpos_proportion_right";
+            case 3 -> "^setpos_rel_left";
+            case 4 -> "^setpos_rel_centre";
+            case 5 -> "^setpos_rel_right";
             default -> "^setposh_" + value;
         };
 
@@ -412,9 +412,9 @@ public class Unpacker {
             case 0 -> "^setpos_abs_top";
             case 1 -> "^setpos_abs_centre";
             case 2 -> "^setpos_abs_bottom";
-            case 3 -> "^setpos_proportion_top";
-            case 4 -> "^setpos_proportion_centre";
-            case 5 -> "^setpos_proportion_bottom";
+            case 3 -> "^setpos_rel_top";
+            case 4 -> "^setpos_rel_centre";
+            case 5 -> "^setpos_rel_bottom";
             default -> "^setposv_" + value;
         };
 
@@ -422,7 +422,7 @@ public class Unpacker {
             case -1 -> "null";
             case 0 -> "^setsize_abs";
             case 1 -> "^setsize_minus";
-            case 2 -> "^setsize_proportion";
+            case 2 -> "^setsize_rel";
             default -> "^setsize_" + value;
         };
 
