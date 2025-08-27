@@ -1,5 +1,6 @@
 package osrs.unpack;
 
+import osrs.Unpack;
 import osrs.unpack.script.ScriptUnpacker;
 
 import java.util.HashMap;
@@ -664,7 +665,10 @@ public class Unpacker {
     }
 
     private static List<Type> getDBColumnType(int table, int column) {
-        return Objects.requireNonNull(DBCOLUMN_TYPE.get((table << 16) | column));
+        if (Unpack.CONFIGS_VERSION >= 4867 && table == 115 && (column == 2 || column == 4)) {
+            return List.of(Type.STRING);
+        }
+        return Objects.requireNonNull(DBCOLUMN_TYPE.get((table << 16) | column), "no types for " + table + ":" + column);
     }
 
     public static List<Type> getDBColumnTypeTuple(int table, int column, int tuple) {

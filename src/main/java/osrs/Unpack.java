@@ -38,6 +38,7 @@ public class Unpack {
     public static int VERSION;
     private static Js5ResourceProvider PROVIDER;
     private static Js5MasterIndex MASTER_INDEX;
+    public static int CONFIGS_VERSION;
     public static int CLIENTSCRIPTS_VERSION;
 
     public static void main(String[] args) throws IOException, InterruptedException {
@@ -63,11 +64,13 @@ public class Unpack {
         VERSION = version;
         PROVIDER = provider;
         MASTER_INDEX = new Js5MasterIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, 255, false)));
+        CONFIGS_VERSION = MASTER_INDEX.getArchiveData(JS5_CONFIG.id).getVersion();
         CLIENTSCRIPTS_VERSION = MASTER_INDEX.getArchiveData(JS5_CLIENTSCRIPTS.id).getVersion();
         Command.reset(); // todo: make non-static
         Unpacker.reset(); // todo: make non-static
         ScriptUnpacker.reset(); // todo: make non-static
 
+        // System.out.println("CONFIGS version: " + CONFIGS_VERSION);
         // System.out.println("CLIENTSCRIPTS version: " + CLIENTSCRIPTS_VERSION);
 
         Files.createDirectories(Path.of(path));
