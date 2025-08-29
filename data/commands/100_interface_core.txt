@@ -25,3 +25,4 @@
 214 [command,if_children_findnextid]()(int)
 215 [command,if_children_subids]()(intarray)
 216 [command,if_children_filter](param $param, unknown $value, basevartype $x3)(int)
+217 [command,cc_children_get](int $index)(boolean)
