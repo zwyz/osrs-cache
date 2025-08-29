@@ -14,7 +14,7 @@ public class UpdateChecker {
         var serverVersion = getServerVersion();
         System.out.println("[Update Checker] Current version is " + serverVersion);
 
-        if (checkServerAccepts(serverVersion + 1, 1)) {
+        if (checkServerAccepts(serverVersion + 1, 1, serverVersion)) {
             System.out.println("[Update Checker] Server accepts " + (serverVersion + 1) + ", client update next week");
         } else {
             System.out.println("[Update Checker] No client update next week");
@@ -37,19 +37,24 @@ public class UpdateChecker {
         throw new IOException("received jav_config does not contain current server version");
     }
 
-    private static boolean checkServerAccepts(int version, int subversion) throws IOException {
+    private static boolean checkServerAccepts(int clientVersion, int clientSubVersion, int serverVersion) throws IOException {
         try (var socket = new Socket("oldschool180.runescape.com", 43594)) {
             socket.getOutputStream().write(16);
             socket.getOutputStream().write(0); // length >> 8
-            socket.getOutputStream().write(8); // length >> 0
-            socket.getOutputStream().write(version >> 24);
-            socket.getOutputStream().write(version >> 16);
-            socket.getOutputStream().write(version >> 8);
-            socket.getOutputStream().write(version >> 0);
-            socket.getOutputStream().write(subversion >> 24);
-            socket.getOutputStream().write(subversion >> 16);
-            socket.getOutputStream().write(subversion >> 8);
-            socket.getOutputStream().write(subversion >> 0);
+            socket.getOutputStream().write(12); // length >> 0
+            socket.getOutputStream().write(clientVersion >> 24);
+            socket.getOutputStream().write(clientVersion >> 16);
+            socket.getOutputStream().write(clientVersion >> 8);
+            socket.getOutputStream().write(clientVersion >> 0);
+            socket.getOutputStream().write(clientSubVersion >> 24);
+            socket.getOutputStream().write(clientSubVersion >> 16);
+            socket.getOutputStream().write(clientSubVersion >> 8);
+            socket.getOutputStream().write(clientSubVersion >> 0);
+            socket.getOutputStream().write(serverVersion >> 24);
+            socket.getOutputStream().write(serverVersion >> 16);
+            socket.getOutputStream().write(serverVersion >> 8);
+            socket.getOutputStream().write(serverVersion >> 0);
+
             socket.getOutputStream().flush();
 
             var reply = socket.getInputStream().read();
