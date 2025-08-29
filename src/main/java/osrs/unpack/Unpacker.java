@@ -550,6 +550,9 @@ public class Unpacker {
             case 9 -> "^opkind_examine";
             case 10 -> "^opkind_unknown";
             case 11 -> "^opkind_obj";
+            case 12 -> "^opking_loc";
+            case 13 -> "^opkind_npc";
+            case 14 -> "^opkind_worldentity";
             default -> "^opkind_" + value;
         };
 
