@@ -97,8 +97,9 @@ public class LocUnpacker {
                 if ((blocked & 2) == 0) result.add("east");
                 if ((blocked & 4) == 0) result.add("south");
                 if ((blocked & 8) == 0) result.add("west");
+                if ((blocked & 16) == 0) result.add("unknown");
 
-                if (blocked >>> 4 != 0) {
+                if (blocked >>> 5 != 0) {
                     throw new IllegalStateException("invalid blocked: " + blocked);
                 }
 
