@@ -160,4 +160,4 @@
 3336 (gap)
 3337 (gap)
 3338 (gap)
-3339 [command,wec_unknown12](worldentity $x1)(string)
+3339 [command,wec_name](worldentity $x1)(string)

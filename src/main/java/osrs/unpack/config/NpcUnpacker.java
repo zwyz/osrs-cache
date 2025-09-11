@@ -128,15 +128,17 @@ public class NpcUnpacker {
 
             case 107 -> lines.add("active=no");
             case 109 -> lines.add("walksmoothing=no");
+
             case 111 -> {
                 if (Unpack.VERSION < 220) {
                     lines.add("follower=yes");
-                } else if (Unpack.VERSION < 232) {
+                } else if (Unpack.VERSION < 233) {
                     throw new IllegalStateException("invalid");
                 } else {
                     lines.add("alwaysonbottom=yes");
                 }
             }
+
             case 112 -> lines.add("hitbarsegments=" + packet.g1());
             case 114 -> lines.add("runanim=" + Unpacker.format(Type.SEQ, packet.g2()));
             case 115 -> lines.add("runanim=" + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()) + "," + Unpacker.format(Type.SEQ, packet.g2()));

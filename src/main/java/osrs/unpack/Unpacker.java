@@ -472,6 +472,9 @@ public class Unpacker {
             case 23 -> "^deviceoption_afk_timeout";
             case 24 -> "^deviceoption_anisotropy_exponent";
             case 25 -> "^deviceoption_force_disable_rseven";
+            case 26 -> "^deviceoption_background_fps_limit";
+            case 27 -> "^deviceoption_ui_scaling";
+            case 28 -> "^deviceoption_vsync_mode";
             default -> "^deviceoption_" + value;
         };
 
@@ -490,6 +493,8 @@ public class Unpacker {
             case 11 -> "^gameoption_camera_sensitivity";
             case 12 -> "^gameoption_draw_minimenu_header";
             case 13 -> "^gameoption_minimenu_mouse_start_index";
+            case 14 -> "^gameoption_minimenu_spacing";
+            case 15 -> "^gameoption_afk_timeout";
             default -> "^gameoption_" + value;
         };
 
