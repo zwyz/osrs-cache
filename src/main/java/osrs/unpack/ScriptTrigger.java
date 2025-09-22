@@ -1,6 +1,6 @@
 package osrs.unpack;
 
-public enum ScriptTrigger {
+public enum ScriptTrigger { // all are official names from 233.2
     // map elements
     OPWORLDMAPELEMENT1(10, Type.MAPELEMENT),
     OPWORLDMAPELEMENT2(11, Type.MAPELEMENT),
@@ -12,17 +12,17 @@ public enum ScriptTrigger {
     WORLDMAPELEMENTMOUSEREPEAT(17, Type.MAPELEMENT),
 
     // client ops
-    CLIENTOPNPC(30),
-    CLIENTOPLOC(31),
-    CLIENTOPOBJ(32),
-    CLIENTOPPLAYER(33),
-    CLIENTOPTILE(34),
+    GCLIENTCLICKNPC(30),
+    GCLIENTCLICKLOC(31),
+    GCLIENTCLICKOBJ(32),
+    GCLIENTCLICKPLAYER(33),
+    GCLIENTCLICKTILE(34),
 
     // load/unload
-    LOADNPC(35, Type.NPC), // active: npc https://twitter.com/JagexAsh/status/1425523182006583297
+    LOADNPC(35, Type.NPC), // active: npc
     UNLOADNPC(36, Type.NPC), // active: npc
     LOADLOC(37, Type.LOC), // active: loc
-    UNLOADLOC(38, Type.LOC), // active: loc
+    LOCCHANGE(38, Type.LOC), // active: loc
     LOADOBJ(39, Type.OBJ), // active: obj
     UNLOADOBJ(40, Type.OBJ), // active: obj
     LOADPLAYER(41), // active: player
@@ -31,24 +31,23 @@ public enum ScriptTrigger {
     // entities
     UPDATEOBJSTACK(45), // active: tile
     UPDATEOBJCOUNT(46, Type.OBJ), // active: obj
-    PLAYER_DESTINATION(47), // active: player, tile
-    PLAYER_HOVER(48), // active: player, tile
-    PLAYER_MOVE(49), // active: player, tile
-    NPC_MOVE(50, Type.NPC), // active: npc, tile
+    COORDDESTINATION(47), // active: player, tile
+    COORDMOUSEOVER(48), // active: player, tile
+    PLAYERROUTEUPDATE(49), // active: player, tile
+    NPCROUTEUPDATE(50, Type.NPC), // active: npc, tile
 
     // core
     PROC(73),
     CLIENTSCRIPT(76),
 
     // minimenu
-    TRIGGER_77(77, Type.OBJ),
+    HELDOBJOVERLAY(77, Type.OBJ),
     ONCLICKLOC(78, Type.LOC),
     ONCLICKOBJ(79, Type.OBJ),
     ONCLICKNPC(80, Type.NPC),
     ONCLICKPLAYER(81),
-    MINIMENU_OPENED(82),
-    TRIGGER_83(83),
-    ;
+    ONMINIMENUOPEN(82),
+    ONMINIMENUCLOSE(83);
 
     public final int id;
     public final Type type;

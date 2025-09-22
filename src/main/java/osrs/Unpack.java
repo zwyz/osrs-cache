@@ -42,7 +42,7 @@ public class Unpack {
     public static int CLIENTSCRIPTS_VERSION;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 232, "oldschool1.runescape.com", 43594, null);
+        unpackLive("unpacked/live", 233, "oldschool1.runescape.com", 43594, null);
 //        unpackOpenRS2("unpacked/beta", 223, "runescape", 1826);
     }
 

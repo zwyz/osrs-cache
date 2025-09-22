@@ -58,7 +58,7 @@ public class InterfaceUnpacker {
             case 5 -> decodeGraphic(lines, packet, version);
             case 6 -> decodeModel(lines, packet, version, widthmode, heightmode);
             case 9 -> decodeLine(lines, packet, version);
-            case 10 -> decodeArc(lines, packet, version);
+            case 10 -> decodeCircle(lines, packet, version);
             default -> throw new AssertionError("invalid type " + type);
         }
 
@@ -241,7 +241,7 @@ public class InterfaceUnpacker {
         }
     }
 
-    private static void decodeArc(ArrayList<String> lines, Packet packet, int version) {
+    private static void decodeCircle(ArrayList<String> lines, Packet packet, int version) {
         line(lines, "colour=", Unpacker.formatColour(packet.g4s())); // if_setcolour
         var fill = packet.g1() == 1;
         line(lines, "fill=", (fill ? "yes" : "no"), "no"); // if_setfill

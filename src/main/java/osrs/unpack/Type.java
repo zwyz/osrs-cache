@@ -203,11 +203,11 @@ public class Type {
     public static final Type BASEVARTYPE = new Type("basevartype", BaseVarType.INTEGER);
     public static final Type PARAM = new Type("param", BaseVarType.INTEGER);
     public static final Type CLIENTSCRIPT = new Type("clientscript", BaseVarType.INTEGER);
-    public static final Type CLIENTOPNPC = new Type("clientopnpc", BaseVarType.INTEGER);
-    public static final Type CLIENTOPLOC = new Type("clientoploc", BaseVarType.INTEGER);
-    public static final Type CLIENTOPOBJ = new Type("clientopobj", BaseVarType.INTEGER);
-    public static final Type CLIENTOPPLAYER = new Type("clientopplayer", BaseVarType.INTEGER);
-    public static final Type CLIENTOPTILE = new Type("clientoptile", BaseVarType.INTEGER);
+    public static final Type GCLIENTCLICKNPC = new Type("gclientclicknpc", BaseVarType.INTEGER);
+    public static final Type GCLIENTCLICKLOC = new Type("gclientclickloc", BaseVarType.INTEGER);
+    public static final Type GCLIENTCLICKOBJ = new Type("gclientclickobj", BaseVarType.INTEGER);
+    public static final Type GCLIENTCLICKPLAYER = new Type("gclientclickplayer", BaseVarType.INTEGER);
+    public static final Type GCLIENTCLICKTILE = new Type("gclientclicktile", BaseVarType.INTEGER);
     public static final Type IF_SCRIPT = new Type("if_script", BaseVarType.INTEGER);
     public static final Type DBCOLUMN = new Type("dbcolumn", BaseVarType.INTEGER);
     public static final Type VAR_PLAYER = new Type("var_player", BaseVarType.INTEGER);
@@ -243,7 +243,7 @@ public class Type {
     public static final Type INT_GAMEOPTION = new Type("gameoption", Type.INT);
     public static final Type INT_DEVICEOPTION = new Type("deviceoption", Type.INT);
     public static final Type INT_MENUENTRYTYPE = new Type("menuentrytype", Type.INT);
-    public static final Type INT_GRADIENTMODE = new Type("gradientmode", Type.INT);
+    public static final Type INT_BLENDMODE = new Type("blendmode", Type.INT);
     public static final Type INT_OBJOWNER = new Type("objowner", Type.INT);
     public static final Type INT_RGB = new Type("rgb", Type.INT);
     public static final Type INT_OPKIND = new Type("opkind", Type.INT);

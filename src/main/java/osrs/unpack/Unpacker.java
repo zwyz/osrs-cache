@@ -201,7 +201,7 @@ public class Unpacker {
             default -> "stat_" + value;
         };
 
-        if (type == Type.CLIENTSCRIPT || type == Type.CLIENTOPNPC || type == Type.CLIENTOPLOC || type == Type.CLIENTOPOBJ || type == Type.CLIENTOPPLAYER || type == Type.CLIENTOPTILE) {
+        if (type == Type.CLIENTSCRIPT || type == Type.GCLIENTCLICKNPC || type == Type.GCLIENTCLICKLOC || type == Type.GCLIENTCLICKOBJ || type == Type.GCLIENTCLICKPLAYER || type == Type.GCLIENTCLICKTILE) {
             if (value == -1) {
                 return "null";
             }
@@ -302,7 +302,7 @@ public class Unpacker {
             case 5 -> "^iftype_graphic";
             case 6 -> "^iftype_model";
             case 9 -> "^iftype_line";
-            case 10 -> "^iftype_arc";
+            case 10 -> "^iftype_circle";
             case 11 -> "^iftype_crmview";
             case 12 -> "^iftype_inputfield";
             default -> "^iftype_" + value;
@@ -524,12 +524,12 @@ public class Unpacker {
             default -> "0x" + Integer.toHexString(value);
         };
 
-        if (type == Type.INT_GRADIENTMODE) return switch (value) {
+        if (type == Type.INT_BLENDMODE) return switch (value) {
             case -1 -> "null";
-            case 0 -> "^gradientmode_none";
-            case 1 -> "^gradientmode_colour";
-            case 2 -> "^gradientmode_colourtrans";
-            default -> "^gradientmode_" + value;
+            case 0 -> "^blendmode_replace";
+            case 1 -> "^blendmode_vgrad";
+            case 2 -> "^blendmode_vgrad_trans";
+            default -> "^blendmode_" + value;
         };
 
         if (type == Type.INT_OBJOWNER) return switch (value) {
