@@ -53,6 +53,8 @@ public class WorldEntityUnpacker {
                 default -> throw new IllegalStateException("invalid interact mode");
             });
 
+            case 25 -> lines.add("anim=" + Unpacker.format(Type.SEQ, packet.g2()));
+            case 26 -> lines.add("minimapicon=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null()));
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

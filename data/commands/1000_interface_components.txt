@@ -146,6 +146,7 @@
 1503 [command,cc_getheight]()(int)
 1504 [command,cc_gethide]()(boolean)
 1505 [command,cc_getlayer]()(component)
+1506 [command,cc_getparentlayer]()(component)
 
 1600 [command,cc_getscrollx]()(int)
 1601 [command,cc_getscrolly]()(int)
@@ -375,6 +376,7 @@
 2503 [command,if_getheight](component $x1)(int)
 2504 [command,if_gethide](component $x1)(boolean)
 2505 [command,if_getlayer](component $x1)(component)
+2506 [command,if_getparentlayer](component $x1)(component)
 
 2600 [command,if_getscrollx](component $x1)(int)
 2601 [command,if_getscrolly](component $x1)(int)

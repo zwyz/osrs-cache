@@ -148,6 +148,7 @@ public class NpcUnpacker {
             case 123 -> lines.add("lowpriorityops=yes");
             case 124 -> lines.add("overlayheight=" + packet.g2());
             case 126 -> lines.add("footprintsize=" + packet.g2());
+            case 129 -> lines.add("unknown129=no");
 
             case 118 -> {
                 var multivarbit = packet.g2null();

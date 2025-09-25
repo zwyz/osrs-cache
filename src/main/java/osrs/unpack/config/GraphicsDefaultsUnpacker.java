@@ -44,6 +44,8 @@ public class GraphicsDefaultsUnpacker {
                     lines.add("flamespalette" + (i + 1) + "=" + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()) + "," + Unpacker.formatColour(packet.g3()));
                 }
             }
+
+            case 4 -> lines.add("headingindicator=" + Unpacker.format(Type.MODEL, packet.gSmart2or4null()) + "," + Unpacker.format(Type.MODEL, packet.gSmart2or4null()));
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

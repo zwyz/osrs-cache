@@ -204,6 +204,7 @@ public class LocUnpacker {
             }
 
             case 93 -> lines.add("bgsoundfade=" + packet.g1() + "," + packet.g2() + "," + packet.g1() + "," + packet.g2()); // easeintype,easeinduration,easeouttype,easeoutduration
+            case 94 -> lines.add("unknown94=no");
 
             case 249 -> {
                 var count = packet.g1();
