@@ -1,7 +1,10 @@
+7th Realm
 7th realm
+A Farmers Grind
 a farmers grind
 adventure
 al kharid
+Alchemical Hydra
 alchemical hydra
 aldarin
 aldarin_2
@@ -12,6 +15,7 @@ alternative root
 ambient jungle
 amlodd
 amoxliatl
+Ancient Prison
 ancient prison
 anywhere
 arabian
@@ -20,6 +24,7 @@ arabian3
 arabique
 araxxor_combat
 araxyte
+Arboretum
 arboretum
 arceuus_outskirts
 armadyl alliance
@@ -28,8 +33,10 @@ army of darkness
 arrival
 artistry
 ascent
+Assassin Boss
 assassin boss
 assault and battery
+Athletes Foot
 athletes foot
 attack1
 attack2
@@ -40,17 +47,21 @@ attack6
 attention
 auburn_valley
 auburn_valley_2
+Autumn in BridgeLum
 autumn in bridgelum
 autumn voyage
 avium_savannah
 avium_savannah_2
 avium_savannah_3
+Aye Car Rum Ba
 aye car rum ba
 aztec
 back to life
 background
+Bait
 bait
 ballad of enchantment
+Ballad of the Basilisk
 ballad of the basilisk
 bandit camp
 bandos battalion
@@ -60,18 +71,21 @@ barbarianism
 barking mad
 baroque
 barren_land
+Battlefront
 battlefront
 bcs_combat
 bcs_cutscene
 bcs_necropolis
 bcs_ruin
 bcs_tomb
+Beetle Juice
 beetle juice
 beneath_the_stronghold
 beyond
 big chords
 black of knight
 blistering barnacles
+Bloodbath
 bloodbath
 bobs on holiday
 body parts
@@ -84,17 +98,22 @@ box_of_delights
 brain_barrelchest_battle
 breeze
 brew hoo hoo
+Brimstail's Scales
 brimstail's scales
 bubble and squeak
 bunny_sugar_rush
+Burning Desire
 burning desire
 cabin fever
 cam_torum
+Camdozaal_ruins_2021
 camdozaal_ruins_2021
 camdozaal_vault
 camelot
 castlewars
+Catacombs and Tombs
 catacombs and tombs
+CatacombsOfKourend
 catacombsofkourend
 catch me if you can
 cave background
@@ -104,6 +123,7 @@ cavern
 cellar song
 chain of command
 chamber
+Chef Surprize
 chef surprize
 chickened out
 chompy hunt
@@ -120,10 +140,14 @@ close quarters
 coil
 competition
 complication
+Confrontation
 confrontation
+Conspiracy
 conspiracy
 contest
+Coronation
 coronation
+Corporal Punishment
 corporal punishment
 corporealbeast
 corridors of power
@@ -146,6 +170,7 @@ dangerous road
 dangerous way
 dark
 darkly_altared
+Darkmeyer
 darkmeyer
 darkness_in_the_depths
 davy jones locker
@@ -155,17 +180,22 @@ deadlands
 deep down
 deep wildy
 delrith summoning
+Desert Heat
 desert heat
 desert voyage
 desolate_mage
 devils_may_care
 diango's little helpers
 dies_irae
+Dimension X
 dimension x
+Distant Land
 distant land
 distillery hilarity
 dogs of war
+Domain of the Vampyres
 domain of the vampyres
+Don't Panic Zanik
 don't panic zanik
 doom_boss
 doorways
@@ -174,12 +204,15 @@ dorgeshun deep
 down and out
 down below
 down to earth
+Dragonkin Ambience
 dragonkin ambience
+Dragonkin Temple
 dragonkin temple
 dragontooth island
 dream
 dream theatre
 dreamstate
+Drunken Dwarf
 drunken dwarf
 dt2_digsite
 dt2_ghorrock
@@ -204,14 +237,17 @@ dt2_whisperer
 dt2_wights
 duel arena
 dunjun
+Dusk in Yu'biusk
 dusk in yu'biusk
 dwarf theme
 dynasty
 eagle peak
+Easter Jig
 easter jig
 easter_2024
 egypt
 elven mist
+Elven Seed
 elven seed
 emotion
 emperor
@@ -219,10 +255,14 @@ escape
 espionage
 etcetera
 etcetera theme
+Everlasting
 everlasting
+Everlasting Fire
 everlasting fire
 everywhere
+eves Epinette
 eves epinette
+Evil Bobs Island
 evil bobs island
 expanse
 expecting
@@ -239,47 +279,65 @@ fangs for the memory
 far away
 fe fi fo fum
 fear and loathing
+fenkenstrain's Refrain
 fenkenstrain's refrain
+Fight of the Basilisk
 fight of the basilisk
 fight or flight
 final_dawn_combat_1
 final_dawn_combat_2
 find my way
+Fire and Brimstone
 fire and brimstone
 fishing
 floating free
+Flute Salad
 flute salad
 food for thought
 forbidden
 forest
 forever
+Forgettable Melody
 forgettable melody
 forgotten
 forlorn_homestead
+Forsaken Tower
 forsaken tower
 forthos_dungeon
 fortis_colosseum
 fremmenik trollking jingle
 fris_jingle_1
+Frogland
 frogland
 frostbite
 fruits de mer
+Ful To The Brim
 ful to the brim
 funny bunnies
+Galvic Boss Fight
 galvic boss fight
 gaol
 garden
+Garden of Autumn
 garden of autumn
+Garden of Spring
 garden of spring
+Garden of Summer
 garden of summer
+Garden of Winter
 garden of winter
 gargoyleboss
+Gates of Menaphos
 gates of menaphos
 gauntlet_minigame
+Getting Down To Business
 getting down to business
+Ghorrock Dungeon
 ghorrock dungeon
+Giant Dwarf Meeting
 giant dwarf meeting
 giantsfoundry_02
+Gill Bill
 gill bill
 gnome king
 gnome village
@@ -294,14 +352,19 @@ grimly_fiendish
 grip of the talon
 grotto
 ground scape
+Grow Grow Grow
 grow grow grow
 grumpy
 guardian_preparation
+Guardians of the Rift
 guardians of the rift
 hailstorm_mountains
+Hallowed Sepulchre
 hallowed sepulchre
+HAM and seek
 ham and seek
 ham attack
+HAM fisted
 ham fisted
 harmony
 harmony2
@@ -314,15 +377,20 @@ heart and mind
 heavy security
 hells bells
 hermit
+Hespori
 hespori
+Hespori Cave
 hespori cave
 high seas
 high spirits
+Hoe Down
 hoe down
 home sweet home
+HomeScape
 homescape
 horizon
 hosidius_outskirts
+HousesOfKourend
 housesofkourend
 hueycoatl
 hunter_guild
@@ -330,20 +398,28 @@ hypnotized
 iban
 ice melody
 iceyene_1
+Illusive
 illusive
+Impetuous
 impetuous
+Impetuous_clue
 impetuous_clue
 in between
+In the Brine
 in the brine
+In The Clink
 in the clink
 in the manor
+In the Pits
 in the pits
+Inadequacy
 inadequacy
 incantation
 incarceration
 inferno
 insect queen
 inspiration
+Into the Abyss
 into the abyss
 intrepid
 iowerths_lament
@@ -351,12 +427,16 @@ island life
 island of the trolls
 isle of everywhere
 ithell
+Jaws of the Basilisk
 jaws of the basilisk
 jester minute
+jollyR
 jollyr
 jormungand defeated jingle
+Jormungand Fight
 jormungand fight
 joy of the hunt
+JudgeOfYama
 judgeofyama
 jungle bells
 jungle hunt
@@ -366,6 +446,7 @@ jungle troubles
 jungly1
 jungly2
 jungly3
+Kanon Of Khalith
 kanon of khalith
 karamja jam
 kastori
@@ -374,9 +455,11 @@ knightly
 knightmare
 kourend_the_magnificent
 kr_betray_jingle
+La Mort
 la mort
 labyrinth
 lair
+Lair of the Basilisk
 lair of the basilisk
 lament
 lament of meiyerditch
@@ -388,6 +471,7 @@ landlubber
 last stand
 last_man_standing
 lasting
+Leagues III Cutscene
 leagues iii cutscene
 legend
 legion
@@ -406,11 +490,14 @@ lord_drakan_reveal_part_1
 lord_drakan_reveal_part_2
 lore and order
 lost soul
+Lost Tribe Cutscene
 lost tribe cutscene
 lotr_jingle_3
 lovakengj_outskirts
 lower_depths
+Lucid Dream
 lucid dream
+Lucid Nightmare
 lucid nightmare
 lullaby
 mad eadgar
@@ -418,7 +505,9 @@ mage arena
 magic dance
 magic magic magic
 magical journey
+Maiden Ambience
 maiden ambience
+Maiden Combat
 maiden combat
 major miner
 making waves
@@ -446,12 +535,15 @@ mirage
 miscellania
 mistrock
 mokhaiotl
+Molch
 molch
 monarch waltz
 monkey badness
 monkey business
 monkey madness
+Monkey Sadness
 monkey sadness
+Monkey Trouble
 monkey trouble
 monster melee
 moody
@@ -459,22 +551,26 @@ mor-ul-rek
 morytania
 mouse trap
 mudskipper melody
+Muspah Boss
 muspah boss
 mutant medley
-my arms journey
 my2arm_boss_battle
 my2arm_love_theme_full
+my arms journey
+Myths Guild
 myths guild
 narnode's theme
 natural
 nether_realm
 neverland
+Newbie Farming
 newbie farming
 newbie melody
 neypotzli
 night of the vampiyre
 nightfall
 nightmare_combat
+No Pasaran
 no pasaran
 no way out
 nomad
@@ -482,25 +578,31 @@ norse code
 nox_irae
 null
 null and void
+Nylocas Ambience
 nylocas ambience
+Nylocas Combat
 nylocas combat
 observatory telescope cutscene
 ogre the top
 olm_battle
 on the up
+On the Wing
 on the wing
 on_the_shore
+Oncoming foe
 oncoming foe
 oriental
 os anniversary medley v3
+Osmans Garden Loop
 osmans garden loop
 osrs_fossil_island_lava_mine_2017
 osrs_fossil_island_overground_1_2017
-osrs_fossil_island_overground_2017
 osrs_fossil_island_overground_2_2017
+osrs_fossil_island_overground_2017
 osrs_fossil_island_underground_2017
 osrs_fossil_island_underwater_2017
 out of the deep
+Over to Nardah
 over to nardah
 overpass
 overture
@@ -511,10 +613,13 @@ peng_bards_jingle
 peng_plans_jingle
 perilous_moons
 pest control
+Pestilent Bloat Ambience
 pestilent bloat ambience
+Pestilent Bloat Combat
 pestilent bloat combat
 pharoah's tomb
 phasmatys
+Pheasant Peasant
 pheasant peasant
 pick_and_shovel
 pinball wizard
@@ -527,6 +632,7 @@ principality
 quest
 quetzacalli_gorge
 ralos_rise
+Ranis_Duel_4_10
 ranis_duel_4_10
 rat a tat tat
 rat hunt
@@ -537,9 +643,11 @@ reggae
 reggae2
 rellekka
 rest_in_peace
+Revenant Slayer Cave
 revenant slayer cave
 revenants
 rhapsody
+Right on Track
 right on track
 righteousness
 rising damp
@@ -549,17 +657,20 @@ roll the bones
 romancing the crone
 romper chomper
 roots_and_flutes
+Rose
 rose
 royale
 rugged_terrain
 rune essence
 sad meadow
+Safety in Numbers
 safety in numbers
 saga
 sarachnis_lair
 sarcophagus
 sarim's vermin
 scape cave
+Scape Crystal
 scape crystal
 scape five ts
 scape five v5
@@ -576,28 +687,33 @@ scape_ape
 scarab
 schools out
 scorpia_dances
+Scrubfoots Descent
 scrubfoots descent
 sea shanty
-sea shanty xmas
 sea shanty2
+sea shanty xmas
 sea_minor_shanty
 serenade
 serene
 settlement
 shadowland
 shadows bouncer jingle
+Shayzien Crypt
 shayzien crypt
 shayzien_march
 shayzien_outskirts
+ShayzienForces
 shayzienforces
 shine
 shining
 shining_spirit
 shipwrecked
 showdown
+Sigmunds showdown
 sigmunds showdown
 silence
 sire
+Slepe Dungeon
 slepe dungeon
 slice of grand opening
 slice of silent movie
@@ -605,22 +721,28 @@ slice of station
 slither and thither
 slug a bug ball
 sojourn
+Sotetseg Ambience
 sotetseg ambience
+Sotetseg Combat
 sotetseg combat
+Soul Wars
 soul wars
 soulfall
 soundscape
 sphinx
 spirit
+Spirits of Elid
 spirits of elid
 splendour
 spooky
 spooky2
 spookyjungle
 spy games
+Spymaster
 spymaster
 stagnant
 stalker_dungeon
+Stand up and be Counted
 stand up and be counted
 starlight
 start
@@ -632,6 +754,7 @@ stranded
 strange place
 stratosphere
 strength of saradomin
+Stuck in the Mire
 stuck in the mire
 subterranea
 sunburn
@@ -640,6 +763,7 @@ superstition
 surok_king_battle_music
 suspicious
 tal_teklan
+Tale of Keldagrim
 tale of keldagrim
 talking forest
 tears of guthix
@@ -647,24 +771,32 @@ technology
 temple
 temple desecrated
 temple of light
+Temple of the Eye
 temple of the eye
 temple of tribes
+Tempoross
 tempoross
 terrorbird tussle
 that_sullen_hall
 the adventurer
+The Angels Fury
 the angels fury
 the cellar dwellers
+The Chosen
 the chosen
+The Dark Fragment
 the dark fragment
 the depths
 the desert
 the desolate isle
 the enchanter
+The Enclave
 the enclave
 the evil within
+The Far Side
 the far side
 the galleon
+The Genie
 the genie
 the golem
 the heist
@@ -672,20 +804,28 @@ the kin
 the kin fade
 the last shanty
 the longramble scramble
+The Lost Melody
 the lost melody
+The Lost Tribe
 the lost tribe
 the lunar isle
+The mad mole
 the mad mole
 the mollusc menace
+The Monsters Below
 the monsters below
 the navigator
+The Noble Rodent
 the noble rodent
 the north
+The Old Ones
 the old ones
 the other side
 the plundered tomb
 the power of tears
+The Quizmaster
 the quizmaster
+The Rogues Den
 the rogues den
 the route of all evil
 the route of the problem
@@ -693,11 +833,14 @@ the shadow
 the slayer
 the sound of guthix
 the stone
+The Terrible Caverns
 the terrible caverns
 the terrible tower
+The Terrible Tunnels
 the terrible tunnels
 the tower
 the trade parade
+The Waiting Game
 the waiting game
 the_tower_of_voices
 theme
@@ -722,6 +865,7 @@ toa_path_scabaras
 toa_victory
 tomb raider
 tomorrow
+Too Many Cooks
 too many cooks
 traehern_toil
 training_montage
@@ -730,8 +874,8 @@ trawler minor
 tree spirits
 tremble
 tribal
-tribal background
 tribal2
+tribal background
 trinity
 troll_shuffle
 trouble brewing
@@ -739,6 +883,7 @@ troubled
 troubled_waters
 twilight
 twilight_temple
+Tzhaar
 tzhaar
 undead army
 undead dungeon
@@ -746,19 +891,28 @@ undercurrent
 underground
 understanding
 unknown land
+Untouchable
 untouchable
+Upass
 upass
 upcoming
+Upir Likhyi
 upir likhyi
 upper_depths
+Vanescula
 vanescula
+Vanstrom
 vanstrom
 venomous
 venture
 venture2
+Verzik Ambience
 verzik ambience
+Verzik Combat
 verzik combat
+Verzik Defeated
 verzik defeated
+Victory is Mine
 victory is mine
 village
 vision
@@ -776,19 +930,24 @@ warpath
 warped_library
 warrens
 warrior
+Warriors Guild
 warriors guild
 waste defaced
 wasteland
 waterfall
 waterlogged
 way of the enchanter
+Way Of The Wyrm
 way of the wyrm
 wayward
 we are the fairies
 weiss_town
+Welcome_To_The_Theatre_6
 welcome_to_the_theatre_6
+Well Hallowed Air
 well hallowed air
 well of voyage
+Werewolves
 werewolves
 wet and wild
 where eagles lair
@@ -805,21 +964,27 @@ wolf mountain
 wonder
 wonderous
 woodland
+Woodland Walk
 woodland walk
 work work work
 workshop
 wrath and ruin
+Xamphur
 xamphur
+Xarpus Ambience
 xarpus ambience
+Xarpus Combat
 xarpus combat
 xenophobe
 xmas_2021
 yama_combat
 yesteryear
+Yuletide eve
 yuletide eve
 zalcano_combat
 zamorak zoo
 zanik's theme
+Zaros Zeitgeist
 zaros zeitgeist
 zeah_combat
 zeah_farming
@@ -828,6 +993,7 @@ zeah_magic
 zeah_mining
 zealot
 zogre dance
+Zombie dragon
 zombie dragon
 zombie invasion
 zombiism
