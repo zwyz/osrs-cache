@@ -37,13 +37,13 @@ public class DBRowUnpacker {
                     var count = packet.gSmart1or2();
 
                     for (var i = 0; i < count; i++) {
-                        var s = "data=" + Unpacker.DBCOLUMN_NAME.getOrDefault((table << 16) | column, "col" + column);
+                        var s = "data=" + Unpacker.formatDBColumnShort((table << 12) | (column << 4));
 
                         for (var type : types) {
                             s += "," + switch (type.base) {
                                 case INTEGER -> Unpacker.format(type, packet.g4s());
-                                case LONG -> Unpacker.format(type, packet.g8s());
-                                case STRING -> Unpacker.format(type, packet.gjstr());
+                                case LONG -> Long.toString(packet.g8s());
+                                case STRING -> packet.gjstr();
                                 default -> throw new IllegalStateException("invalid");
                             };
                         }

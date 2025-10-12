@@ -75,9 +75,27 @@ public class SeqUnpacker {
             }
 
             case 8 -> lines.add("maxloops=" + packet.g1());
-            case 9 -> lines.add("preanim_move=" + Unpacker.getPreanimMoveName(packet.g1()));
-            case 10 -> lines.add("postanim_move=" + Unpacker.getPostanimMoveName(packet.g1()));
-            case 11 -> lines.add("duplicatebehaviour=" + Unpacker.getDuplicateBehaviourName(packet.g1()));
+
+            case 9 -> lines.add("preanim_move=" + switch (packet.g1()) {
+                case 0 -> "delaymove";
+                case 1 -> "delayanim";
+                case 2 -> "merge";
+                default -> throw new IllegalStateException("invalid preanim_move");
+            });
+
+            case 10 -> lines.add("postanim_move=" + switch (packet.g1()) {
+                case 0 -> "delaymove";
+                case 1 -> "abortanim";
+                case 2 -> "merge";
+                default -> throw new IllegalStateException("invalid postanim_move");
+            });
+
+            case 11 -> lines.add("duplicatebehaviour=" + switch (packet.g1()) {
+                case 0 -> "ignore"; // continues the current animation
+                case 1 -> "reset"; // resets frame and loop counter
+                case 2 -> "extend"; // resets loop counter only
+                default -> throw new IllegalStateException("invalid duplicatebehaviour");
+            });
 
             case 12 -> {
                 var count = packet.g1();

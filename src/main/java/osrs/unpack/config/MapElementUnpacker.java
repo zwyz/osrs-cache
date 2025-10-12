@@ -29,7 +29,7 @@ public class MapElementUnpacker {
             case 5 -> lines.add("unknown5=" + packet.g3());
             case 6 -> lines.add("size=" + packet.g1());
             case 7 -> lines.add("vis=" + packet.g1());
-            case 8 -> lines.add("mapfunction=" + Unpacker.getBooleanName(packet.g1()));
+            case 8 -> lines.add("mapfunction=" + Unpacker.formatYesNo(packet.g1()));
             case 10 -> lines.add("op1=" + packet.gjstr());
             case 11 -> lines.add("op2=" + packet.gjstr());
             case 12 -> lines.add("op3=" + packet.gjstr());

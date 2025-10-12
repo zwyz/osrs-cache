@@ -446,7 +446,7 @@ public class CodeFormatter {
         }
 
         if (value instanceof Integer i) return Unpacker.format(type, i);
-        if (value instanceof String s) return Unpacker.format(type, s);
+        if (value instanceof String s) return s;
         throw new IllegalStateException("invalid constant");
     }
 

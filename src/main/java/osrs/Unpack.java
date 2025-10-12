@@ -34,6 +34,7 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 
 // todo: clean this up
 public class Unpack {
+    public static final boolean DUMP_CONFIG_IDS = false;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static int VERSION;
     private static Js5ResourceProvider PROVIDER;
@@ -80,23 +81,23 @@ public class Unpack {
 //        Files.createDirectories(Path.of(path + "/maps"));
 
         // load names
-        loadDebugNames(Js5DebugNamesGroup.OBJTYPES, Unpacker.OBJ_NAME);
-        loadDebugNames(Js5DebugNamesGroup.NPCTYPES, Unpacker.NPC_NAME);
-        loadDebugNames(Js5DebugNamesGroup.INVTYPES, Unpacker.INV_NAME);
-        loadDebugNames(Js5DebugNamesGroup.VARPTYPES, Unpacker.VARP_NAME);
-        loadDebugNames(Js5DebugNamesGroup.VARBITTYPES, Unpacker.VARBIT_NAME);
-        loadDebugNames(Js5DebugNamesGroup.LOCTYPES, Unpacker.LOC_NAME);
-        loadDebugNames(Js5DebugNamesGroup.SEQTYPES, Unpacker.SEQ_NAME);
-        loadDebugNames(Js5DebugNamesGroup.SPOTTYPES, Unpacker.SPOTANIM_NAME);
-        loadDebugNames(Js5DebugNamesGroup.ROWTYPES, Unpacker.DBROW_NAME);
-        loadDebugNames(Js5DebugNamesGroup.SOUNDTYPES, Unpacker.JINGLE_NAME);
-        loadDebugNames(Js5DebugNamesGroup.VARCTYPES, Unpacker.VARC_NAME);
+        loadDebugNames(Js5DebugNamesGroup.OBJTYPES, Type.OBJ);
+        loadDebugNames(Js5DebugNamesGroup.NPCTYPES, Type.NPC);
+        loadDebugNames(Js5DebugNamesGroup.INVTYPES, Type.INV);
+        loadDebugNames(Js5DebugNamesGroup.VARPTYPES, Type.VAR_PLAYER);
+        loadDebugNames(Js5DebugNamesGroup.VARBITTYPES, Type.VAR_PLAYER_BIT);
+        loadDebugNames(Js5DebugNamesGroup.LOCTYPES, Type.LOC);
+        loadDebugNames(Js5DebugNamesGroup.SEQTYPES, Type.SEQ);
+        loadDebugNames(Js5DebugNamesGroup.SPOTTYPES, Type.SPOTANIM);
+        loadDebugNames(Js5DebugNamesGroup.ROWTYPES, Type.DBROW);
+        loadDebugNames(Js5DebugNamesGroup.SOUNDTYPES, Type.JINGLE);
+        loadDebugNames(Js5DebugNamesGroup.VARCTYPES, Type.VAR_CLIENT);
         loadDebugNamesInterface();
         loadDebugNamesDBTable();
         loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME);
         loadGroupNames(Path.of("data/names/scripts.txt"), JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME::put);
-        loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, Unpacker.GRAPHIC_NAME::put);
-        loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, Unpacker.MIDI_NAME::put);
+        loadGroupNames(Path.of("data/names/graphics.txt"), JS5_SPRITES, (id, name) -> Unpacker.setSymbolName(Type.GRAPHIC, id, name));
+        loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, (id, name) -> Unpacker.setSymbolName(Type.MIDI, id, name));
         loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAME::put);
 
         // world map
@@ -537,7 +538,7 @@ public class Unpack {
 
         if (files != null) {
             for (var file : files.keySet()) {
-                if (Unpacker.DUMP_CONFIG_IDS) {
+                if (DUMP_CONFIG_IDS) {
                     lines.add("// " + file);
                 }
                 lines.addAll(unpack.apply(file, files.get(file)));
@@ -577,12 +578,12 @@ public class Unpack {
         }
     }
 
-    private static void loadDebugNames(Js5DebugNamesGroup group, Map<Integer, String> names) {
+    private static void loadDebugNames(Js5DebugNamesGroup group, Type type) {
         var files = loadGroupFiles(JS5_DEBUGNAMES, group.id);
 
         if (files != null) {
             for (var file : files.keySet()) {
-                names.put(file, new String(files.get(file), StandardCharsets.UTF_8));
+                Unpacker.setSymbolName(type, file, new String(files.get(file), StandardCharsets.UTF_8));
             }
         }
     }
@@ -593,12 +594,13 @@ public class Unpack {
         if (filesV2 != null) {
             for (var itf : filesV2.keySet()) {
                 var packet = new Packet(filesV2.get(itf));
-                Unpacker.INTERFACE_NAME.put(itf, packet.gjstr());
+                var name = packet.gjstr();
+                Unpacker.setSymbolName(Type.INTERFACE, itf, name);
 
                 while (true) {
                     int com = packet.g2();
                     if (com == 0xffff) break;
-                    Unpacker.COMPONENT_NAME.put((itf << 16) | com, packet.gjstr());
+                    Unpacker.setSymbolName(Type.COMPONENT, (itf << 16) | com, name + ":" + packet.gjstr());
                 }
             }
 
@@ -610,12 +612,13 @@ public class Unpack {
         if (files != null) {
             for (var itf : files.keySet()) {
                 var packet = new Packet(files.get(itf));
-                Unpacker.INTERFACE_NAME.put(itf, packet.gjstr());
+                var name = packet.gjstr();
+                Unpacker.setSymbolName(Type.INTERFACE, itf, name);
 
                 // interfaces can have more than 255 components. thankfully the data exists
                 // in the buffer still, we just need to detect if there is additional data.
                 for (var com = 0; packet.g1() != 0xff || (packet.pos < packet.arr.length && packet.arr[packet.pos] != 0); com++) {
-                    Unpacker.COMPONENT_NAME.put((itf << 16) | com, packet.gjstr());
+                    Unpacker.setSymbolName(Type.COMPONENT, (itf << 16) | com, name + ":" + packet.gjstr());
                 }
             }
         }
@@ -629,11 +632,12 @@ public class Unpack {
                 var packet = new Packet(files.get(table));
 
                 if (packet.gBoolean()) {
-                    Unpacker.DBTABLE_NAME.put(table, packet.gjstr());
-                }
+                    var name = packet.gjstr();
+                    Unpacker.setSymbolName(Type.DBTABLE, table, name);
 
-                for (var column = 0; packet.g1() != 0; column++) {
-                    Unpacker.DBCOLUMN_NAME.put((table << 16) | column, packet.gjstr());
+                    for (var column = 0; packet.g1() != 0; column++) {
+                        Unpacker.setSymbolName(Type.DBCOLUMN, (table << 12) | (column << 4), name + ":" + packet.gjstr());
+                    }
                 }
             }
         }

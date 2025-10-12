@@ -44,7 +44,7 @@ public class WaterUnpacker {
             case 30 -> lines.add("normal_map_material2=" + Unpacker.format(Type.MATERIAL, packet.g2()));
             case 31 -> lines.add("normal_map_material3=" + Unpacker.format(Type.MATERIAL, packet.g2()));
 
-            case 33 -> lines.add("normal_map_a0=" + Unpacker.getBooleanName(packet.g1()));
+            case 33 -> lines.add("normal_map_a0=" + Unpacker.formatYesNo(packet.g1()));
             case 34 -> lines.add("normal_map_b0=" + packet.gFloat());
             case 35 -> lines.add("normal_map_c0=" + packet.gFloat());
             case 36 -> lines.add("normal_map_d0=" + packet.gFloat());
@@ -53,7 +53,7 @@ public class WaterUnpacker {
             case 39 -> lines.add("normal_map_f0=" + packet.gFloat());
             case 40 -> lines.add("normal_map_g0=" + packet.gFloat());
 
-            case 41 -> lines.add("normal_map_a1=" + Unpacker.getBooleanName(packet.g1()));
+            case 41 -> lines.add("normal_map_a1=" + Unpacker.formatYesNo(packet.g1()));
             case 42 -> lines.add("normal_map_b1=" + packet.gFloat());
             case 43 -> lines.add("normal_map_c1=" + packet.gFloat());
             case 44 -> lines.add("normal_map_d1=" + packet.gFloat());
@@ -62,7 +62,7 @@ public class WaterUnpacker {
             case 47 -> lines.add("normal_map_f1=" + packet.gFloat());
             case 48 -> lines.add("normal_map_g1=" + packet.gFloat());
 
-            case 49 -> lines.add("normal_map_a2=" + Unpacker.getBooleanName(packet.g1()));
+            case 49 -> lines.add("normal_map_a2=" + Unpacker.formatYesNo(packet.g1()));
             case 50 -> lines.add("normal_map_b2=" + packet.gFloat());
             case 51 -> lines.add("normal_map_c2=" + packet.gFloat());
             case 52 -> lines.add("normal_map_d2=" + packet.gFloat());
@@ -71,7 +71,7 @@ public class WaterUnpacker {
             case 55 -> lines.add("normal_map_f2=" + packet.gFloat());
             case 56 -> lines.add("normal_map_g2=" + packet.gFloat());
 
-            case 57 -> lines.add("normal_map_a3=" + Unpacker.getBooleanName(packet.g1()));
+            case 57 -> lines.add("normal_map_a3=" + Unpacker.formatYesNo(packet.g1()));
             case 58 -> lines.add("normal_map_b3=" + packet.gFloat());
             case 59 -> lines.add("normal_map_c3=" + packet.gFloat());
             case 60 -> lines.add("normal_map_d3=" + packet.gFloat());
@@ -80,7 +80,7 @@ public class WaterUnpacker {
             case 63 -> lines.add("normal_map_f3=" + packet.gFloat());
             case 64 -> lines.add("normal_map_g3=" + packet.gFloat());
 
-            case 65 -> lines.add("normal_map_a4=" + Unpacker.getBooleanName(packet.g1()));
+            case 65 -> lines.add("normal_map_a4=" + Unpacker.formatYesNo(packet.g1()));
             case 66 -> lines.add("normal_map_b4=" + packet.gFloat());
             case 67 -> lines.add("normal_map_c4=" + packet.gFloat());
             case 68 -> lines.add("normal_map_d4=" + packet.gFloat());
@@ -89,7 +89,7 @@ public class WaterUnpacker {
             case 71 -> lines.add("normal_map_f4=" + packet.gFloat());
             case 72 -> lines.add("normal_map_g4=" + packet.gFloat());
 
-            case 73 -> lines.add("normal_map_a5=" + Unpacker.getBooleanName(packet.g1()));
+            case 73 -> lines.add("normal_map_a5=" + Unpacker.formatYesNo(packet.g1()));
             case 74 -> lines.add("normal_map_b5=" + packet.gFloat());
             case 75 -> lines.add("normal_map_c5=" + packet.gFloat());
             case 76 -> lines.add("normal_map_d5=" + packet.gFloat());
@@ -129,7 +129,7 @@ public class WaterUnpacker {
             // other
             case 81 -> lines.add("still_water_normal_strength=" + packet.gFloat());
             case 82 -> lines.add("flow_noise=" + packet.gFloat());
-            case 85 -> lines.add("override_default_water_type=" + Unpacker.getBooleanName(packet.g1()));
+            case 85 -> lines.add("override_default_water_type=" + Unpacker.formatYesNo(packet.g1()));
 
             default -> throw new IllegalStateException("unknown opcode");
         }

@@ -37,14 +37,14 @@ public class ObjUnpacker {
             case 9 -> lines.add("unknown9=" + packet.gjstr()); // todo: unused
             case 11 -> lines.add("stackable=yes"); // https://twitter.com/JagexAsh/status/1626564052901060609
             case 12 -> lines.add("cost=" + packet.g4s());
-            case 13 -> lines.add("wearpos=" + Unpacker.formatWearPos(packet.g1())); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
-            case 14 -> lines.add("wearpos2=" + Unpacker.formatWearPos(packet.g1()));
+            case 13 -> lines.add("wearpos=" + formatWearPos(packet.g1())); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
+            case 14 -> lines.add("wearpos2=" + formatWearPos(packet.g1()));
             case 16 -> lines.add("members=yes");
             case 23 -> lines.add("manwear=" + Unpacker.format(Type.MODEL, packet.g2()) + "," + packet.g1()); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 24 -> lines.add("manwear2=" + Unpacker.format(Type.MODEL, packet.g2()));
             case 25 -> lines.add("womanwear=" + Unpacker.format(Type.MODEL, packet.g2()) + "," + packet.g1()); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 26 -> lines.add("womanwear2=" + Unpacker.format(Type.MODEL, packet.g2()));
-            case 27 -> lines.add("wearpos3=" + Unpacker.formatWearPos(packet.g1()));
+            case 27 -> lines.add("wearpos3=" + formatWearPos(packet.g1()));
             case 30 -> lines.add("op1=" + packet.gjstr());
             case 31 -> lines.add("op2=" + packet.gjstr());
             case 32 -> lines.add("op3=" + packet.gjstr());
@@ -155,5 +155,25 @@ public class ObjUnpacker {
 
             default -> throw new IllegalStateException("unknown opcode");
         }
+    }
+
+    public static String formatWearPos(int slot) {
+        return switch (slot) {
+            case 0 -> "hat";
+            case 1 -> "back";
+            case 2 -> "front";
+            case 3 -> "righthand";
+            case 4 -> "torso";
+            case 5 -> "lefthand";
+            case 6 -> "arms";
+            case 7 -> "legs";
+            case 8 -> "head";
+            case 9 -> "hands";
+            case 10 -> "feet";
+            case 11 -> "jaw";
+            case 12 -> "ring";
+            case 13 -> "quiver";
+            default -> throw new IllegalArgumentException("wearpos " + slot);
+        };
     }
 }

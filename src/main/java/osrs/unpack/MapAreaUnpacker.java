@@ -12,7 +12,7 @@ public class MapAreaUnpacker {
         var lines = new ArrayList<String>();
 
         var debugname = packet.gjstr();
-        Unpacker.setWorldMapAreaName(id, debugname);
+        Unpacker.setSymbolName(Type.MAPAREA, id, debugname);
         lines.add("[" + Unpacker.format(Type.MAPAREA, id, false) + "]");
 
         lines.add("name=" + packet.gjstr());

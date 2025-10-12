@@ -37,19 +37,19 @@ public class DBTableUnpacker {
                     }
 
                     Unpacker.setDBColumnType(id, column, types);
-                    lines.add("column=" + Unpacker.DBCOLUMN_NAME.getOrDefault((id << 16) | column, "col" + column) + "," + types.stream().map(t -> t.name).collect(Collectors.joining(",")));
+                    lines.add("column=" + Unpacker.formatDBColumnShort((id << 12) | (column << 4)) + "," + types.stream().map(t -> t.name).collect(Collectors.joining(",")));
 
                     if (hasdefault) {
                         var defaultCount = packet.gSmart1or2();
 
                         for (var entry = 0; entry < defaultCount; entry++) {
-                            var s = "default=" + Unpacker.DBCOLUMN_NAME.getOrDefault((id << 16) | column, "col" + column);
+                            var s = "default=" + Unpacker.formatDBColumnShort((id << 12) | (column << 4));
 
                             for (var type : types) {
                                 s += "," + switch (type.base) {
                                     case INTEGER -> Unpacker.format(type, packet.g4s());
-                                    case LONG -> Unpacker.format(type, packet.g8s());
-                                    case STRING -> Unpacker.format(type, packet.gjstr());
+                                    case LONG -> Long.toString(packet.g8s());
+                                    case STRING -> packet.gjstr();
                                     default -> throw new IllegalStateException("invalid");
                                 };
                             }
