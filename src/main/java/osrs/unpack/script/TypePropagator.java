@@ -475,7 +475,7 @@ public class TypePropagator {
                 var elementTypeA = typeA.element();
 
                 if (elementTypeA == null) {
-                    elementTypeA = Type.UNKNOWN;
+                    elementTypeA = typeA == Type.CONFLICT ? Type.CONFLICT : Type.UNKNOWN;
                 }
 
                 var meet = Type.LATTICE.meet(elementTypeA, typeB);
@@ -486,7 +486,7 @@ public class TypePropagator {
                     throw new IllegalStateException("type conflict");
                 }
 
-                typeA = meet.array();
+                typeA = meet == Type.CONFLICT ? Type.CONFLICT : meet.array();
                 typeB = meet;
             }
 
