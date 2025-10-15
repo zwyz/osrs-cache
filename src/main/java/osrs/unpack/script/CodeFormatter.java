@@ -86,6 +86,7 @@ public class CodeFormatter {
         return " ".repeat(indent) + switch (expression.command.name) {
             case "push_constant_int" -> formatConstant(expression.type.get(0), expression.operand);
             case "push_constant_string" -> formatConstant(expression.type.get(0), expression.operand);
+            case "push_constant_null" -> "null";
 
             case "flow_assign" -> {
                 var targets = (List<Object>) expression.operand;
