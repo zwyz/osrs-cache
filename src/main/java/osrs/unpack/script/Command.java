@@ -125,6 +125,7 @@ public class Command {
     public static Command DB_FIND_REFINE;
     public static Command DB_FIND_REFINE_WITH_COUNT;
     public static Command DB_GETFIELD;
+    public static Command IF_FIND_CHILD;
 
     // load commands
     private static final Pattern COMMAND_PATTERN = Pattern.compile("(?<opcode>\\d+) \\[command,(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
@@ -233,6 +234,7 @@ public class Command {
         DB_FIND_REFINE = findCommand("db_find_refine");
         DB_FIND_REFINE_WITH_COUNT = findCommand("db_find_refine_with_count");
         DB_GETFIELD = findCommand("db_getfield");
+        IF_FIND_CHILD = findCommand("if_find_child");
     }
 
     public boolean hasHook() {

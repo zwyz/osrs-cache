@@ -216,6 +216,35 @@ public class SyntaxBuilder {
             return;
         }
 
+        if (command == IF_FIND_CHILD) {
+            var baseType2 = (int) stack.get(stack.size() - 1).operand;
+            var baseType1 = (int) stack.get(stack.size() - 2).operand;
+
+            stack.removeLast();
+            stack.removeLast();
+
+            if (baseType2 != -1) {
+                var param2 = (int) stack.get(stack.size() - 4).operand;
+                var param1 = (int) stack.get(stack.size() - 6).operand;
+                var argumentTypes = List.of(Type.COMPONENT, Type.PARAM, Unpacker.getParamType(param1), Type.PARAM, Unpacker.getParamType(param2));
+                var returnTypes = List.of(Type.BOOLEAN);
+                buildCommand(code, index, command, operand, argumentTypes, returnTypes);
+            } else if (baseType1 != -1) {
+                var param1 = (int) stack.get(stack.size() - 5).operand;
+                stack.removeLast();
+                var argumentTypes = List.of(Type.COMPONENT, Type.PARAM, Unpacker.getParamType(param1));
+                var returnTypes = List.of(Type.BOOLEAN);
+                buildCommand(code, index, command, operand, argumentTypes, returnTypes);
+            } else {
+                stack.removeLast();
+                var argumentTypes = List.of(Type.COMPONENT);
+                var returnTypes = List.of(Type.BOOLEAN);
+                buildCommand(code, index, command, operand, argumentTypes, returnTypes);
+            }
+
+            return;
+        }
+
         // handle regular command
         var argumentTypes = command.arguments;
         var returnTypes = command.returns;
