@@ -227,7 +227,7 @@
 1924 (gap)
 1925 (gap)
 1926 (gap)
-1927 [command,cc_callonresize](boolean $x1)
+1927 [command,cc_callonresize]
 1928 [command,cc_triggerop](int $x1)
 
 2000 [command,if_setposition](int $x, int $y, component $component)
