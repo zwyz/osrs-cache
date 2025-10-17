@@ -2,3 +2,4 @@
 6211 [command,uizoom_get]()(int)
 6212 [command,uizoom_reset]
 6213 [command,uizoom_setmode](int $x1)
+6214 [command,uizoom_getdefault]()(int)

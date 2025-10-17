@@ -149,6 +149,8 @@ public class NpcUnpacker {
             case 124 -> lines.add("overlayheight=" + packet.g2());
             case 126 -> lines.add("footprintsize=" + packet.g2());
             case 129 -> lines.add("unknown129=no");
+            case 156 -> lines.add("worldoverlaptint=yes");
+            case 157 -> lines.add("worldoverlaptintcolour=" + Unpacker.formatColour(packet.g2()));
 
             case 118 -> {
                 var multivarbit = packet.g2null();
