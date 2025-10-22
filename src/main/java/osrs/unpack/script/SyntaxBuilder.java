@@ -224,8 +224,8 @@ public class SyntaxBuilder {
             stack.removeLast();
 
             if (baseType2 != -1) {
-                var param2 = (int) stack.get(stack.size() - 4).operand;
-                var param1 = (int) stack.get(stack.size() - 6).operand;
+                var param2 = (int) stack.get(stack.size() - 2).operand;
+                var param1 = (int) stack.get(stack.size() - 4).operand;
                 var argumentTypes = List.of(Type.COMPONENT, Type.PARAM, Unpacker.getParamType(param1), Type.PARAM, Unpacker.getParamType(param2));
                 var returnTypes = List.of(Type.BOOLEAN);
                 buildCommand(code, index, command, operand, argumentTypes, returnTypes);
