@@ -230,7 +230,7 @@ public class SyntaxBuilder {
                 var returnTypes = List.of(Type.BOOLEAN);
                 buildCommand(code, index, command, operand, argumentTypes, returnTypes);
             } else if (baseType1 != -1) {
-                var param1 = (int) stack.get(stack.size() - 5).operand;
+                var param1 = (int) stack.get(stack.size() - 3).operand;
                 stack.removeLast();
                 var argumentTypes = List.of(Type.COMPONENT, Type.PARAM, Unpacker.getParamType(param1));
                 var returnTypes = List.of(Type.BOOLEAN);
