@@ -274,6 +274,7 @@ public class SyntaxBuilder {
                         case 'X' -> Type.STRINGARRAY;
                         case 'W' -> Type.UNKNOWN_INTARRAY;
                         case 'Y' -> Type.TRANSMIT_LIST;
+                        case '*' -> Type.UNKNOWNARRAY;
                         default -> throw new IllegalStateException("unexpected hook type " + c);
                     };
                 }
