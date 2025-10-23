@@ -127,6 +127,10 @@ public class Command {
     public static Command DB_GETFIELD;
     public static Command IF_FIND_CHILD;
     public static Command IF_RUNSCRIPT;
+    public static Command CC_PARAM;
+    public static Command CC_SETPARAM;
+    public static Command IF_PARAM;
+    public static Command IF_SETPARAM;
 
     // load commands
     private static final Pattern COMMAND_PATTERN = Pattern.compile("(?<opcode>\\d+) \\[command,(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
@@ -237,6 +241,10 @@ public class Command {
         DB_GETFIELD = findCommand("db_getfield");
         IF_FIND_CHILD = findCommand("if_find_child");
         IF_RUNSCRIPT = findCommand("if_runscript");
+        CC_PARAM = findCommand("cc_param");
+        CC_SETPARAM = findCommand("cc_setparam");
+        IF_PARAM = findCommand("if_param");
+        IF_SETPARAM = findCommand("if_setparam");
     }
 
     public boolean hasHook() {
