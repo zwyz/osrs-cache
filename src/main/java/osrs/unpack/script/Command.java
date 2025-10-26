@@ -132,6 +132,23 @@ public class Command {
     public static Command IF_PARAM;
     public static Command IF_SETPARAM;
 
+    public static Command ARRAY_COMPARE;
+    public static Command ARRAY_INDEXOF;
+    public static Command ARRAY_LASTINDEXOF;
+    public static Command ARRAY_COUNT;
+    public static Command ARRAY_MIN;
+    public static Command ARRAY_MAX;
+    public static Command ARRAY_FILL;
+    public static Command ARRAY_COPY;
+    public static Command ENUM_GETINPUTS;
+    public static Command ENUM_GETOUTPUTS;
+    public static Command ARRAY_CREATE;
+    public static Command ARRAY_PUSH;
+    public static Command ARRAY_PUSHALL;
+    public static Command ARRAY_INSERT;
+    public static Command ARRAY_INSERTALL;
+    public static Command ARRAY_DELETE;
+
     // load commands
     private static final Pattern COMMAND_PATTERN = Pattern.compile("(?<opcode>\\d+) \\[command,(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
 
@@ -245,6 +262,23 @@ public class Command {
         CC_SETPARAM = findCommand("cc_setparam");
         IF_PARAM = findCommand("if_param");
         IF_SETPARAM = findCommand("if_setparam");
+
+        ARRAY_COMPARE = findCommand("array_compare");
+        ARRAY_INDEXOF = findCommand("array_indexof");
+        ARRAY_LASTINDEXOF = findCommand("array_lastindexof");
+        ARRAY_COUNT = findCommand("array_count");
+        ARRAY_MIN = findCommand("array_min");
+        ARRAY_MAX = findCommand("array_max");
+        ARRAY_FILL = findCommand("array_fill");
+        ARRAY_COPY = findCommand("array_copy");
+        ENUM_GETINPUTS = findCommand("enum_getinputs");
+        ENUM_GETOUTPUTS = findCommand("enum_getoutputs");
+        ARRAY_CREATE = findCommand("array_create");
+        ARRAY_PUSH = findCommand("array_push");
+        ARRAY_PUSHALL = findCommand("array_pushall");
+        ARRAY_INSERT = findCommand("array_insert");
+        ARRAY_INSERTALL = findCommand("array_insertall");
+        ARRAY_DELETE = findCommand("array_delete");
     }
 
     public boolean hasHook() {

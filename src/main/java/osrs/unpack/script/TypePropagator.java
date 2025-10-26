@@ -213,6 +213,35 @@ public class TypePropagator {
             emitEqual(local(script, Unpack.VERSION >= 231 ? LocalDomain.STRING : LocalDomain.ARRAY, index), type.array());
         }
 
+        if (expression.command == ARRAY_COMPARE) {
+            emitArrayArrayCompare(arg(expression, 0), arg(expression, 1));
+        }
+
+        if (expression.command == ARRAY_INDEXOF || expression.command == ARRAY_LASTINDEXOF || expression.command == ARRAY_COUNT) {
+            emitArrayElementCompare(arg(expression, 1), arg(expression, 0));
+        }
+
+        if (expression.command == ARRAY_MIN || expression.command == ARRAY_MAX || expression.command == ARRAY_DELETE) {
+            emitIsArray(arg(expression, 0), type(expression, 0));
+        }
+
+        if (expression.command == ARRAY_FILL || expression.command == ARRAY_PUSH || expression.command == ARRAY_INSERT) {
+            emitArrayStore(arg(expression, 1), arg(expression, 0));
+        }
+
+        if (expression.command == ARRAY_COPY) {
+            emitArrayArrayStore(arg(expression, 0), arg(expression, 1));
+        }
+
+        if (expression.command == ENUM_GETINPUTS || expression.command == ENUM_GETOUTPUTS || expression.command == ARRAY_CREATE) {
+            var type = expression.arguments.get(0);
+            emitEqual(type(expression, 0), Type.byChar((int) type.operand).array());
+        }
+
+        if (expression.command == ARRAY_PUSHALL || expression.command == ARRAY_INSERTALL) {
+            emitArrayArrayStore(arg(expression, 1), arg(expression, 0));
+        }
+
         // if_script
         if (expression.command == IF_RUNSCRIPT) {
             var otherScript = (int) expression.arguments.get(0).operand;
@@ -384,6 +413,28 @@ public class TypePropagator {
         var t = new Node.TemporaryType();
         constraints.add(new Constraint(ConstraintKind.ASSIGN, a, t));
         constraints.add(new Constraint(ConstraintKind.ISARRAY, b, t));
+    }
+
+    private void emitArrayArrayStore(Node a, Node b) { // exists t u, isarray(a, t) and isarray(b, u) and t -> u
+        var t = new Node.TemporaryType();
+        var u = new Node.TemporaryType();
+        constraints.add(new Constraint(ConstraintKind.ISARRAY, a, t));
+        constraints.add(new Constraint(ConstraintKind.ISARRAY, b, t));
+        constraints.add(new Constraint(ConstraintKind.ASSIGN, t, u));
+    }
+
+    private void emitArrayElementCompare(Node a, Node b) { // exists t, a ~ t and isarray(b, t)
+        var t = new Node.TemporaryType();
+        constraints.add(new Constraint(ConstraintKind.COMPARE, a, t));
+        constraints.add(new Constraint(ConstraintKind.ISARRAY, b, t));
+    }
+
+    private void emitArrayArrayCompare(Node a, Node b) { // exists t u, isarray(a, t) and isarray(b, u) and t ~ u
+        var t = new Node.TemporaryType();
+        var u = new Node.TemporaryType();
+        constraints.add(new Constraint(ConstraintKind.ISARRAY, a, t));
+        constraints.add(new Constraint(ConstraintKind.ISARRAY, b, t));
+        constraints.add(new Constraint(ConstraintKind.COMPARE, t, u));
     }
 
     private void emitEqual(Node a, Node b) {
