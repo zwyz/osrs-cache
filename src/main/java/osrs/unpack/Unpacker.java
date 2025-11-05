@@ -20,6 +20,7 @@ public class Unpacker {
     public static final Map<Integer, Type> VAR_CLAN_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_PLAYER_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLIENT_TYPE = new HashMap<>();
+    public static final Map<Integer, List<Type>> IF_SCRIPT_TYPE = new HashMap<>();
 
     public static void reset() {
         NAME.clear();
@@ -31,6 +32,7 @@ public class Unpacker {
         ENUM_OUTPUT_TYPE.clear();
         VAR_CLAN_SETTING_TYPE.clear();
         VAR_CLAN_TYPE.clear();
+        IF_SCRIPT_TYPE.clear();
 
         setSymbolName(Type.BOOLEAN, 0, "false");
         setSymbolName(Type.BOOLEAN, 1, "true");

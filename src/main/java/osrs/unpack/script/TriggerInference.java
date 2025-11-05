@@ -2,9 +2,11 @@ package osrs.unpack.script;
 
 import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
+import osrs.unpack.Unpacker;
 
 import java.util.List;
 
+import static osrs.unpack.script.Command.IF_RUNSCRIPT;
 import static osrs.unpack.script.Command.PUSH_CONSTANT_INT;
 
 public class TriggerInference {
@@ -28,6 +30,18 @@ public class TriggerInference {
                 ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.GCLIENTCLICKPLAYER);
             } else if (type == Type.GCLIENTCLICKTILE) {
                 ScriptUnpacker.SCRIPT_TRIGGERS.put((int)expression.operand, ScriptTrigger.GCLIENTCLICKTILE);
+            }
+        } else if (expression.command == IF_RUNSCRIPT) {
+            var ifScript = (int) expression.arguments.getFirst().operand;
+            var types = expression.arguments
+                    .subList(3, expression.arguments.size() - 1)
+                    .stream()
+                    .flatMap(e -> e.type.stream())
+                    .toList();
+
+            var existing = Unpacker.IF_SCRIPT_TYPE.put(ifScript, types);
+            if (existing != null && !types.equals(existing)) {
+                throw new IllegalStateException("if_runscript " + ifScript + " has conflicting types in script " + script + ", context: " + expression);
             }
         }
 
