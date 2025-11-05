@@ -6,8 +6,8 @@
 104 [command,cc_deleteall_entityoverlay](entityoverlay $overlay)
 105 [command,cc_copy](component $layer, int $layersubid)
 105 [command,cc_copy](component $layer, int $layersubid, int $subid) 230
-106 [command,cc_createchild](iftype $type, int $subid)
-107 [command,cc_createparentchild](iftype $type, int $subid)
+106 [command,cc_create_child](iftype $type, int $subid)
+107 [command,cc_create_sibling](iftype $type, int $subid)
 
 200 [command,cc_find](component $component, int $subid)(boolean)
 201 [command,if_find](component $component)(boolean)
