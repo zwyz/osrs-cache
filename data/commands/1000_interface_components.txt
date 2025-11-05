@@ -305,8 +305,8 @@
 1210 [command,if_setplayermodel_bodytype](int $x1, component $x2)
 2212 [command,if_setobject_alwaysnum](obj $x1, int $x2, component $x3, component $x4)
 2213 [command,if_setobject_nummode](obj $x1, int $x2, int $x3, component $x4)
-1214 [command,if_setlocmodel](loc $x1, component $x2)
-1215 [command,if_setnpcmodel](npc $x1, component $x2)
+2214 [command,if_setlocmodel](loc $x1, component $x2)
+2215 [command,if_setnpcmodel](npc $x1, component $x2)
 
 2300 [command,if_setop](int $x1, string $x2, component $x3)
 2301 [command,if_setdraggable](component $x1, int $x2, component $x3)
