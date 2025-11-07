@@ -182,6 +182,7 @@ public class Unpack {
         // only necessary for scripts we don't actually know the name of.
         Set<Integer> collisions = new HashSet<>();
         collisions.add("5926".hashCode());       // [trigger_38,type_23]
+        collisions.add("-1226673".hashCode());   // [onclickobj,_category_4789]
 
         for (var trigger : ScriptTrigger.values()) {
             // trigger
