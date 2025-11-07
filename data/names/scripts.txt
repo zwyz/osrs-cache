@@ -2163,7 +2163,6 @@
 [clientscript,league_reward_shop_showpoints]
 [clientscript,league_rewards_confirmdraw]
 [clientscript,league_rewards_init]
-[clientscript,league_search_kills]
 [clientscript,league_search_update]
 [clientscript,league_searchbar_keypress]
 [clientscript,league_secondinv_draw]

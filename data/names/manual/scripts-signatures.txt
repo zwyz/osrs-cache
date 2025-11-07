@@ -330,6 +330,7 @@
 [clientscript,xpdrops_setup_display_dropdown_hover](boolean $boolean0, component $component1, int $int2, int $int3, int $rgb4) 2329
 [clientscript,xpdrops_setup_display_hover](boolean $boolean0, component $component1) 2329
 [clientscript,xpdrops_stattransmit](boolean $boolean0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, int $int10, int $int11, int $int12, int $int13, int $int14, int $int15, int $int16, int $int17, int $int18, int $int19, int $int20, int $int21, int $int22, int $int23, int $int24, int $int25, int $int26, int $int27, int $int28, int $int29, int $int30, int $int31, int $int32, int $int33) 2329
+[clientscript,xpdrops_stattransmit](boolean $boolean0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, int $int10, int $int11, int $int12, int $int13, int $int14, int $int15, int $int16, int $int17, int $int18, int $int19, int $int20, int $int21, int $int22, int $int23, int $int24, int $int25, int $int26, int $int27, int $int28, int $int29, int $int30, int $int31, int $int32, int $int33, int $int34) 1762333018
 [clientscript,zmi_bank_payment_selection_reset](int $int0, int $int1, component $component2, component $component3, int $int4, boolean $boolean5) 2329
 [proc,2d_intarray_init](intarray $intarray0, int $int1, int $int2) 2329
 [proc,2d_intarray_set](intarray $intarray0, int $int1, int $int2, int $int3) 2329
@@ -341,3 +342,6 @@
 [proc,script3833](dbrow $dbrow0, obj $obj1)(stat, int) 2363
 [proc,script6658](dbrow $dbrow0)(dbrow) 1769
 [proc,script8046](npc $npc0)(int) 2379
+[proc,script8047](int $int0)(npc) 2379
+[proc,script8584]()(obj) 1762333018
+[proc,script9019](int $int0)(inv) 1762333018
