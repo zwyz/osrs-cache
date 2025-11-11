@@ -12,7 +12,7 @@ public class Unpacker {
     public static final Map<Type, Map<Integer, String>> NAME = new HashMap<>();
     public static final Map<Integer, String> SCRIPT_NAME = new HashMap<>();
     public static final Map<Integer, String> BINARY_NAME = new HashMap<>();
-    public static final Map<Integer, List<Type>> DBCOLUMN_TYPE = new HashMap<>();
+    public static final Map<Integer, Map<Integer, List<Type>>> DBCOLUMN_TYPE = new HashMap<>();
     public static final Map<Integer, Type> PARAM_TYPE = new HashMap<>();
     public static final Map<Integer, Type> ENUM_INPUT_TYPE = new HashMap<>();
     public static final Map<Integer, Type> ENUM_OUTPUT_TYPE = new HashMap<>();
@@ -374,6 +374,13 @@ public class Unpacker {
         setSymbolName(Type.INT_CLAN, 0, "^clantype_clan");
         setSymbolName(Type.INT_CLAN, 1, "^clantype_gim");
         setSymbolName(Type.INT_CLAN, 2, "^clantype_pvpa_group");
+
+        if (Unpack.CONFIGS_VERSION >= 4867) {
+            // TODO note down names
+            // TODO don't set column 2 after version that transmits it
+            setDBColumnType(115, 2, List.of(Type.STRING));
+            setDBColumnType(115, 4, List.of(Type.STRING));
+        }
     }
 
     public static String format(Type type, int value) {
@@ -385,9 +392,6 @@ public class Unpacker {
         if (type == Type.FONTMETRICS) return format(Type.GRAPHIC, value, safe);
         if (type == Type.VARP) return format(Type.VAR_PLAYER, value, safe);
         if (type == Type.NAMEDOBJ) return format(Type.OBJ, value, safe);
-        if (type == Type.TOPLEVELINTERFACE) return format(Type.INTERFACE, value, safe);
-        if (type == Type.OVERLAYINTERFACE) return format(Type.INTERFACE, value, safe);
-        if (type == Type.CLIENTINTERFACE) return format(Type.INTERFACE, value, safe);
         if (type == Type.GCLIENTCLICKNPC) return format(Type.CLIENTSCRIPT, value, safe);
         if (type == Type.GCLIENTCLICKLOC) return format(Type.CLIENTSCRIPT, value, safe);
         if (type == Type.GCLIENTCLICKOBJ) return format(Type.CLIENTSCRIPT, value, safe);
@@ -450,9 +454,14 @@ public class Unpacker {
         } else {
             if (value == -1) {
                 return "null";
-            } else {
-                return type.name.replace("_", "") + "_" + Integer.toUnsignedString(value);
+            } else if (type == Type.TOPLEVELINTERFACE || type == Type.OVERLAYINTERFACE || type == Type.CLIENTINTERFACE) {
+                name = NAME.getOrDefault(Type.INTERFACE, Map.of()).get(value);
+            } else  {
+                name = type.name.replace("_", "") + "_" + Integer.toUnsignedString(value);
             }
+
+            Unpacker.setSymbolName(type, value, name);
+            return name;
         }
     }
 
@@ -530,14 +539,13 @@ public class Unpacker {
     }
 
     public static void setDBColumnType(int table, int column, List<Type> types) {
-        DBCOLUMN_TYPE.put((table << 16) | column, types);
+        var tableTypes = DBCOLUMN_TYPE.computeIfAbsent(table, _ -> new HashMap<>());
+        tableTypes.put(column, types);
     }
 
     private static List<Type> getDBColumnType(int table, int column) {
-        if (Unpack.CONFIGS_VERSION >= 4867 && table == 115 && (column == 2 || column == 4)) {
-            return List.of(Type.STRING);
-        }
-        return Objects.requireNonNull(DBCOLUMN_TYPE.get((table << 16) | column), "no types for " + table + ":" + column);
+        var typeTypes = Objects.requireNonNull(DBCOLUMN_TYPE.get(table));
+        return Objects.requireNonNull(typeTypes.get(column), "no types for " + table + ", " + column);
     }
 
     public static List<Type> getDBColumnTypeTuple(int table, int column, int tuple) {

@@ -35,10 +35,11 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 // todo: clean this up
 public class Unpack {
     public static final boolean DUMP_CONFIG_IDS = false;
+    public static final boolean DUMP_SYMBOLS = false;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static int VERSION;
-    private static Js5ResourceProvider PROVIDER;
-    private static Js5MasterIndex MASTER_INDEX;
+    public static Js5ResourceProvider PROVIDER;
+    public static Js5MasterIndex MASTER_INDEX;
     public static int CONFIGS_VERSION;
     public static int CLIENTSCRIPTS_VERSION;
 
@@ -79,6 +80,13 @@ public class Unpack {
         Files.createDirectories(Path.of(path + "/script"));
         Files.createDirectories(Path.of(path + "/interface"));
 //        Files.createDirectories(Path.of(path + "/maps"));
+
+        // generate {type}_{id} default names for assets
+        generateDefaultNames(JS5_MODELS, Type.MODEL);
+        generateDefaultNames(JS5_SPRITES, Type.GRAPHIC);
+        generateDefaultNames(JS5_SONGS, Type.MIDI);
+        generateDefaultNames(JS5_JINGLES, Type.JINGLE);
+        generateDefaultNames(JS5_SYNTH, Type.SYNTH);
 
         // load names
         loadDebugNames(Js5DebugNamesGroup.OBJTYPES, Type.OBJ);
@@ -166,6 +174,12 @@ public class Unpack {
 
         // maps
 //        unpackMaps(Path.of(path + "/maps"), path);
+
+        if (DUMP_SYMBOLS) {
+            Path symbolsPath = Path.of(path + "/symbols");
+            Files.createDirectories(symbolsPath);
+            Symbols.dumpSymbols(symbolsPath);
+        }
     }
 
     private static void loadGroupNamesScriptTrigger(Js5Archive archive, Map<Integer, String> names) throws IOException {
@@ -576,6 +590,44 @@ public class Unpack {
             if (unhash.containsKey(hash)) {
                 consumer.accept(group, unhash.get(hash));
             }
+        }
+    }
+
+    private static void generateDefaultNames(Js5Archive archive, Type type) {
+        if (archive.id >= Unpack.MASTER_INDEX.getArchiveCount()) {
+            // archive doesn't exist
+            return;
+        }
+
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, archive.id, false)));
+        for (var group : archiveIndex.groupId) {
+            Unpacker.setSymbolName(type, group, type.name.replace("_", "") + "_" + group);
+        }
+    }
+
+    private static void generateDefaultNames(Js5Archive archive, int group, Type type) {
+        if (archive.id >= Unpack.MASTER_INDEX.getArchiveCount()) {
+            // archive doesn't exist
+            return;
+        }
+
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, archive.id, false)));
+        if (group >= archiveIndex.groupFileIds.length) {
+            // group doesn't exist
+            return;
+        }
+
+        int[] ids = archiveIndex.groupFileIds[group];
+        if (ids == null) {
+            // this is true when there are no gaps in the file ids, so generate an array of all ids
+            ids = new int[archiveIndex.groupMaxFileId[group]];
+            for (int i = 0; i < ids.length; i++) {
+                ids[i] = i;
+            }
+        }
+
+        for (var file : ids) {
+            Unpacker.setSymbolName(type, file, type.name.replace("_", "") + "_" + file);
         }
     }
 
