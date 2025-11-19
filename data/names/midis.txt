@@ -27,6 +27,8 @@ araxyte
 Arboretum
 arboretum
 arceuus_outskirts
+ardent_ocean
+ardent_ocean_2
 armadyl alliance
 armageddon
 army of darkness
@@ -70,6 +72,7 @@ barbarian assault tutorial
 barbarianism
 barking mad
 baroque
+barracuda_trials
 barren_land
 Battlefront
 battlefront
@@ -105,6 +108,7 @@ bunny_sugar_rush
 Burning Desire
 burning desire
 cabin fever
+calm_islands
 cam_torum
 Camdozaal_ruins_2021
 camdozaal_ruins_2021
@@ -123,6 +127,7 @@ cavern
 cellar song
 chain of command
 chamber
+charting_complete
 Chef Surprize
 chef surprize
 chickened out
@@ -168,6 +173,7 @@ dangerous
 dangerous logic
 dangerous road
 dangerous way
+dangerous_islands
 dark
 darkly_altared
 Darkmeyer
@@ -347,6 +353,9 @@ gnomeball
 goblin game
 goblin village
 golden touch
+great_conch
+great_conch_2
+great_conch_underground
 greatness
 grimly_fiendish
 grip of the talon
@@ -355,6 +364,7 @@ ground scape
 Grow Grow Grow
 grow grow grow
 grumpy
+gryphon_boss
 guardian_preparation
 Guardians of the Rift
 guardians of the rift
@@ -388,6 +398,7 @@ hoe down
 home sweet home
 HomeScape
 homescape
+honkytonky_sea_shanty_2
 horizon
 hosidius_outskirts
 HousesOfKourend
@@ -416,6 +427,7 @@ Inadequacy
 inadequacy
 incantation
 incarceration
+industrial_islands
 inferno
 insect queen
 inspiration
@@ -557,6 +569,7 @@ mutant medley
 my2arm_boss_battle
 my2arm_love_theme_full
 my arms journey
+mysterious_islands
 Myths Guild
 myths guild
 narnode's theme
@@ -575,6 +588,8 @@ no pasaran
 no way out
 nomad
 norse code
+northern_ocean
+northern_ocean_2
 nox_irae
 null
 null and void
@@ -684,6 +699,7 @@ scape scared
 scape soft
 scape wild
 scape_ape
+scape_sail
 scarab
 schools out
 scorpia_dances
@@ -709,6 +725,8 @@ shining
 shining_spirit
 shipwrecked
 showdown
+shrouded_ocean
+shrouded_ocean_2
 Sigmunds showdown
 sigmunds showdown
 silence
@@ -759,6 +777,8 @@ stuck in the mire
 subterranea
 sunburn
 sunset_coast
+sunset_ocean
+sunset_ocean_2
 superstition
 surok_king_battle_music
 suspicious
@@ -891,6 +911,8 @@ undercurrent
 underground
 understanding
 unknown land
+unquiet_ocean
+unquiet_ocean_2
 Untouchable
 untouchable
 Upass
@@ -949,6 +971,8 @@ well hallowed air
 well of voyage
 Werewolves
 werewolves
+western_ocean
+western_ocean_2
 wet and wild
 where eagles lair
 wild side
@@ -979,6 +1003,7 @@ xenophobe
 xmas_2021
 yama_combat
 yesteryear
+yo_ho_ho
 Yuletide eve
 yuletide eve
 zalcano_combat
