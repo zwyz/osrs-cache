@@ -5,7 +5,9 @@ import osrs.unpack.Unpacker;
 import osrs.util.Packet;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 
 public class DBRowUnpacker {
     public static List<String> unpack(int id, byte[] data) {
@@ -26,6 +28,8 @@ public class DBRowUnpacker {
             case 3 -> {
                 var a = packet.g1();
 
+                var definedColumns = new HashSet<>();
+
                 for (var column = packet.g1(); column != 255; column = packet.g1()) {
                     var elementCount = packet.g1();
                     var types = new Type[elementCount];
@@ -36,8 +40,15 @@ public class DBRowUnpacker {
 
                     var count = packet.gSmart1or2();
 
+                    var columnID = (table << 12) | (column << 4);
+                    if (count > 1) {
+                        Unpacker.setColumnList(columnID);
+                    }
+                    if (elementCount > 0 && count > 0) {
+                        definedColumns.add(columnID);
+                    }
                     for (var i = 0; i < count; i++) {
-                        var s = "data=" + Unpacker.formatDBColumnShort((table << 12) | (column << 4));
+                        var s = "data=" + Unpacker.formatDBColumnShort(columnID);
 
                         for (var type : types) {
                             s += "," + switch (type.base) {
@@ -49,6 +60,15 @@ public class DBRowUnpacker {
                         }
 
                         lines.add(s);
+                    }
+                }
+
+                Map<Integer, List<Type>> columns = Unpacker.DBCOLUMN_TYPE.get(table);
+
+                for (int column : columns.keySet()) {
+                    int columnID = id << 12 | column << 4;
+                    if (!definedColumns.contains(columnID)) {
+                        Unpacker.setColumnOptional(columnID);
                     }
                 }
             }
