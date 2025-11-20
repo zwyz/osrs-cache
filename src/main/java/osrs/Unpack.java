@@ -150,6 +150,8 @@ public class Unpack {
         unpackConfigGroup(STRUCTTYPE, StructUnpacker::unpack, path + "/config/dump.struct");
         unpackConfigGroup(MELTYPE, MapElementUnpacker::unpack, path + "/config/dump.mel");
         unpackConfigGroup(STRINGVECTORTYPE, StringVectorUnpacker::unpack, path + "/config/dump.stringvector"); // https://twitter.com/JagexAsh/status/1656354577057185792
+        unpackDBTableIndex();
+        unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::declareColumns);
         unpackConfigGroup(DBROWTYPE, DBRowUnpacker::unpack, path + "/config/dump.dbrow");
         unpackConfigGroup(DBTABLETYPE, DBTableUnpacker::unpack, path + "/config/dump.dbtable");
         unpackConfigGroup(GAMELOGEVENT, GameLogEventUnpacker::unpack, path + "/config/dump.gamelogevent"); // tfu
@@ -561,6 +563,32 @@ public class Unpack {
             }
 
             Files.write(Path.of(result), lines);
+        }
+    }
+
+    private static void unpackConfigGroup(Js5ConfigGroup group, BiConsumer<Integer, byte[]> unpack) {
+        unpackGroup(JS5_CONFIG, group.id, unpack);
+    }
+
+    private static void unpackGroup(Js5Archive archive, int group, BiConsumer<Integer, byte[]> unpack) {
+        var files = loadGroupFiles(archive, group);
+        if (files != null) {
+            for (var file : files.keySet()) {
+                unpack.accept(file, files.get(file));
+            }
+        }
+    }
+
+    private static void unpackDBTableIndex() {
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_DBTABLEINDEX.id, false)));
+        for (var tableId : archiveIndex.groupId) {
+            var fileIds = archiveIndex.getGroupFileIDs(tableId);
+            for (int fileId : fileIds) {
+                if (fileId == 0) {
+                    continue;
+                }
+                Unpacker.setColumnIndexed(tableId << 12 | (fileId - 1) << 4);
+            }
         }
     }
 

@@ -3,10 +3,7 @@ package osrs.unpack;
 import osrs.Unpack;
 import osrs.unpack.script.ScriptUnpacker;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class Unpacker {
     public static final Map<Type, Map<Integer, String>> NAME = new HashMap<>();
@@ -21,6 +18,9 @@ public class Unpacker {
     public static final Map<Integer, Type> VAR_PLAYER_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLIENT_TYPE = new HashMap<>();
     public static final Map<Integer, List<Type>> IF_SCRIPT_TYPE = new HashMap<>();
+    public static final Set<Integer> OPTIONAL_COLUMNS = new HashSet<>();
+    public static final Set<Integer> LIST_COLUMNS = new HashSet<>();
+    public static final Set<Integer> INDEXED_COLUMNS = new HashSet<>();
 
     public static void reset() {
         NAME.clear();
@@ -33,6 +33,9 @@ public class Unpacker {
         VAR_CLAN_SETTING_TYPE.clear();
         VAR_CLAN_TYPE.clear();
         IF_SCRIPT_TYPE.clear();
+        OPTIONAL_COLUMNS.clear();
+        LIST_COLUMNS.clear();
+        INDEXED_COLUMNS.clear();
 
         setSymbolName(Type.BOOLEAN, 0, "false");
         setSymbolName(Type.BOOLEAN, 1, "true");
@@ -566,6 +569,30 @@ public class Unpacker {
         }
 
         return types.get(0);
+    }
+
+    public static boolean isColumnOptional(int columnID) {
+        return OPTIONAL_COLUMNS.contains(columnID);
+    }
+
+    public static void setColumnOptional(int columnID) {
+        OPTIONAL_COLUMNS.add(columnID);
+    }
+
+    public static boolean isColumnList(int columnID) {
+        return LIST_COLUMNS.contains(columnID);
+    }
+
+    public static void setColumnList(int columnID) {
+        LIST_COLUMNS.add(columnID);
+    }
+
+    public static boolean isColumnIndexed(int columnID) {
+        return INDEXED_COLUMNS.contains(columnID);
+    }
+
+    public static void setColumnIndexed(int columnID) {
+        INDEXED_COLUMNS.add(columnID);
     }
 
     public static void setVarClanSettingType(int var, Type type) {
