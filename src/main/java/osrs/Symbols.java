@@ -173,7 +173,7 @@ public class Symbols {
             for (var componentId : componentIds) {
                 var combinedId = (interfaceId << 16) | componentId;
                 var componentName = Unpacker.format(Type.COMPONENT, combinedId, false);
-                componentBuilder.append(combinedId).append('\t').append(componentName).append('\n');
+                componentBuilder.append(interfaceId).append(':').append(componentId).append('\t').append(componentName).append('\n');
             }
         }
 
@@ -203,12 +203,17 @@ public class Symbols {
                 var name = Unpacker.format(Type.DBCOLUMN, basePackedId, false);
 
                 var typesJoined = types.stream().map(t -> t.name).collect(Collectors.joining(","));
-                builder.append(basePackedId).append('\t').append(name).append('\t').append(typesJoined).append('\n');
+                builder.append(tableId).append(':').append(columnId)
+                        .append('\t').append(name)
+                        .append('\t').append(typesJoined)
+                        .append('\n');
 
-                for (int i = 0; i < Math.min(types.size(), 14); i++) {
+                for (int i = 0; i < Math.min(types.size(), 15); i++) {
                     var typeAtIndex = types.get(i);
-                    var columnTupleId = basePackedId | (i + 1);
-                    builder.append(columnTupleId).append('\t').append(name).append(":").append(i).append('\t').append(typeAtIndex.name).append('\n');
+                    builder.append(tableId).append(':').append(columnId).append(':').append(i)
+                            .append('\t').append(name).append(":").append(i)
+                            .append('\t').append(typeAtIndex.name)
+                            .append('\n');
                 }
             }
         }
