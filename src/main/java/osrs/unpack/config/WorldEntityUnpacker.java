@@ -36,7 +36,7 @@ public class WorldEntityUnpacker {
             case 17 -> lines.add("op3=" + packet.gjstr());
             case 18 -> lines.add("op4=" + packet.gjstr());
             case 19 -> lines.add("op5=" + packet.gjstr());
-            case 20 -> lines.add("unknown20=" + packet.g2());
+            case 20 -> lines.add("category=" + Unpacker.format(Type.CATEGORY, packet.g2()));
 
             case 23 -> lines.add("interacttarget=" + switch (packet.g1()) {
                 case 0 -> "world";
