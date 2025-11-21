@@ -580,6 +580,10 @@ public class Unpack {
     }
 
     private static void unpackDBTableIndex() {
+        if (JS5_DBTABLEINDEX.id >= MASTER_INDEX.getArchiveCount() || MASTER_INDEX.getArchiveData(JS5_DBTABLEINDEX.id).getCrc() == 0) {
+            return;
+        }
+
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_DBTABLEINDEX.id, false)));
         for (var tableId : archiveIndex.groupId) {
             var fileIds = archiveIndex.getGroupFileIDs(tableId);
