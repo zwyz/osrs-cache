@@ -66,7 +66,7 @@ public class DBRowUnpacker {
                 Map<Integer, List<Type>> columns = Unpacker.DBCOLUMN_TYPE.get(table);
 
                 for (int column : columns.keySet()) {
-                    int columnID = id << 12 | column << 4;
+                    int columnID = table << 12 | column << 4;
                     if (!definedColumns.contains(columnID)) {
                         Unpacker.setColumnOptional(columnID);
                     }
