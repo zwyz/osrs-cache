@@ -21,6 +21,7 @@ public class Unpacker {
     public static final Set<Integer> OPTIONAL_COLUMNS = new HashSet<>();
     public static final Set<Integer> LIST_COLUMNS = new HashSet<>();
     public static final Set<Integer> INDEXED_COLUMNS = new HashSet<>();
+    public static final Map<Integer, Integer> COLUMN_COUNTS = new HashMap<>();
 
     public static void reset() {
         NAME.clear();
@@ -593,6 +594,14 @@ public class Unpacker {
 
     public static void setColumnIndexed(int columnID) {
         INDEXED_COLUMNS.add(columnID);
+    }
+
+    public static int getColumnCount(int table) {
+        return COLUMN_COUNTS.getOrDefault(table, 0);
+    }
+
+    public static void setColumnCount(int table, int column) {
+        COLUMN_COUNTS.put(table, column);
     }
 
     public static void setVarClanSettingType(int var, Type type) {

@@ -36,6 +36,7 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 public class Unpack {
     public static final boolean DUMP_CONFIG_IDS = false;
     public static final boolean DUMP_SYMBOLS = false;
+    public static final boolean DUMP_SERVERSIDE_COLUMNS = true;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static int VERSION;
     public static Js5ResourceProvider PROVIDER;
@@ -44,7 +45,7 @@ public class Unpack {
     public static int CLIENTSCRIPTS_VERSION;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 233, "oldschool1.runescape.com", 43594, null);
+        unpackLive("unpacked/live", 235, "oldschool1.runescape.com", 43594, null);
 //        unpackOpenRS2("unpacked/beta", 223, "runescape", 1826);
     }
 
@@ -722,6 +723,7 @@ public class Unpack {
 
                     for (var column = 0; packet.g1() != 0; column++) {
                         Unpacker.setSymbolName(Type.DBCOLUMN, (table << 12) | (column << 4), name + ":" + packet.gjstr());
+                        Unpacker.setColumnCount(table, column + 1);
                     }
                 }
             }

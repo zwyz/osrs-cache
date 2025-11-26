@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
@@ -24,11 +25,20 @@ public class DBTableUnpacker {
             }
 
             case 1 -> {
-                var var1 = packet.g1();
+                packet.g1();
+                var lastColumn = -1;
 
                 for (var value = packet.g1(); value != 255; value = packet.g1()) {
                     var column = value & 127;
                     var hasdefault = (value & 128) != 0;
+
+                    if (Unpack.DUMP_SERVERSIDE_COLUMNS) {
+                        for (var skipped = lastColumn + 1; skipped < column; skipped++) {
+                            lines.add("column=" + Unpacker.formatDBColumnShort((id << 12) | (skipped << 4)));
+                        }
+                    }
+
+                    lastColumn = column;
                     var length = packet.g1();
                     var types = new ArrayList<Type>(length);
 
@@ -71,6 +81,12 @@ public class DBTableUnpacker {
                         }
                     }
                 }
+
+                if (Unpack.DUMP_SERVERSIDE_COLUMNS) {
+                    for (var skipped = lastColumn + 1; skipped < Unpacker.getColumnCount(id); skipped++) {
+                        lines.add("column=" + Unpacker.formatDBColumnShort((id << 12) | (skipped << 4)));
+                    }
+                }
             }
 
             default -> throw new IllegalStateException("unknown opcode");
@@ -107,7 +123,8 @@ public class DBTableUnpacker {
                                     case INTEGER -> packet.g4s();
                                     case LONG -> packet.g8s();
                                     case STRING -> packet.gjstr();
-                                };
+                                }
+                                ;
                             }
                         }
                     }
