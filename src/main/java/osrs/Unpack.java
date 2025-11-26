@@ -69,9 +69,6 @@ public class Unpack {
         MASTER_INDEX = new Js5MasterIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, 255, false)));
         CONFIGS_VERSION = MASTER_INDEX.getArchiveData(JS5_CONFIG.id).getVersion();
         CLIENTSCRIPTS_VERSION = MASTER_INDEX.getArchiveData(JS5_CLIENTSCRIPTS.id).getVersion();
-        Command.reset(); // todo: make non-static
-        Unpacker.reset(); // todo: make non-static
-        ScriptUnpacker.reset(); // todo: make non-static
 
         // System.out.println("CONFIGS version: " + CONFIGS_VERSION);
         // System.out.println("CLIENTSCRIPTS version: " + CLIENTSCRIPTS_VERSION);

@@ -40,19 +40,7 @@ public class ScriptUnpacker {
 
     private static final Pattern OVERRIDE_PATTERN = Pattern.compile("\\[(?<trigger>[a-zA-Z0-9_]+),(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
 
-    public static void reset() {
-        SCRIPTS.clear();
-        SCRIPTS_DECOMPILED.clear();
-        SCRIPT_PARAMETER_COUNT.clear();
-        SCRIPT_RETURN_TYPES.clear();
-        SCRIPT_PARAMETERS.clear();
-        SCRIPT_RETURNS.clear();
-        SCRIPT_LEGACY_ARRAY_PARAMETER.clear();
-        SCRIPT_LOCALS.clear();
-        SCRIPT_OVERRIDES.clear();
-        CALLED.clear();
-        SCRIPT_TRIGGERS.clear();
-
+    static {
         try {
             for (var line : Files.readAllLines(Path.of("data/names/manual/scripts-signatures.txt"))) {
                 if (line.isBlank() || line.startsWith("//")) {

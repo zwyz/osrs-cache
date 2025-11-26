@@ -152,10 +152,7 @@ public class Command {
     // load commands
     private static final Pattern COMMAND_PATTERN = Pattern.compile("(?<opcode>\\d+) \\[command,(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
 
-    public static void reset() {
-        BY_ID.clear();
-        BY_NAME.clear();
-
+    static {
         try {
             for (var file : Files.list(Path.of("data/commands")).toList()) {
                 for (var line : Files.readAllLines(file)) {
