@@ -33,13 +33,13 @@ public class IfType {
     public boolean vflip;
     public boolean hflip;
     public int model = -1;
-    public int modelorigin_x;
-    public int modelorigin_y;
-    public int modelangle_x;
-    public int modelangle_y;
-    public int modelangle_z;
-    public int modelzoom;
-    public int modelanim;
+    public int modeloriginx;
+    public int modeloriginy;
+    public int modelanglex;
+    public int modelangley;
+    public int modelanglez;
+    public int modelzoom = 100;
+    public int modelanim = -1;
     public boolean modelorthog;
     public int unknown1;
     public int modelobjwidth;
@@ -192,11 +192,11 @@ public class IfType {
 
     private void decodeModel(Packet packet, int version) {
         model = packet.g2null();
-        modelorigin_x = packet.g2s();
-        modelorigin_y = packet.g2s();
-        modelangle_x = packet.g2();
-        modelangle_y = packet.g2();
-        modelangle_z = packet.g2();
+        modeloriginx = packet.g2s();
+        modeloriginy = packet.g2s();
+        modelanglex = packet.g2();
+        modelangley = packet.g2();
+        modelanglez = packet.g2();
         modelzoom = packet.g2();
         modelanim = packet.g2null();
         modelorthog = packet.g1() == 1;
