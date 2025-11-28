@@ -22,6 +22,7 @@ public class Unpacker {
     public static final Set<Integer> LIST_COLUMNS = new HashSet<>();
     public static final Set<Integer> INDEXED_COLUMNS = new HashSet<>();
     public static final Map<Integer, Integer> COLUMN_COUNTS = new HashMap<>();
+    public static final Map<Integer, Map<Integer, IfType>> IF_TYPES = new LinkedHashMap<>();
 
     static {
         setSymbolName(Type.BOOLEAN, 0, "false");
