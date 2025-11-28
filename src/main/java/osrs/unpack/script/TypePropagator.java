@@ -1,6 +1,7 @@
 package osrs.unpack.script;
 
 import osrs.Unpack;
+import osrs.unpack.IfType;
 import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
@@ -263,6 +264,24 @@ public class TypePropagator {
 
         // visit children
         expression.visitChildren(c -> run(script, c));
+    }
+
+    public void visitHook(IfType.IfTypeHook hook) {
+        var script = hook.id();
+        for (var i = 0; i < hook.args().size(); i++) {
+            if (hook.args().get(i) instanceof Integer value) {
+                var type = switch (value) {
+                    case Integer.MIN_VALUE + 3 -> Type.COMPONENT;
+                    case Integer.MIN_VALUE + 6 -> Type.COMPONENT;
+                    case Integer.MIN_VALUE + 8 -> Type.INT_KEY;
+                    case Integer.MIN_VALUE + 9 -> Type.CHAR;
+                    default -> Type.UNKNOWN_INT;
+                };
+                emitEqual(parameter(script, i), type);
+            } else {
+                emitEqual(parameter(script, i), Type.STRING);
+            }
+        }
     }
 
     public void finish(Set<Integer> scripts) {

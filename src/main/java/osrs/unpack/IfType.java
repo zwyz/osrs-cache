@@ -248,6 +248,65 @@ public class IfType {
         }
     }
 
+    public List<IfTypeHook> hooks() {
+        var hooks = new ArrayList<IfTypeHook>(18);
+        if (onload != null) {
+            hooks.add(onload);
+        }
+        if (onmouseover != null) {
+            hooks.add(onmouseover);
+        }
+        if (onmouseleave != null) {
+            hooks.add(onmouseleave);
+        }
+        if (ontargetleave != null) {
+            hooks.add(ontargetleave);
+        }
+        if (ontargetenter != null) {
+            hooks.add(ontargetenter);
+        }
+        if (onvartransmit != null) {
+            hooks.add(onvartransmit);
+        }
+        if (oninvtransmit != null) {
+            hooks.add(oninvtransmit);
+        }
+        if (onstattransmit != null) {
+            hooks.add(onstattransmit);
+        }
+        if (ontimer != null) {
+            hooks.add(ontimer);
+        }
+        if (onop != null) {
+            hooks.add(onop);
+        }
+        if (onmouserepeat != null) {
+            hooks.add(onmouserepeat);
+        }
+        if (onclick != null) {
+            hooks.add(onclick);
+        }
+        if (onclickrepeat != null) {
+            hooks.add(onclickrepeat);
+        }
+        if (onrelease != null) {
+            hooks.add(onrelease);
+        }
+        if (onhold != null) {
+            hooks.add(onhold);
+        }
+        if (ondrag != null) {
+            hooks.add(ondrag);
+        }
+        if (ondragcomplete != null) {
+            hooks.add(ondragcomplete);
+        }
+        if (onscrollwheel != null) {
+            hooks.add(onscrollwheel);
+        }
+        return hooks;
+    }
+
 
     private static IfTypeHook decodeHook(Packet packet) {
         var count = packet.g1();
