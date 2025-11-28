@@ -6,7 +6,6 @@ import osrs.js5.*;
 import osrs.unpack.*;
 import osrs.unpack.config.*;
 import osrs.unpack.map.Environment;
-import osrs.unpack.script.Command;
 import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Packet;
 
@@ -106,6 +105,8 @@ public class Unpack {
         loadGroupNames(Path.of("data/names/midis.txt"), JS5_SONGS, (id, name) -> Unpacker.setSymbolName(Type.MIDI, id, name));
         loadGroupNames(Path.of("data/names/binaries.txt"), JS5_BINARY, Unpacker.BINARY_NAME::put);
 
+        loadInterfaces();
+
         // world map
         unpackWorldMapGroup(DETAILS, path + "/config/dump.wma");
 
@@ -164,7 +165,7 @@ public class Unpack {
         unpackScripts(Path.of(path + "/script"));
 
         // interface
-        unpackInterfaces(JS5_INTERFACES, InterfaceUnpacker::unpack, Path.of(path + "/interface"));
+        unpackInterfaces(InterfaceUnpacker::unpack, Path.of(path + "/interface"));
 
         // materials
         unpackConfigArchive(JS5_TEXTURES, 0, TextureUnpacker::unpack, Path.of(path + "/config/dump.texture"));
@@ -518,24 +519,37 @@ public class Unpack {
         Files.write(result, lines);
     }
 
-    private static void unpackInterfaces(Js5Archive archive, BiFunction<Integer, byte[], List<String>> unpack, Path result) throws IOException {
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
-        var groups = preloadGroups(archive.id);
+    private static void loadInterfaces() {
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, Js5Archive.JS5_INTERFACES.id, false)));
+        var groups = preloadGroups(Js5Archive.JS5_INTERFACES.id);
 
         for (var group : archiveIndex.groupId) {
             var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
-            var lines = new ArrayList<String>();
-            boolean scripted = false;
-
             for (var file : files.keySet()) {
-                byte[] data = files.get(file);
-                scripted |= data[0] == -1;
-                lines.addAll(unpack.apply((group << 16) | file, data));
+                var data = files.get(file);
+                var id = group << 16 | file;
+                var ifType = new IfType(id, data);
+                Unpacker.IF_TYPES.computeIfAbsent(group, _ -> new LinkedHashMap<>()).put(file, ifType);
+            }
+        }
+    }
+
+    private static void unpackInterfaces(BiFunction<Integer, IfType, List<String>> unpack, Path result) throws IOException {
+        for (var entry : Unpacker.IF_TYPES.entrySet()) {
+            var lines = new ArrayList<String>();
+            var ifId = entry.getKey();
+            var ifTypes = entry.getValue();
+            var scripted = false;
+            for (var ifTypeEntry : ifTypes.entrySet()) {
+                var comId = ifTypeEntry.getKey();
+                var ifType = ifTypeEntry.getValue();
+                scripted |= ifType.scripted;
+                lines.addAll(unpack.apply((ifId << 16) | comId, ifType));
                 lines.add("");
             }
 
             String extension = scripted ? "if3" : "if";
-            Files.write(result.resolve(Unpacker.format(Type.INTERFACE, group) + "." + extension), lines);
+            Files.write(result.resolve(Unpacker.format(Type.INTERFACE, ifId) + "." + extension), lines);
         }
     }
 
