@@ -1,6 +1,5 @@
 package osrs.unpack;
 
-import osrs.Unpack;
 import osrs.unpack.script.ScriptUnpacker;
 
 import java.util.ArrayList;
@@ -26,11 +25,17 @@ public class InterfaceUnpacker {
         line(lines, "width=", data.width, 0); // if_getwidth
         line(lines, "height=", data.height, 0); // if_getheight
 
-        if (Unpack.VERSION >= 79) {
-            line(lines, "widthmode=", decodeSizeMode(data.widthmode), "abs");
-            line(lines, "heightmode=", decodeSizeMode(data.heightmode), "abs");
-            line(lines, "xmode=", decodeXMode(data.xmode), "abs_left");
-            line(lines, "ymode=", decodeYMode(data.ymode), "abs_top");
+        if (data.widthmode != 0) {
+            line(lines, "widthmode=", decodeSizeMode(data.widthmode));
+        }
+        if (data.heightmode != 0) {
+            line(lines, "heightmode=", decodeSizeMode(data.heightmode));
+        }
+        if (data.xmode != 0) {
+            line(lines, "xmode=", decodeXMode(data.xmode));
+        }
+        if (data.ymode != 0) {
+            line(lines, "ymode=", decodeYMode(data.ymode));
         }
 
         var layerID = data.layerID;
@@ -39,7 +44,9 @@ public class InterfaceUnpacker {
             line(lines, "layer=", Unpacker.formatComponentShort((id & 0xffff0000) | layerID)); // if_getlayer
         }
 
-        line(lines, "hide=", data.hide ? "yes" : "no", "no"); // if_sethide
+        if (data.hide) {
+            lines.add("hide=yes"); // if_sethide
+        }
 
         switch (type) {
             case 0 -> decodeLayer(lines, data);
@@ -53,6 +60,7 @@ public class InterfaceUnpacker {
         }
 
         line(lines, "events=", data.events, 0); // if_setevents
+
         line(lines, "opbase=", data.opbase, ""); // if_setopbase
         if (data.ops != null) {
             for (var i = 0; i < data.ops.length; ++i) {
@@ -64,52 +72,65 @@ public class InterfaceUnpacker {
         line(lines, "dragdeadtime=", data.dragdeadtime, 0); // if_setdragdeadtime
         line(lines, "dragrenderbehaviour=", data.dragrenderbehaviour, 0); // if_setdragrenderbehaviour
         line(lines, "targetverb=", data.targetverb, ""); // if_settargetverb
-
-        line(lines, "onload=", decodeHook(data.onload), "null");
-        line(lines, "onmouseover=", decodeHook(data.onmouseover), "null"); // if_setonmouseover
-        line(lines, "onmouseleave=", decodeHook(data.onmouseleave), "null"); // if_setonmouseleave
-        line(lines, "ontargetleave=", decodeHook(data.ontargetleave), "null"); // if_setontargetleave
-        line(lines, "ontargetenter=", decodeHook(data.ontargetenter), "null"); // if_setontargetenter
-        line(lines, "onvartransmit=", decodeHook(data.onvartransmit), "null"); // if_setonvartransmit
-        line(lines, "oninvtransmit=", decodeHook(data.oninvtransmit), "null"); // if_setoninvtransmit
-        line(lines, "onstattransmit=", decodeHook(data.onstattransmit), "null"); // if_setonstattransmit
-        line(lines, "ontimer=", decodeHook(data.ontimer), "null"); // if_setontimer
-        line(lines, "onop=", decodeHook(data.onop), "null"); // if_setonop
-        line(lines, "onmouserepeat=", decodeHook(data.onmouserepeat), "null"); // if_setonmouserepeat
-        line(lines, "onclick=", decodeHook(data.onclick), "null"); // if_setonclick
-        line(lines, "onclickrepeat=", decodeHook(data.onclickrepeat), "null"); // if_setonclickrepeat
-        line(lines, "onrelease=", decodeHook(data.onrelease), "null"); // if_setonrelease
-        line(lines, "onhold=", decodeHook(data.onhold), "null"); // if_setonhold
-        line(lines, "ondrag=", decodeHook(data.ondrag), "null"); // if_setondrag
-        line(lines, "ondragcomplete=", decodeHook(data.ondragcomplete), "null"); // if_setondragcomplete
-        line(lines, "onscrollwheel=", decodeHook(data.onscrollwheel), "null"); // if_setonscrollwheel
-
-        line(lines, "onvartransmitlist=", decodeHookTransmitList(data.onvartransmitlist, Type.VAR_PLAYER), "null");
-        line(lines, "oninvtransmitlist=", decodeHookTransmitList(data.oninvtransmitlist, Type.INV), "null");
-        line(lines, "onstattransmitlist=", decodeHookTransmitList(data.onstattransmitlist, Type.STAT), "null");
-
+        line(lines, "onload=", decodeHook(data.onload, null, null), "null");
+        line(lines, "onmouseover=", decodeHook(data.onmouseover, null, null), "null"); // if_setonmouseover
+        line(lines, "onmouseleave=", decodeHook(data.onmouseleave, null, null), "null"); // if_setonmouseleave
+        line(lines, "ontargetleave=", decodeHook(data.ontargetleave, null, null), "null"); // if_setontargetleave
+        line(lines, "ontargetenter=", decodeHook(data.ontargetenter, null, null), "null"); // if_setontargetenter
+        line(lines, "onvartransmit=", decodeHook(data.onvartransmit, data.onvartransmitlist, Type.VAR_PLAYER), "null"); // if_setonvartransmit
+        line(lines, "oninvtransmit=", decodeHook(data.oninvtransmit, data.oninvtransmitlist, Type.INV), "null"); // if_setoninvtransmit
+        line(lines, "onstattransmit=", decodeHook(data.onstattransmit, data.onstattransmitlist, Type.STAT), "null"); // if_setonstattransmit
+        line(lines, "ontimer=", decodeHook(data.ontimer, null, null), "null"); // if_setontimer
+        line(lines, "onop=", decodeHook(data.onop, null, null), "null"); // if_setonop
+        line(lines, "onmouserepeat=", decodeHook(data.onmouserepeat, null, null), "null"); // if_setonmouserepeat
+        line(lines, "onclick=", decodeHook(data.onclick, null, null), "null"); // if_setonclick
+        line(lines, "onclickrepeat=", decodeHook(data.onclickrepeat, null, null), "null"); // if_setonclickrepeat
+        line(lines, "onrelease=", decodeHook(data.onrelease, null, null), "null"); // if_setonrelease
+        line(lines, "onhold=", decodeHook(data.onhold, null, null), "null"); // if_setonhold
+        line(lines, "ondrag=", decodeHook(data.ondrag, null, null), "null"); // if_setondrag
+        line(lines, "ondragcomplete=", decodeHook(data.ondragcomplete, null, null), "null"); // if_setondragcomplete
+        line(lines, "onscrollwheel=", decodeHook(data.onscrollwheel, null, null), "null"); // if_setonscrollwheel
 
         return lines;
     }
 
-    private static String decodeHook(IfType.IfTypeHook hook) {
+    private static String decodeHook(IfType.IfTypeHook hook, int[] transmitList, Type transmitType) {
         if (hook == null) {
+            if (transmitList != null) {
+                // safe check
+                throw new IllegalStateException();
+            }
             return "null";
         }
 
         var script = hook.id();
-        var arguments = new ArrayList<String>();
 
-        for (int i = 0; i < hook.args().size(); i++) {
-            var arg = hook.args().get(i);
-            arguments.add(formatHookArgument(arg, ScriptUnpacker.SCRIPT_PARAMETERS.get(script).get(i)));
-        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(Unpacker.format(Type.CLIENTSCRIPT, script));
 
-        if (arguments.isEmpty()) {
-            return Unpacker.format(Type.CLIENTSCRIPT, script);
-        } else {
-            return Unpacker.format(Type.CLIENTSCRIPT, script) + "(" + String.join(", ", arguments) + ")";
+        var args = hook.args();
+        if (!args.isEmpty()) {
+            sb.append('(');
+            var parameters = ScriptUnpacker.SCRIPT_PARAMETERS.get(script);
+            for (var i = 0; i < args.size(); ++i) {
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(formatHookArgument(args.get(i), parameters.get(i)));
+            }
+            sb.append(')');
         }
+        if (transmitList != null) {
+            sb.append('{');
+            for (var i = 0; i < transmitList.length; ++i) {
+                if (i > 0) {
+                    sb.append(",");
+                }
+                sb.append(Unpacker.format(transmitType, transmitList[i]));
+            }
+            sb.append('}');
+        }
+        return sb.toString();
     }
 
     private static String formatHookArgument(Object value, Type type) {
@@ -134,88 +155,81 @@ public class InterfaceUnpacker {
         return "\"" + value + "\"";
     }
 
-    private static String decodeHookTransmitList(int[] transmitList, Type type) {
-        if (transmitList == null) {
-            return "null";
-        }
-
-        var sb = new StringBuilder();
-
-        for (var i = 0; i < transmitList.length; ++i) {
-            if (i > 0) {
-                sb.append(",");
-            }
-
-            sb.append(Unpacker.format(type, transmitList[i]));
-        }
-
-        return sb.toString();
-    }
-
     private static void decodeLayer(ArrayList<String> lines, IfType data) {
         line(lines, "scrollwidth=", data.scrollwidth, 0); // if_getscrollwidth
         line(lines, "scrollheight=", data.scrollheight, 0); // if_getscrollheight
-        line(lines, "noclickthrough=", data.noclickthrough ? "yes" : "no", "no"); // if_setnoclickthrough
+        if (data.noclickthrough) {
+            lines.add("noclickthrough=yes"); // if_setnoclickthrough
+        }
     }
 
     private static void decodeGraphic(ArrayList<String> lines, IfType data) {
         line(lines, "graphic=", Unpacker.format(Type.GRAPHIC, data.graphic), "null"); // if_setgraphic
         line(lines, "2dangle=", data.angle2d, 0); // if_set2dangle
-        line(lines, "tiling=", data.tiling ? "yes" : "no", "no"); // if_settiling
+        if (data.tiling) {
+            lines.add("tiling=yes"); // if_settiling
+        }
         line(lines, "trans=", data.trans, 0); // if_settrans
         line(lines, "outline=", data.outline, 0); // if_setoutline
         line(lines, "graphicshadow=", data.graphicshadow, 0); // if_setgraphicshadow
-        line(lines, "vflip=", (data.vflip ? "yes" : "no"), "no"); // if_setvflip
-        line(lines, "hflip=", (data.hflip ? "yes" : "no"), "no"); // if_sethflip
+        if (data.vflip) {
+            lines.add("vflip=yes"); // if_setvflip
+        }
+        if (data.hflip) {
+            lines.add("hflip=yes"); // if_sethflip
+        }
     }
 
     private static void decodeModel(ArrayList<String> lines, IfType data) {
         line(lines, "model=", Unpacker.format(Type.MODEL, data.model));
-        line(lines, "modelorigin_x=", data.modelorigin_x); // if_setmodelorigin
-        line(lines, "modelorigin_y=", data.modelorigin_y); // if_setmodelorigin
-        line(lines, "modelangle_x=", data.modelangle_x); // if_getmodelangle_x
-        line(lines, "modelangle_y=", data.modelangle_y); // if_getmodelangle_y
-        line(lines, "modelangle_z=", data.modelangle_z); // if_getmodelangle_z
-        line(lines, "modelzoom=", data.modelzoom); // if_setmodelzoom
+        line(lines, "modeloriginx=", data.modeloriginx, 0); // if_setmodelorigin
+        line(lines, "modeloriginy=", data.modeloriginy, 0); // if_setmodelorigin
+        line(lines, "modelanglex=", data.modelanglex, 0); // if_getmodelangle_x
+        line(lines, "modelangley=", data.modelangley, 0); // if_getmodelangle_y
+        line(lines, "modelanglez=", data.modelanglez, 0); // if_getmodelangle_z
+        line(lines, "modelzoom=", data.modelzoom, 100); // if_setmodelzoom
         line(lines, "modelanim=", Unpacker.format(Type.SEQ, data.modelanim), "null"); // if_setmodelanim
-        line(lines, "modelorthog=", data.modelorthog ? "yes" : "no", "no"); // if_setmodelorthog
-        if (Unpack.VERSION >= 79) {
-            line(lines, "unknown1=", data.unknown1, 0);
-            if (data.widthmode != 0 || data.heightmode != 0) {
-                line(lines, "modelobjwidth=", data.modelobjwidth);
-                line(lines, "modelobjheight=", data.modelobjheight);
-            }
+        if (data.modelorthog) {
+            lines.add("modelorthog=yes"); // if_setmodelorthog
         }
+        line(lines, "unknown1=", data.unknown1, 0);
+        line(lines, "modelobjwidth=", data.modelobjwidth, 0);
+        line(lines, "modelobjheight=", data.modelobjheight, 0);
     }
 
     private static void decodeText(ArrayList<String> lines, IfType data) {
         line(lines, "textfont=", Unpacker.format(Type.FONTMETRICS, data.textfont), "null"); // if_settextfont
         line(lines, "text=", data.text, ""); // if_settext
         line(lines, "textlineheight=", data.textlineheight, 0); // todo
-        line(lines, "textalignh=", data.textalignh, 0); // if_settextalign
-        line(lines, "textalignv=", data.textalignv, 0); // if_settextalign
-        line(lines, "textshadow=", data.textshadow ? "yes" : "no", "no"); // if_settextshadow
+        line(lines, "textalignh=", formatAlignH(data.textalignh), 0); // if_settextalign
+        line(lines, "textalignv=", formatAlignV(data.textalignv), 0); // if_settextalign
+        if (data.textshadow) {
+            lines.add("textshadow=yes"); // if_settextshadow
+        }
         line(lines, "colour=", Unpacker.formatColour(data.colour)); // if_setcolour
     }
 
     private static void decodeRectangle(ArrayList<String> lines, IfType data) {
         line(lines, "colour=", Unpacker.formatColour(data.colour)); // if_setcolour
-        line(lines, "fill=", data.fill ? "yes" : "no", "no"); // if_setfill
+        if (data.fill) {
+            lines.add("fill=yes"); // if_setfill
+        }
         line(lines, "trans=", data.trans, 0); // if_settrans
     }
 
     private static void decodeLine(ArrayList<String> lines, IfType data) {
         line(lines, "linewid=", data.linewid, 1); // if_setlinewid
         line(lines, "colour=", Unpacker.formatColour(data.colour)); // if_setcolour
-
-        if (Unpack.VERSION >= 79) {
-            line(lines, "linedirection=", data.linedirection ? "yes" : "no", "no"); // if_setlinedirection
+        if (data.linedirection) {
+            lines.add("linedirection=yes"); // if_setlinedirection
         }
     }
 
     private static void decodeCircle(ArrayList<String> lines, IfType data) {
         line(lines, "colour=", Unpacker.formatColour(data.colour)); // if_setcolour
-        line(lines, "fill=", data.fill ? "yes" : "no", "no"); // if_setfill
+        if (data.fill) {
+            lines.add("fill=yes"); // if_setfill
+        }
         line(lines, "trans=", data.trans, 0); // if_settrans
         line(lines, "arcstart=", data.arcstart);
         line(lines, "arcend=", data.arcend);
@@ -228,7 +242,7 @@ public class InterfaceUnpacker {
             case 1 -> "minus";
             case 2 -> "rel";
             case 3 -> "mode_3";
-            case 4 -> "mode_4";
+            case 4 -> "aspect";
             default -> throw new IllegalStateException("Unexpected value: " + sizemode);
         };
     }
@@ -254,6 +268,24 @@ public class InterfaceUnpacker {
             case 4 -> "rel_centre";
             case 5 -> "rel_bottom";
             default -> throw new IllegalStateException("Unexpected value: " + ymode);
+        };
+    }
+
+    private static String formatAlignH(int id) {
+        return switch (id) {
+            case 0 -> "left";
+            case 1 -> "centre";
+            case 2 -> "right";
+            default -> throw new IllegalStateException();
+        };
+    }
+
+    private static String formatAlignV(int id) {
+        return switch (id) {
+            case 0 -> "top";
+            case 1 -> "centre";
+            case 2 -> "bottom";
+            default -> throw new IllegalStateException();
         };
     }
 
