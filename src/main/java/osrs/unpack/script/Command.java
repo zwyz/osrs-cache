@@ -131,6 +131,7 @@ public class Command {
     public static Command CC_SETPARAM;
     public static Command IF_PARAM;
     public static Command IF_SETPARAM;
+    public static Command IF_CHILDREN_FILTER;
 
     public static Command ARRAY_COMPARE;
     public static Command ARRAY_INDEXOF;
@@ -259,6 +260,7 @@ public class Command {
         CC_SETPARAM = findCommand("cc_setparam");
         IF_PARAM = findCommand("if_param");
         IF_SETPARAM = findCommand("if_setparam");
+        IF_CHILDREN_FILTER = findCommand("if_children_filter");
 
         ARRAY_COMPARE = findCommand("array_compare");
         ARRAY_INDEXOF = findCommand("array_indexof");

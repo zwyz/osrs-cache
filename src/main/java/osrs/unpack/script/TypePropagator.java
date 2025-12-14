@@ -192,6 +192,12 @@ public class TypePropagator {
             emitEqual(type(value, 0), Unpacker.getParamType((int) param.operand));
         }
 
+        if (expression.command == IF_CHILDREN_FILTER) {
+            var param = expression.arguments.get(0);
+            var value = expression.arguments.get(1);
+            emitEqual(type(value, 0), Unpacker.getParamType((int) param.operand));
+        }
+
         // dbtables todo: can use a node to allow alias propagation through dbtables
         if (expression.command == DB_FIND || expression.command == DB_FIND_WITH_COUNT || expression.command == DB_FIND_REFINE || expression.command == DB_FIND_REFINE_WITH_COUNT) {
             var column = (int) expression.arguments.get(0).operand;
