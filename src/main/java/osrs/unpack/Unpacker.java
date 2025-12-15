@@ -24,7 +24,22 @@ public class Unpacker {
     public static final Map<Integer, Integer> COLUMN_COUNTS = new HashMap<>();
     public static final Map<Integer, Map<Integer, IfType>> IF_TYPES = new LinkedHashMap<>();
 
-    static {
+    public static void reset() {
+        NAME.clear();
+        SCRIPT_NAME.clear();
+        BINARY_NAME.clear();
+        DBCOLUMN_TYPE.clear();
+        PARAM_TYPE.clear();
+        ENUM_INPUT_TYPE.clear();
+        ENUM_OUTPUT_TYPE.clear();
+        VAR_CLAN_SETTING_TYPE.clear();
+        VAR_CLAN_TYPE.clear();
+        IF_SCRIPT_TYPE.clear();
+        OPTIONAL_COLUMNS.clear();
+        LIST_COLUMNS.clear();
+        INDEXED_COLUMNS.clear();
+        COLUMN_COUNTS.clear();
+
         setSymbolName(Type.BOOLEAN, 0, "false");
         setSymbolName(Type.BOOLEAN, 1, "true");
 
