@@ -15,10 +15,17 @@ public class DBTableUnpacker {
         var packet = new Packet(data);
         lines.add("[" + Unpacker.format(Type.DBTABLE, id, false) + "]");
 
+        var lastColumn = -1;
         while (true) switch (packet.g1()) {
             case 0 -> {
                 if (packet.pos != packet.arr.length) {
                     throw new IllegalStateException("end of file not reached");
+                }
+
+                if (Unpack.DUMP_SERVERSIDE_COLUMNS) {
+                    for (var skipped = lastColumn + 1; skipped < Unpacker.getColumnCount(id); skipped++) {
+                        lines.add("column=" + Unpacker.formatDBColumnShort((id << 12) | (skipped << 4)));
+                    }
                 }
 
                 return lines;
@@ -26,7 +33,6 @@ public class DBTableUnpacker {
 
             case 1 -> {
                 packet.g1();
-                var lastColumn = -1;
 
                 for (var value = packet.g1(); value != 255; value = packet.g1()) {
                     var column = value & 127;
@@ -79,12 +85,6 @@ public class DBTableUnpacker {
 
                             lines.add(s);
                         }
-                    }
-                }
-
-                if (Unpack.DUMP_SERVERSIDE_COLUMNS) {
-                    for (var skipped = lastColumn + 1; skipped < Unpacker.getColumnCount(id); skipped++) {
-                        lines.add("column=" + Unpacker.formatDBColumnShort((id << 12) | (skipped << 4)));
                     }
                 }
             }
