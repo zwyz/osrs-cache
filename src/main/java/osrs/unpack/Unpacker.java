@@ -382,6 +382,10 @@ public class Unpacker {
         setSymbolName(Type.INT_CLAN, 1, "^clantype_gim");
         setSymbolName(Type.INT_CLAN, 2, "^clantype_pvpa_group");
 
+        if (Unpack.CONFIGS_VERSION >= 1765282238) {
+            setDBColumnType(194, 5, List.of(Type.DBROW));
+        }
+
         if (Unpack.CONFIGS_VERSION >= 4867) {
             // TODO note down names
             // TODO don't set column 2 after version that transmits it
