@@ -39,6 +39,7 @@ public class Unpacker {
         LIST_COLUMNS.clear();
         INDEXED_COLUMNS.clear();
         COLUMN_COUNTS.clear();
+        IF_TYPES.clear();
 
         setSymbolName(Type.BOOLEAN, 0, "false");
         setSymbolName(Type.BOOLEAN, 1, "true");
