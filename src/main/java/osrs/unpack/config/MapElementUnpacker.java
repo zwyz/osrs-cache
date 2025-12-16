@@ -28,7 +28,13 @@ public class MapElementUnpacker {
             case 4 -> lines.add("colour=" + packet.g3());
             case 5 -> lines.add("unknown5=" + packet.g3());
             case 6 -> lines.add("size=" + packet.g1());
-            case 7 -> lines.add("vis=" + packet.g1());
+            case 7 -> lines.add("vis=" + switch (packet.g1()) {
+                case 0 -> "none";
+                case 1 -> "map";
+                case 2 -> "minimap";
+                case 3 -> "both";
+                default -> throw new IllegalStateException();
+            });
             case 8 -> lines.add("mapfunction=" + Unpacker.formatYesNo(packet.g1()));
             case 10 -> lines.add("op1=" + packet.gjstr());
             case 11 -> lines.add("op2=" + packet.gjstr());
@@ -61,7 +67,7 @@ public class MapElementUnpacker {
             }
 
             case 16 -> lines.add("unknown16=yes");
-            case 17 -> lines.add("unknown17=" + packet.gjstr());
+            case 17 -> lines.add("opbase=" + packet.gjstr());
             case 18 -> lines.add("unknown18=" + packet.gSmart2or4s());
             case 19 -> lines.add("category=" + Unpacker.format(Type.CATEGORY, packet.g2()));
             case 21 -> lines.add("unknown21=" + packet.g4s());
@@ -70,8 +76,18 @@ public class MapElementUnpacker {
             case 24 -> lines.add("unknown24=" + packet.g2s() + "," + packet.g2s());
             case 25 -> lines.add("unknown25=" + packet.gSmart2or4s());
             case 28 -> lines.add("unknown28=" + packet.g1());
-            case 29 -> lines.add("unknown29=" + packet.g1());
-            case 30 -> lines.add("unknown30=" + packet.g1());
+            case 29 -> lines.add("halign=" + switch (packet.g1()) {
+                case 0 -> "left";
+                case 1 -> "centre";
+                case 2 -> "right";
+                default -> throw new IllegalStateException();
+            });
+            case 30 -> lines.add("valign=" + switch (packet.g1()) {
+                case 0 -> "top";
+                case 1 -> "centre";
+                case 2 -> "bottom";
+                default -> throw new IllegalStateException();
+            });
 
             default -> throw new IllegalStateException("unknown opcode");
         }
