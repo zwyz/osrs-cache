@@ -415,6 +415,11 @@ public class Unpacker {
             return quote(name, safe);
         } else if (type == Type.TYPE) {
             return Type.byChar(value).name;
+        } else if (type == Type.CHAR) {
+            if (value == -1) {
+                return "null";
+            }
+            return "'" + (char) value + "'";
         } else if (type == Type.COORDGRID) {
             if (value == -1) {
                 return "null";
