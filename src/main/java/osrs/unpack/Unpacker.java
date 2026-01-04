@@ -382,6 +382,10 @@ public class Unpacker {
         setSymbolName(Type.INT_CLAN, 1, "^clantype_gim");
         setSymbolName(Type.INT_CLAN, 2, "^clantype_pvpa_group");
 
+        setSymbolName(Type.INT_OVERLAYTYPE, 0, "^overlaytype_middle");
+        setSymbolName(Type.INT_OVERLAYTYPE, 1, "^overlaytype_top");
+        setSymbolName(Type.INT_OVERLAYTYPE, 2, "^overlaytype_bottom");
+
         if (Unpack.CONFIGS_VERSION >= 1765282238) {
             setDBColumnType(194, 5, List.of(Type.DBROW));
         }

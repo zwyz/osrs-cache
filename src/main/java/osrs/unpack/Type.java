@@ -249,6 +249,7 @@ public class Type {
     public static final Type INT_OPKIND = new Type("opkind", Type.INT);
     public static final Type INT_OPMODE = new Type("opmode", Type.INT);
     public static final Type INT_CLAN = new Type("clan", Type.INT);
+    public static final Type INT_OVERLAYTYPE = new Type("overlaytype", Type.INT);
 
     // type sets
     public static final Type UNKNOWN = new Type("unknown"); // any type
