@@ -6,6 +6,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 public class OpenRS2Js5ResourceProvider implements Js5ResourceProvider, AutoCloseable {
@@ -15,9 +16,9 @@ public class OpenRS2Js5ResourceProvider implements Js5ResourceProvider, AutoClos
     private final int id;
     private final Semaphore semaphore = new Semaphore(MAX_CONCURRENT_REQUESTS);
     private final byte[] masterIndexData;
-    private final byte[][] archiveIndexData;
+    private final ConcurrentHashMap<Integer, byte[]> archiveIndexData;
     private final Js5MasterIndex masterIndex;
-    private final Js5ArchiveIndex[] archiveIndex;
+    private final ConcurrentHashMap<Integer, Js5ArchiveIndex> archiveIndex;
 
     public OpenRS2Js5ResourceProvider(String scope, int id) {
         this.scope = scope;
@@ -28,8 +29,8 @@ public class OpenRS2Js5ResourceProvider implements Js5ResourceProvider, AutoClos
         this.masterIndex = new Js5MasterIndex(Js5Util.decompress(masterIndexData));
 
         // Initialise array for archive indices (needed for CRCs)
-        this.archiveIndexData = new byte[masterIndex.getArchiveCount()][];
-        this.archiveIndex = new Js5ArchiveIndex[masterIndex.getArchiveCount()];
+        this.archiveIndexData = new ConcurrentHashMap<>();
+        this.archiveIndex = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -37,17 +38,10 @@ public class OpenRS2Js5ResourceProvider implements Js5ResourceProvider, AutoClos
         if (archive == 255 && group == 255) {
             return masterIndexData;
         } else if (archive == 255) {
-            if (archiveIndexData[group] == null) {
-                archiveIndexData[group] = request(archive, group, masterIndex.getArchiveData(group).getVersion(), masterIndex.getArchiveData(group).getCrc());
-            }
-
-            return archiveIndexData[group];
+            return archiveIndexData.computeIfAbsent(group, _ -> request(archive, group, masterIndex.getArchiveData(group).getVersion(), masterIndex.getArchiveData(group).getCrc()));
         } else {
-            if (archiveIndex[archive] == null) {
-                archiveIndex[archive] = new Js5ArchiveIndex(Js5Util.decompress(get(255, archive, true)));
-            }
-
-            return request(archive, group, archiveIndex[archive].groupVersion[group], archiveIndex[archive].groupChecksum[group]);
+            var index = archiveIndex.computeIfAbsent(archive, _ -> new Js5ArchiveIndex(Js5Util.decompress(get(255, archive, true))));
+            return request(archive, group, index.groupVersion[group], index.groupChecksum[group]);
         }
     }
 
@@ -60,7 +54,7 @@ public class OpenRS2Js5ResourceProvider implements Js5ResourceProvider, AutoClos
     }
 
     private byte[] request(int archive, int group, String url) {
-        var goawayCount = 0;
+        var failureCount = 0;
 
         while (true) {
             try {
@@ -75,11 +69,9 @@ public class OpenRS2Js5ResourceProvider implements Js5ResourceProvider, AutoClos
                 System.out.println("received " + archive + "." + group);
                 return response.body();
             } catch (IOException e) {
-                if (e.getMessage().contains("GOAWAY received") && goawayCount++ < 5) {
-                    continue;
+                if (failureCount++ >= 5) {
+                    throw new UncheckedIOException(e);
                 }
-
-                throw new UncheckedIOException(e);
             } catch (InterruptedException e) {
                 throw new AssertionError(e);
             } finally {
