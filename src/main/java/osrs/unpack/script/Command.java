@@ -111,6 +111,11 @@ public class Command {
     // commands with special behavior
     public static Command ADD;
     public static Command SUB;
+    public static Command MULTIPLY;
+    public static Command DIVIDE;
+    public static Command MODULO;
+    public static Command OR;
+    public static Command AND;
 
     public static Command ENUM;
     public static Command ENUM_STRING;
@@ -125,6 +130,7 @@ public class Command {
     public static Command DB_FIND_REFINE;
     public static Command DB_FIND_REFINE_WITH_COUNT;
     public static Command DB_GETFIELD;
+    public static Command CC_CREATE;
     public static Command IF_FIND_CHILD;
     public static Command IF_RUNSCRIPT;
     public static Command CC_PARAM;
@@ -243,6 +249,11 @@ public class Command {
         // commands with special behavior
         ADD = findCommand("add");
         SUB = findCommand("sub");
+        MULTIPLY = findCommand("multiply");
+        DIVIDE = findCommand("divide");
+        MODULO = findCommand("modulo");
+        AND = findCommand("and");
+        OR = findCommand("or");
 
         ENUM = findCommand("enum");
         ENUM_STRING = findCommand("enum_string");
@@ -257,6 +268,7 @@ public class Command {
         DB_FIND_REFINE = findCommand("db_find_refine");
         DB_FIND_REFINE_WITH_COUNT = findCommand("db_find_refine_with_count");
         DB_GETFIELD = findCommand("db_getfield");
+        CC_CREATE = findCommand("cc_create");
         IF_FIND_CHILD = findCommand("if_find_child");
         IF_RUNSCRIPT = findCommand("if_runscript");
         CC_PARAM = findCommand("cc_param");

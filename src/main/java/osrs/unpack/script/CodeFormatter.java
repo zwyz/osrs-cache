@@ -83,273 +83,256 @@ public class CodeFormatter {
     }
 
     static String format(Expression expression, int prec, int indent, Set<LocalReference> declaredLocals) {
-        return " ".repeat(indent) + switch (expression.command.name) {
-            case "push_constant_int" -> formatConstant(expression.type.get(0), expression.operand);
-            case "push_constant_string" -> formatConstant(expression.type.get(0), expression.operand);
-            case "push_constant_null" -> "null";
+        return " ".repeat(indent) + formatNoIndent(expression, prec, indent, declaredLocals);
+    }
 
-            case "flow_assign" -> {
-                var targets = (List<Object>) expression.operand;
+    private static String formatNoIndent(Expression expression, int prec, int indent, Set<LocalReference> declaredLocals) {
+        var command = expression.command;
 
-                if (targets.stream().allMatch(Objects::isNull)) {
-                    yield expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
-                } else {
-                    var left = new ArrayList<String>();
+        if (command == PUSH_CONSTANT_INT) {
+            return formatConstant(expression.type.get(0), expression.operand);
+        } else if (command == PUSH_CONSTANT_STRING) {
+            return formatConstant(expression.type.get(0), expression.operand);
+        } else if (command == PUSH_CONSTANT_NULL) {
+            return "null";
+        } else if (command == FLOW_ASSIGN) {
+            var targets = (List<Object>) expression.operand;
 
-                    for (var target : targets) {
-                        switch (target) {
-                            case LocalReference local -> {
-                                if (declaredLocals != null && declaredLocals.add(local)) {
-                                    left.add("def_" + formatLocalType(local, true) + " " + formatLocal(local));
-                                } else {
-                                    left.add(formatLocal(local));
-                                }
-                            }
+            if (targets.stream().allMatch(Objects::isNull)) {
+                return expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
+            } else {
+                var left = new ArrayList<String>();
 
-                            case VarPlayerReference var -> left.add(formatVarPlayer(var));
-                            case VarPlayerBitReference var -> left.add(formatVarPlayerBit(var));
-                            case VarClientReference var -> left.add(formatVarClient(var));
-                            case VarClientStringReference var -> left.add(formatVarClientString(var));
-                            case VarClanSettingReference var -> left.add(formatVarClanSetting(var));
-                            case VarClanReference var -> left.add(formatVarClan(var));
-                            case null -> left.add("$_");
-                            default -> throw new IllegalStateException("invalid assign target type");
-                        }
-                    }
-
-                    yield String.join(", ", left) + " = " + expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
-                }
-            }
-
-            case "flow_load" -> formatLoadTarget(expression.operand);
-
-            case "flow_preinc" -> "++" + formatLoadTarget(expression.operand);
-            case "flow_predec" -> "--" + formatLoadTarget(expression.operand);
-            case "flow_postinc" -> formatLoadTarget(expression.operand) + "++";
-            case "flow_postdec" -> formatLoadTarget(expression.operand) + "--";
-
-            case "gosub_with_params" -> {
-                var script = formatConstant(Type.CLIENTSCRIPT, expression.operand);
-
-                if (expression.arguments.isEmpty()) {
-                    yield "~" + script;
-                } else {
-                    yield "~" + script + "(" + expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
-                }
-            }
-
-            case "define_array" -> {
-                var index = (int) expression.operand >> 16;
-                var type = Type.byChar((int) expression.operand & 0xffff);
-                var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
-                yield "def_" + formatType(type, true) + " " + formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
-            }
-
-            case "push_array_int" -> {
-                var index = (int) expression.operand;
-                var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
-                yield formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
-            }
-
-            case "pop_array_int" -> {
-                var index = (int) expression.operand;
-                var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
-                yield formatLocal(local) + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
-            }
-
-            case "or" -> {
-                var s = formatBinary(prec, 50, " | ", expression.arguments.get(0), expression.arguments.get(1));
-                yield prec < 50 ? "calc(" + s + ")" : s;
-            }
-
-            case "and" -> {
-                var s = formatBinary(prec, 60, " & ", expression.arguments.get(0), expression.arguments.get(1));
-                yield prec < 50 ? "calc(" + s + ")" : s;
-            }
-
-            case "add" -> {
-                var s = formatBinary(prec, 70, " + ", expression.arguments.get(0), expression.arguments.get(1));
-                yield prec < 50 ? "calc(" + s + ")" : s;
-            }
-
-            case "sub" -> {
-                var s = formatBinary(prec, 70, " - ", expression.arguments.get(0), expression.arguments.get(1));
-                yield prec < 50 ? "calc(" + s + ")" : s;
-            }
-
-            case "multiply" -> {
-                var s = formatBinary(prec, 80, " * ", expression.arguments.get(0), expression.arguments.get(1));
-                yield prec < 50 ? "calc(" + s + ")" : s;
-            }
-
-            case "divide" -> {
-                var s = formatBinary(prec, 80, " / ", expression.arguments.get(0), expression.arguments.get(1));
-                yield prec < 50 ? "calc(" + s + ")" : s;
-            }
-
-            case "modulo" -> {
-                var s = formatBinary(prec, 80, " % ", expression.arguments.get(0), expression.arguments.get(1));
-                yield prec < 50 ? "calc(" + s + ")" : s;
-            }
-
-            case "join_string" -> {
-                var result = "";
-                var interpolations = new HashSet<Integer>();
-
-                for (int i = 0; i < expression.arguments.size(); i++) {
-                    var arg = expression.arguments.get(i);
-
-                    if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
-                        if (s.startsWith("<") && s.endsWith(">")) {
-                            interpolations.add(i);
-                        } else if (i > 0 && !interpolations.contains(i - 1)) {
-                            var last = (String) expression.arguments.get(i - 1).operand;
-                            var lastSpaced = last.startsWith(" ") || last.endsWith(" ") || last.startsWith(". ") || last.startsWith(", ") || last.startsWith(": ");
-                            var currentSpaced = s.startsWith(" ") || s.endsWith(" ") || s.startsWith(". ") || s.startsWith(", ") || s.startsWith(": ");
-
-                            if (!lastSpaced && currentSpaced) {
-                                interpolations.add(i - 1);
+                for (var target : targets) {
+                    switch (target) {
+                        case LocalReference local -> {
+                            if (declaredLocals != null && declaredLocals.add(local)) {
+                                left.add("def_" + formatLocalType(local, true) + " " + formatLocal(local));
                             } else {
-                                interpolations.add(i);
+                                left.add(formatLocal(local));
                             }
                         }
-                    } else {
+
+                        case VarPlayerReference var -> left.add(formatVarPlayer(var));
+                        case VarPlayerBitReference var -> left.add(formatVarPlayerBit(var));
+                        case VarClientReference var -> left.add(formatVarClient(var));
+                        case VarClientStringReference var -> left.add(formatVarClientString(var));
+                        case VarClanSettingReference var -> left.add(formatVarClanSetting(var));
+                        case VarClanReference var -> left.add(formatVarClan(var));
+                        case null -> left.add("$_");
+                        default -> throw new IllegalStateException("invalid assign target type");
+                    }
+                }
+
+                return String.join(", ", left) + " = " + expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
+            }
+        } else if (command == FLOW_LOAD) {
+            return formatLoadTarget(expression.operand);
+        } else if (command == FLOW_PREINC) {
+            return "++" + formatLoadTarget(expression.operand);
+        } else if (command == FLOW_PREDEC) {
+            return "--" + formatLoadTarget(expression.operand);
+        } else if (command == FLOW_POSTINC) {
+            return formatLoadTarget(expression.operand) + "++";
+        } else if (command == FLOW_POSTDEC) {
+            return formatLoadTarget(expression.operand) + "--";
+        } else if (command == GOSUB_WITH_PARAMS) {
+            var script = formatConstant(Type.CLIENTSCRIPT, expression.operand);
+
+            if (expression.arguments.isEmpty()) {
+                return "~" + script;
+            } else {
+                return "~" + script + "(" + expression.arguments.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
+            }
+        } else if (command == DEFINE_ARRAY) {
+            var index = (int) expression.operand >> 16;
+            var type = Type.byChar((int) expression.operand & 0xffff);
+            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+            return "def_" + formatType(type, true) + " " + formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
+        } else if (command == PUSH_ARRAY_INT) {
+            var index = (int) expression.operand;
+            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+            return formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
+        } else if (command == POP_ARRAY_INT && expression.arguments.size() == 2) {
+            var index = (int) expression.operand;
+            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+            return formatLocal(local) + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
+        } else if (command == OR && expression.arguments.size() == 2) {
+            var s = formatBinary(prec, 50, " | ", expression.arguments.get(0), expression.arguments.get(1));
+            return prec < 50 ? "calc(" + s + ")" : s;
+        } else if (command == AND && expression.arguments.size() == 2) {
+            var s = formatBinary(prec, 60, " & ", expression.arguments.get(0), expression.arguments.get(1));
+            return prec < 50 ? "calc(" + s + ")" : s;
+        } else if (command == ADD && expression.arguments.size() == 2) {
+            var s = formatBinary(prec, 70, " + ", expression.arguments.get(0), expression.arguments.get(1));
+            return prec < 50 ? "calc(" + s + ")" : s;
+        } else if (command == SUB && expression.arguments.size() == 2) {
+            var s = formatBinary(prec, 70, " - ", expression.arguments.get(0), expression.arguments.get(1));
+            return prec < 50 ? "calc(" + s + ")" : s;
+        } else if (command == MULTIPLY && expression.arguments.size() == 2) {
+            var s = formatBinary(prec, 80, " * ", expression.arguments.get(0), expression.arguments.get(1));
+            return prec < 50 ? "calc(" + s + ")" : s;
+        } else if (command == DIVIDE && expression.arguments.size() == 2) {
+            var s = formatBinary(prec, 80, " / ", expression.arguments.get(0), expression.arguments.get(1));
+            return prec < 50 ? "calc(" + s + ")" : s;
+        } else if (command == MODULO && expression.arguments.size() == 2) {
+            var s = formatBinary(prec, 80, " % ", expression.arguments.get(0), expression.arguments.get(1));
+            return prec < 50 ? "calc(" + s + ")" : s;
+        } else if (command == JOIN_STRING) {
+            var result = "";
+            var interpolations = new HashSet<Integer>();
+
+            for (int i = 0; i < expression.arguments.size(); i++) {
+                var arg = expression.arguments.get(i);
+
+                if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
+                    if (s.startsWith("<") && s.endsWith(">")) {
                         interpolations.add(i);
-                    }
-                }
+                    } else if (i > 0 && !interpolations.contains(i - 1)) {
+                        var last = (String) expression.arguments.get(i - 1).operand;
+                        var lastSpaced = last.startsWith(" ") || last.endsWith(" ") || last.startsWith(". ") || last.startsWith(", ") || last.startsWith(": ");
+                        var currentSpaced = s.startsWith(" ") || s.endsWith(" ") || s.startsWith(". ") || s.startsWith(", ") || s.startsWith(": ");
 
-                for (int i = 0; i < expression.arguments.size(); i++) {
-                    var arg = expression.arguments.get(i);
-
-                    if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
-                        if (!interpolations.contains(i)) {
-                            result += escape(s);
-                        } else if (s.startsWith("<") && s.endsWith(">")) {
-                            result += s;
+                        if (!lastSpaced && currentSpaced) {
+                            interpolations.add(i - 1);
                         } else {
-                            if (DIRECT_STRING_PATTERN.matcher(s).matches()) {
-                                result += "<" + s + ">";
-                            } else {
-                                result += "<\"" + s + "\">";
-                            }
-                        }
-                    } else {
-                        result += "<" + format(arg) + ">";
-                    }
-                }
-
-                yield "\"" + result + "\"";
-            }
-
-            case "cc_create" -> {
-                var args = expression.arguments;
-                var dot = expression.operand instanceof Integer i && i == 1;
-
-                if (Unpack.VERSION >= 230 && expression.arguments.get(3).command == PUSH_CONSTANT_INT && (int) expression.arguments.get(3).operand == 0) {
-                    args = args.subList(0, 3);
-                }
-
-                yield (dot ? "." : "") + "cc_create(" + args.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
-            }
-
-            case "if_runscript" -> {
-                var dot = expression.operand instanceof Integer i && i == 1;
-                var args1 = expression.arguments.subList(0, 3);
-                var args2 = expression.arguments.subList(3, expression.arguments.size() - 1);
-                yield (dot ? "." : "") + "if_runscript*(" + args1.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")(" + args2.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
-            }
-
-            // control flow
-            case "flow_ne" -> formatBinary(prec, 40, " ! ", expression.arguments.get(0), expression.arguments.get(1));
-            case "flow_eq" -> formatBinary(prec, 40, " = ", expression.arguments.get(0), expression.arguments.get(1));
-            case "flow_lt" -> formatBinary(prec, 40, " < ", expression.arguments.get(0), expression.arguments.get(1));
-            case "flow_gt" -> formatBinary(prec, 40, " > ", expression.arguments.get(0), expression.arguments.get(1));
-            case "flow_le" -> formatBinary(prec, 40, " <= ", expression.arguments.get(0), expression.arguments.get(1));
-            case "flow_ge" -> formatBinary(prec, 40, " >= ", expression.arguments.get(0), expression.arguments.get(1));
-
-            case "flow_and" -> formatBinary(prec, 20, " & ", expression.arguments.get(0), expression.arguments.get(1));
-            case "flow_or" -> formatBinary(prec, 10, " | ", expression.arguments.get(0), expression.arguments.get(1));
-
-            case "flow_if" -> "if (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock((List<Expression>) expression.operand, indent + 4, declaredLocals) + " ".repeat(indent) + "}";
-
-            case "flow_ifelse" -> {
-                var trueBranch = ((IfElseBranches) expression.operand).trueBranch();
-                var falseBranch = ((IfElseBranches) expression.operand).falseBranche();
-
-                if (falseBranch.size() == 1 && (falseBranch.get(0).command == FLOW_IF || falseBranch.get(0).command == FLOW_IFELSE)) {
-                    yield "if (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock(trueBranch, indent + 4, declaredLocals) + " ".repeat(indent) + "} else " + format(falseBranch.get(0), 0, indent, declaredLocals).substring(indent);
-                } else {
-                    yield "if (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock(trueBranch, indent + 4, declaredLocals) + " ".repeat(indent) + "} else {\n" + formatBlock(falseBranch, indent + 4, declaredLocals) + " ".repeat(indent) + "}";
-                }
-            }
-
-            case "flow_while" -> "while (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock((List<Expression>) expression.operand, indent + 4, declaredLocals) + " ".repeat(indent) + "}";
-
-            case "flow_switch" -> {
-                var type = expression.arguments.get(0).type.get(0);
-                var result = "switch_" + formatType(type, true) + " (" + expression.arguments.get(0) + ") {\n";
-
-                for (var branch : (List<SwitchBranch>) expression.operand) {
-                    if (branch.values() == null) {
-                        result += " ".repeat(indent + 4) + "case default :\n";
-                    } else {
-                        result += " ".repeat(indent + 4) + "case " + String.join(", ", branch.values().stream().map(value -> formatConstant(type, value)).toList()) + " :\n";
-                    }
-
-                    result += formatBlock(branch.branch(), indent + 8, declaredLocals);
-                }
-
-                result += " ".repeat(indent) + "}";
-                yield result;
-            }
-
-            // only used for debug output
-            case "label" -> "label(" + expression.operand + ")";
-            case "branchif" -> "branchif(" + format(expression.arguments.get(0)) + ", " + ((BranchIfTarget) expression.operand).a() + ", " + ((BranchIfTarget) expression.operand).b() + ")";
-
-            case "branch" -> "branch(" + expression.operand + ")";
-            case "branch_equals" -> "branch_equals(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")";
-            case "branch_less_than" -> "branch_less_than(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")";
-            case "branch_greater_than" -> "branch_greater_than(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")";
-            case "branch_less_than_or_equals" -> "branch_less_than_or_equals(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")";
-            case "branch_greater_than_or_equals" -> "branch_greater_than_or_equals(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")";
-
-            case "switch" -> {
-                var table = new ArrayList<String>();
-
-                for (var branch : (List<SwitchCase>) expression.operand) {
-                    table.add(branch.value() + " => " + branch.target());
-                }
-
-                yield "switch(" + expression.arguments.get(0) + ", " + String.join(", ", table) + ")";
-            }
-
-            default -> {
-                var dot = expression.operand instanceof Integer i && i == 1;
-                var operand = Objects.equals(expression.operand, 0) || Objects.equals(expression.operand, 1) ? "" : "[" + expression.operand + "]";
-
-                if (expression.arguments.isEmpty()) {
-                    yield (dot ? "." : "") + expression.command.name + operand;
-                } else {
-                    var arguments = expression.arguments.stream()
-                            .filter(arg -> arg.type.get(0) != Type.BASEVARTYPE) // these are auto-generated to let the client know which stack to pop from
-                            .map(CodeFormatter::format)
-                            .collect(Collectors.joining(", "));
-
-                    if (ScriptUnpacker.FORMAT_HOOKS && expression.command.hasHook()) {
-                        var hookStart = 0;
-                        var hookEnd = expression.arguments.size() - (expression.command.arguments.size() - 2);
-                        arguments = formatHook(expression.arguments.subList(hookStart, hookEnd));
-
-                        if (expression.arguments.size() != hookEnd) {
-                            arguments += ", " + expression.arguments.subList(hookEnd, expression.arguments.size()).stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
+                            interpolations.add(i);
                         }
                     }
-
-                    yield (dot ? "." : "") + expression.command.name + operand + "(" + arguments + ")";
+                } else {
+                    interpolations.add(i);
                 }
             }
-        };
+
+            for (int i = 0; i < expression.arguments.size(); i++) {
+                var arg = expression.arguments.get(i);
+
+                if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
+                    if (!interpolations.contains(i)) {
+                        result += escape(s);
+                    } else if (s.startsWith("<") && s.endsWith(">")) {
+                        result += s;
+                    } else {
+                        if (DIRECT_STRING_PATTERN.matcher(s).matches()) {
+                            result += "<" + s + ">";
+                        } else {
+                            result += "<\"" + s + "\">";
+                        }
+                    }
+                } else {
+                    result += "<" + format(arg) + ">";
+                }
+            }
+
+            return "\"" + result + "\"";
+        } else if (command == CC_CREATE) {
+            var args = expression.arguments;
+            var dot = expression.operand instanceof Integer i && i == 1;
+
+            if (Unpack.VERSION >= 230 && expression.arguments.getLast().command == PUSH_CONSTANT_INT && (int) expression.arguments.getLast().operand == 0) {
+                args = args.subList(0, args.size() - 1);
+            }
+
+            return (dot ? "." : "") + "cc_create(" + args.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
+        } else if (command == IF_RUNSCRIPT) {
+            var dot = expression.operand instanceof Integer i && i == 1;
+            var args1 = expression.arguments.subList(0, 3);
+            var args2 = expression.arguments.subList(3, expression.arguments.size() - 1);
+            return (dot ? "." : "") + "if_runscript*(" + args1.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")(" + args2.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
+        } else if (command == FLOW_NE) {
+            return formatBinary(prec, 40, " ! ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_EQ) {
+            return formatBinary(prec, 40, " = ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_LT) {
+            return formatBinary(prec, 40, " < ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_GT) {
+            return formatBinary(prec, 40, " > ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_LE) {
+            return formatBinary(prec, 40, " <= ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_GE) {
+            return formatBinary(prec, 40, " >= ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_AND) {
+            return formatBinary(prec, 20, " & ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_OR) {
+            return formatBinary(prec, 10, " | ", expression.arguments.get(0), expression.arguments.get(1));
+        } else if (command == FLOW_IF) {
+            return "if (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock((List<Expression>) expression.operand, indent + 4, declaredLocals) + " ".repeat(indent) + "}";
+        } else if (command == FLOW_IFELSE) {
+            var trueBranch = ((IfElseBranches) expression.operand).trueBranch();
+            var falseBranch = ((IfElseBranches) expression.operand).falseBranche();
+
+            if (falseBranch.size() == 1 && (falseBranch.get(0).command == FLOW_IF || falseBranch.get(0).command == FLOW_IFELSE)) {
+                return "if (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock(trueBranch, indent + 4, declaredLocals) + " ".repeat(indent) + "} else " + format(falseBranch.get(0), 0, indent, declaredLocals).substring(indent);
+            } else {
+                return "if (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock(trueBranch, indent + 4, declaredLocals) + " ".repeat(indent) + "} else {\n" + formatBlock(falseBranch, indent + 4, declaredLocals) + " ".repeat(indent) + "}";
+            }
+        } else if (command == FLOW_WHILE) {
+            return "while (" + format(expression.arguments.get(0)) + ") {\n" + formatBlock((List<Expression>) expression.operand, indent + 4, declaredLocals) + " ".repeat(indent) + "}";
+        } else if (command == FLOW_SWITCH) {
+            var type = expression.arguments.get(0).type.get(0);
+            var result = "switch_" + formatType(type, true) + " (" + expression.arguments.get(0) + ") {\n";
+
+            for (var branch : (List<SwitchBranch>) expression.operand) {
+                if (branch.values() == null) {
+                    result += " ".repeat(indent + 4) + "case default :\n";
+                } else {
+                    result += " ".repeat(indent + 4) + "case " + String.join(", ", branch.values().stream().map(value -> formatConstant(type, value)).toList()) + " :\n";
+                }
+
+                result += formatBlock(branch.branch(), indent + 8, declaredLocals);
+            }
+
+            result += " ".repeat(indent) + "}";
+            return result;
+        } else if (command == LABEL) {
+            return "label(" + expression.operand + ")";
+        } else if (command == BRANCHIF) {
+            return "branchif(" + format(expression.arguments.get(0)) + ", " + ((BranchIfTarget) expression.operand).a() + ", " + ((BranchIfTarget) expression.operand).b() + ")";
+        } else if (command == BRANCH) {
+            return "branch(" + expression.operand + ")"; // debug output only
+        } else if (command == BRANCH_EQUALS) {
+            return "branch_equals(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")"; // debug output only
+        } else if (command == BRANCH_LESS_THAN) {
+            return "branch_less_than(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")"; // debug output only
+        } else if (command == BRANCH_GREATER_THAN) {
+            return "branch_greater_than(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")"; // debug output only
+        } else if (command == BRANCH_LESS_THAN_OR_EQUALS) {
+            return "branch_less_than_or_equals(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")"; // debug output only
+        } else if (command == BRANCH_GREATER_THAN_OR_EQUALS) {
+            return "branch_greater_than_or_equals(" + format(expression.arguments.get(0)) + ", " + format(expression.arguments.get(1)) + ", " + expression.operand + ")"; // debug output only
+        } else if (command == SWITCH) {
+            var table = new ArrayList<String>();
+
+            for (var branch : (List<SwitchCase>) expression.operand) {
+                table.add(branch.value() + " => " + branch.target());
+            }
+
+            return "switch(" + expression.arguments.get(0) + ", " + String.join(", ", table) + ")";
+        } else {
+            var dot = expression.operand instanceof Integer i && i == 1;
+            var operand = Objects.equals(expression.operand, 0) || Objects.equals(expression.operand, 1) ? "" : "[" + expression.operand + "]";
+
+            if (expression.arguments.isEmpty()) {
+                return (dot ? "." : "") + command.name + operand;
+            } else {
+                var arguments = expression.arguments.stream()
+                        .filter(arg -> arg.type.get(0) != Type.BASEVARTYPE) // these are auto-generated to let the client know which stack to pop from
+                        .map(CodeFormatter::format)
+                        .collect(Collectors.joining(", "));
+
+                if (ScriptUnpacker.FORMAT_HOOKS && command.hasHook()) {
+                    var hookStart = 0;
+                    var hookEnd = expression.arguments.size() - (command.arguments.size() - 2);
+                    arguments = formatHook(expression.arguments.subList(hookStart, hookEnd));
+
+                    if (expression.arguments.size() != hookEnd) {
+                        arguments += ", " + expression.arguments.subList(hookEnd, expression.arguments.size()).stream().map(CodeFormatter::format).collect(Collectors.joining(", "));
+                    }
+                }
+
+                return (dot ? "." : "") + command.name + operand + "(" + arguments + ")";
+            }
+        }
     }
 
     private static String formatLoadTarget(Object operand) {
