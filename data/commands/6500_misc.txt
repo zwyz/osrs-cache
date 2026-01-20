@@ -29,3 +29,4 @@
 6528 (gap)
 6529 (gap)
 6530 [command,haptic](int $x1)
+6531 [command,client_version]()(int,int)

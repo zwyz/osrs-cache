@@ -27,3 +27,8 @@
 215 [command,if_children_subids]()(intarray)
 216 [command,if_children_filter](param $param, unknown $value, basevartype $x3)(int)
 217 [command,cc_children_get](int $index)(boolean)
+218 [command,cc_find_first_sibling]()(boolean)
+219 [command,cc_find_last_sibling]()(boolean)
+220 [command,cc_find_first_child]()(boolean)
+221 [command,cc_find_last_child]()(boolean)
+

@@ -149,8 +149,10 @@ public class NpcUnpacker {
             case 124 -> lines.add("overlayheight=" + packet.g2());
             case 126 -> lines.add("footprintsize=" + packet.g2());
             case 129 -> lines.add("unknown129=no");
+            case 130 -> lines.add("readyanimduringanim=yes"); // opt-in to old behavior of continuing to play readyanim while performing an animation
             case 145 -> lines.add("worldoverlaphide=yes"); // flattens to a colored shadow
             case 146 -> lines.add("worldoverlaphidecolour=" + Unpacker.formatColour(packet.g2()));
+            case 147 -> lines.add("unknown147=no");
 
             case 118 -> {
                 var multivarbit = packet.g2null();

@@ -155,7 +155,7 @@
 3331 [command,runenergy]
 3332 [command,stat_unknown](stat $x1)(int)
 3333 [command,unknown_command_3333]()(string)
-3334 (gap)
+3334 [command,rebootmessage]()(string)
 3335 (gap)
 3336 (gap)
 3337 (gap)

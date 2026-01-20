@@ -213,6 +213,8 @@ public class LocUnpacker {
                 default -> throw new IllegalStateException("unknown mode");
             });
 
+            case 96 -> lines.add("thickness=" + packet.g1()); // thickness of this ground decor (to offset entities so they don't clip into it)
+
             case 249 -> {
                 var count = packet.g1();
 
