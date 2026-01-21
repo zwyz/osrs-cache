@@ -131,13 +131,13 @@ public class Command {
     public static Command DB_FIND_REFINE_WITH_COUNT;
     public static Command DB_GETFIELD;
     public static Command CC_CREATE;
-    public static Command IF_FIND_CHILD;
+    public static Command CC_FIND_PARAM;
     public static Command IF_RUNSCRIPT;
     public static Command CC_PARAM;
     public static Command CC_SETPARAM;
     public static Command IF_PARAM;
     public static Command IF_SETPARAM;
-    public static Command IF_CHILDREN_FILTER;
+    public static Command IF_QUERY_REFINE;
 
     public static Command ARRAY_COMPARE;
     public static Command ARRAY_INDEXOF;
@@ -269,13 +269,13 @@ public class Command {
         DB_FIND_REFINE_WITH_COUNT = findCommand("db_find_refine_with_count");
         DB_GETFIELD = findCommand("db_getfield");
         CC_CREATE = findCommand("cc_create");
-        IF_FIND_CHILD = findCommand("if_find_child");
+        CC_FIND_PARAM = findCommand("cc_find_param");
         IF_RUNSCRIPT = findCommand("if_runscript");
         CC_PARAM = findCommand("cc_param");
         CC_SETPARAM = findCommand("cc_setparam");
         IF_PARAM = findCommand("if_param");
         IF_SETPARAM = findCommand("if_setparam");
-        IF_CHILDREN_FILTER = findCommand("if_children_filter");
+        IF_QUERY_REFINE = findCommand("if_query_refine");
 
         ARRAY_COMPARE = findCommand("array_compare");
         ARRAY_INDEXOF = findCommand("array_indexof");

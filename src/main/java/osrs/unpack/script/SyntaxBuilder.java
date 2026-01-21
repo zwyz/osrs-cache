@@ -216,7 +216,7 @@ public class SyntaxBuilder {
             return;
         }
 
-        if (command == IF_FIND_CHILD) {
+        if (command == CC_FIND_PARAM) {
             var baseType2 = (int) stack.get(stack.size() - 1).operand;
             var baseType1 = (int) stack.get(stack.size() - 2).operand;
 

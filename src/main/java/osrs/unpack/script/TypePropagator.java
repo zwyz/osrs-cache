@@ -192,7 +192,7 @@ public class TypePropagator {
             emitEqual(type(value, 0), Unpacker.getParamType((int) param.operand));
         }
 
-        if (expression.command == IF_CHILDREN_FILTER) {
+        if (expression.command == IF_QUERY_REFINE) {
             var param = expression.arguments.get(0);
             var value = expression.arguments.get(1);
             emitEqual(type(value, 0), Unpacker.getParamType((int) param.operand));
