@@ -378,6 +378,12 @@ public class TypePropagator {
         // propagate again with newly generated constraints
         propagateUntilStable();
 //        printConnectedComponent(local(969, LocalDomain.STRING, 0));
+        if (Unpack.INFER_COMPONENT_ALIASES) {
+            assignComponentAliases(scripts);
+            pruneComponentAliases();
+            // propagate again with generated aliases from hooks
+            propagateUntilStable();
+        }
 
         // output script signatures
         for (var script : scripts) {
@@ -412,6 +418,77 @@ public class TypePropagator {
                 Unpacker.setVarClientType(id, ScriptUnpacker.chooseDisplayType(typeof(node)));
             }
         }
+    }
+
+    private void assignComponentAliases(Set<Integer> scripts) {
+        Unpacker.IF_TYPES
+                .entrySet()
+                .stream()
+                .flatMap(e -> e.getValue().values().stream())
+                .flatMap(ifType -> ifType.hooks().stream())
+                .forEach(this::assignParameterComponentAliases);
+        for (var script : scripts) {
+            for (var e : ScriptUnpacker.SCRIPTS_DECOMPILED.get(script))
+                assignImmediateComponentAliases(e);
+        }
+    }
+
+    private void assignImmediateComponentAliases(Expression expression) {
+        if (expression.command == PUSH_CONSTANT_INT) {
+            if (typeof(type(expression, 0)) == Type.COMPONENT) {
+                var id = (int) expression.operand;
+                if (id != -1) {
+                    emitEqual(type(expression, 0), findComponentAlias(id, ""));
+                }
+            }
+        }
+        expression.visitChildren(this::assignImmediateComponentAliases);
+    }
+
+    private void assignParameterComponentAliases(IfType.IfTypeHook hook) {
+        var script = hook.id();
+        for (var i = 0; i < hook.args().size(); ++i) {
+            var parameter = parameter(script, i);
+            var type = typeof(parameter);
+            if (type != Type.COMPONENT) continue;
+            var value = (int) hook.args().get(i);
+            if (value == -1) continue;
+            var aliasedType = switch (value) {
+                case Integer.MIN_VALUE + 3 -> findComponentAlias(hook.ifType().id, "");
+                case Integer.MIN_VALUE + 6 -> findComponentAlias(hook.ifType().id, "_drop");
+                default -> findComponentAlias(value, "");
+            };
+            emitEqual(parameter, aliasedType);
+        }
+    }
+
+    private Type findComponentAlias(int id, String suffix) {
+        var name = Unpacker.formatComponentShort(id);
+        if (name.isBlank() || name.startsWith("\"") || name.contains(" ")) {
+            return Type.COMPONENT;
+        }
+
+        name += suffix;
+
+        var type = Type.componentAliases.get(name);
+        if (type != null) {
+            return type;
+        }
+
+        type = new Type(name, Type.COMPONENT);
+
+        Type.LATTICE.add(type, Type.COMPONENT);
+        Type.LATTICE.add(Type.COMPONENT_COMPONENT, type);
+
+        Type.LATTICE.add(type.array(), Type.COMPONENT.array());
+        Type.LATTICE.add(Type.COMPONENT_COMPONENT.array(), type.array());
+
+        // for better error handling
+        Type.LATTICE.add(Type.CONFLICT, type);
+        Type.LATTICE.add(Type.CONFLICT, type.array());
+
+        Type.componentAliases.put(name, type);
+        return type;
     }
 
     private Type typeof(Node node) {
@@ -588,6 +665,24 @@ public class TypePropagator {
                 remaining.addAll(incident.get(b));
             }
         }
+    }
+
+    private void pruneComponentAliases() {
+        var incident = new HashMap<Node, Set<Constraint>>();
+        for (var c : constraints) {
+            if (c.a() instanceof Node.ConstantType || c.b() instanceof Node.ConstantType) {
+                continue;
+            }
+            incident.computeIfAbsent(c.a(), _ -> new HashSet<>()).add(c);
+            incident.computeIfAbsent(c.b(), _ -> new HashSet<>()).add(c);
+        }
+        var removeSet = new HashSet<Constraint>();
+        for (var edges : incident.values()) {
+            if (edges.stream().filter(c -> c.a() instanceof Node.ParameterType
+                    || c.b() instanceof Node.ParameterType).count() <= 2) continue;
+            removeSet.addAll(edges);
+        }
+        constraints.removeAll(removeSet);
     }
 
     private void printConnectedComponent(Node start) { // export to graphviz for debugging

@@ -8,6 +8,7 @@ import java.util.List;
 
 public class IfType {
 
+    public final int id;
     public boolean scripted;
     public int type;
     public int contenttype;
@@ -86,6 +87,8 @@ public class IfType {
     public int[] onstattransmitlist;
 
     public IfType(int id, byte[] data) {
+        this.id = id;
+
         var packet = new Packet(data);
         var version = packet.g1();
 
@@ -308,7 +311,7 @@ public class IfType {
     }
 
 
-    private static IfTypeHook decodeHook(Packet packet) {
+    private IfTypeHook decodeHook(Packet packet) {
         var count = packet.g1();
 
         if (count == 0) {
@@ -330,7 +333,7 @@ public class IfType {
 
         }
 
-        return new IfTypeHook(script, arguments);
+        return new IfTypeHook(this, script, arguments);
     }
 
     private static int[] decodeHookTransmitList(Packet packet) {
@@ -349,7 +352,7 @@ public class IfType {
         return ids;
     }
 
-    public record IfTypeHook(int id, List<Object> args) {
+    public record IfTypeHook(IfType ifType, int id, List<Object> args) {
     }
 }
     

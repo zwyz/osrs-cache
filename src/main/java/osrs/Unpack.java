@@ -6,6 +6,7 @@ import osrs.js5.*;
 import osrs.unpack.*;
 import osrs.unpack.config.*;
 import osrs.unpack.map.Environment;
+import osrs.unpack.script.Command;
 import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Packet;
 
@@ -36,6 +37,8 @@ public class Unpack {
     public static final boolean DUMP_CONFIG_IDS = false;
     public static final boolean DUMP_SYMBOLS = false;
     public static final boolean DUMP_SERVERSIDE_COLUMNS = true;
+    public static final boolean INFER_COMPONENT_ALIASES = true;
+    public static final boolean APPEND_LOCAL_VAR_INDEX = false;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static int VERSION;
     public static Js5ResourceProvider PROVIDER;
