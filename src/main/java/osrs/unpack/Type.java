@@ -250,6 +250,7 @@ public class Type {
     public static final Type INT_OPMODE = new Type("opmode", Type.INT);
     public static final Type INT_CLAN = new Type("clan", Type.INT);
     public static final Type INT_OVERLAYTYPE = new Type("overlaytype", Type.INT);
+    public static final Type COMPONENT_COMPONENT = new Type("component", Type.COMPONENT);
 
     // type sets
     public static final Type UNKNOWN = new Type("unknown"); // any type
@@ -277,7 +278,13 @@ public class Type {
     // is more specific than objarray, but not a subtype)
     public static final Lattice<Type> LATTICE = new Lattice<>();
 
+    // hash map of unique name literal to its type (e.g. "universe" -> Type("universe", Type.COMPONENT))
+    public static final Map<String, Type> componentAliases = new HashMap<>();
+
     static {
+        BY_NAME.put("component", Type.COMPONENT);
+        LATTICE.add(COMPONENT_COMPONENT, Type.COMPONENT);
+
         for (var type : TYPES) {
             if (type.base == BaseVarType.INTEGER) {
                 if (type.alias == INT) {
@@ -357,7 +364,7 @@ public class Type {
         TYPES.add(this);
     }
 
-    private Type(String name, Type alias) {
+    public Type(String name, Type alias) {
         this.name = name;
         this.alias = alias;
         this.base = alias.base;

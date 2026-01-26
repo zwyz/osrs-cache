@@ -412,6 +412,7 @@ public class Unpacker {
         if (type == Type.GCLIENTCLICKOBJ) return format(Type.CLIENTSCRIPT, value, safe);
         if (type == Type.GCLIENTCLICKPLAYER) return format(Type.CLIENTSCRIPT, value, safe);
         if (type == Type.GCLIENTCLICKTILE) return format(Type.CLIENTSCRIPT, value, safe);
+        if (type.alias == Type.COMPONENT) return format(Type.COMPONENT, value, safe);
 
         var name = NAME.getOrDefault(type, Map.of()).get(value);
 

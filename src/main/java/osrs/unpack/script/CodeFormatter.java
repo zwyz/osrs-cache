@@ -14,9 +14,21 @@ import static osrs.unpack.script.Command.*;
 public class CodeFormatter {
     private static final Pattern DIRECT_STRING_PATTERN = Pattern.compile("[a-z_0-9]+");
     private static Map<LocalReference, Type> localTypes;
+    private static final Map<Type, Integer> usageCount = new HashMap<>();
 
     public static String formatScript(String name, List<Type> parameterTypes, List<Type> returnTypes, Map<LocalReference, Type> localTypes, List<Expression> script) {
         CodeFormatter.localTypes = localTypes;
+
+        if (Unpack.INFER_COMPONENT_ALIASES) {
+            usageCount.clear();
+            if (localTypes != null) {
+                for (var type : localTypes.values()) {
+                    type = ScriptUnpacker.chooseDisplayType(type);
+                    usageCount.put(type, usageCount.getOrDefault(type, 0) + 1);
+                }
+            }
+        }
+
         var parameters = new ArrayList<String>();
         var returns = new ArrayList<String>();
         var indexInt = 0;
@@ -445,7 +457,12 @@ public class CodeFormatter {
     }
 
     private static String formatLocal(LocalReference local) {
-        return "$" + formatLocalType(local, false) + local.local();
+        if (Unpack.APPEND_LOCAL_VAR_INDEX || usageCount.isEmpty()
+                || usageCount.get(ScriptUnpacker.chooseDisplayType(localTypes.get(local))) > 1) {
+            return "$" + formatLocalType(local, false) + local.local();
+        } else {
+            return "$" + formatLocalType(local, false);
+        }
     }
 
     private static String formatLocalType(LocalReference local, boolean real) {
