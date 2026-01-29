@@ -303,7 +303,7 @@
 2208 [command,if_setplayermodel_obj](obj $x1, component $x2)
 2209 [command,if_setplayermodel_basecolour](int $x1, int $x2, component $x3)
 2210 [command,if_setplayermodel_bodytype](int $x1, component $x2)
-2212 [command,if_setobject_alwaysnum](obj $x1, int $x2, component $x3, component $x4)
+2212 [command,if_setobject_alwaysnum](obj $x1, int $x2, component $x3)
 2213 [command,if_setobject_nummode](obj $x1, int $x2, int $x3, component $x4)
 2214 [command,if_setlocmodel](loc $x1, component $x2)
 2215 [command,if_setnpcmodel](npc $x1, component $x2)
