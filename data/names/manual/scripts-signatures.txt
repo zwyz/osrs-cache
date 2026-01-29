@@ -186,6 +186,7 @@
 [clientscript,raids_sidepanel_entry_setup](component $component0, int $int1, int $int2, boolean $boolean3) 2329
 [clientscript,rareitems_diango](string $string0, int $int0, int $int1, int $int2, int $int3, int $int4, int $int5, int $int6, int $int7) 2228
 [clientscript,reportabuse_init](boolean $boolean0, boolean $boolean1, string $string0) 2119
+[clientscript,reportabuse_page_set](boolean $boolean0) 2329
 [clientscript,reportabuse_toggle_op](component $component0, string $string0, boolean $boolean1) 2329
 [clientscript,sanity_bar_movement](boolean $boolean0, component $component1, int $int2, component $component3, int $int4, component $component5) 2329
 [clientscript,sanity_init](component $component0, component $component1, boolean $boolean2) 2329
@@ -217,7 +218,6 @@
 [clientscript,script1963](component $component0, string $string0, boolean $boolean1, boolean $boolean2) 2329
 [clientscript,script2137](boolean $boolean0, component $component1, string $string0) 2329
 [clientscript,script2270](component $component0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, boolean $boolean14) 2329
-[clientscript,script2272](component $component0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, boolean $boolean7) 2329
 [clientscript,script2415](int $int0, boolean $boolean1, component $component2) 2329
 [clientscript,script2426](boolean $boolean0, string $string0, component $component1, graphic $graphic2, int $int3) 2329
 [clientscript,script2433](boolean $boolean0, string $string0, component $component1, graphic $graphic2) 2329
@@ -245,7 +245,6 @@
 [clientscript,script4888](boolean $boolean0, component $component1) 2329
 [clientscript,script4911](boolean $boolean0, component $component1, int $int2, graphic $graphic3, int $int4, int $int5) 2329
 [clientscript,script5006](string $string0, model $model0, string $string1, int $int1, int $int2, int $int3, int $int4, int $int5, int $int6, boolean $boolean7) 2101
-[clientscript,script5088](boolean $boolean0) 2329
 [clientscript,script5099](boolean $boolean0, component $component1, int $int2) 2329
 [clientscript,script5104](boolean $boolean0, component $component1, int $int2, int $int3, int $int4) 2329
 [clientscript,script5105](boolean $boolean0, char $char1, string $string0, int $int2) 2329
@@ -303,6 +302,7 @@
 [clientscript,target_system_hideop](int $int0, int $int1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9) 2329
 [clientscript,target_system_redraw](component $component0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7) 2329
 [clientscript,teleblock_timer_tooltip](component $component0, component $component1, boolean $boolean2) 2329
+[clientscript,telenexus_slotted_init](component $component0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, boolean $boolean7) 2329
 [clientscript,teletab_button_draw](boolean $boolean0, enum $enum1, string $string0, int $int2, component $component3, boolean $boolean4) 2329
 [clientscript,teletab_confirm_draw](boolean $boolean0, string $string0, component $component1) 2329
 [clientscript,tempoross_hud_bar_movement](boolean $boolean0, component $component1, int $int2) 2329
@@ -339,9 +339,9 @@
 [proc,keypress_permit](interface $interface0, overlayinterface $overlayinterface1)(boolean) 591
 [proc,omnishop_var_setter](dbrow $dbrow0, int $int1) 1968
 [proc,pickaxe_checker]()(obj) 1571
+[proc,saw_check]()(obj) 1762333018
 [proc,script3833](dbrow $dbrow0, obj $obj1)(stat, int) 2363
 [proc,script6658](dbrow $dbrow0)(dbrow) 1769
 [proc,script8046](npc $npc0)(int) 2379
 [proc,script8047](int $int0)(npc) 2379
-[proc,script8584]()(obj) 1762333018
 [proc,script9019](int $int0)(inv) 1762333018
