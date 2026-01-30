@@ -114,11 +114,7 @@ public class InterfaceUnpacker {
             var parameters = ScriptUnpacker.SCRIPT_PARAMETERS.get(script);
             for (var i = 0; i < args.size(); ++i) {
                 if (i > 0) {
-                    if (i <= args.size() - 1) {
-                        sb.append(", ");
-                    } else {
-                        sb.append(",");
-                    }
+                    sb.append(", ");
                 }
                 sb.append(formatHookArgument(args.get(i), parameters.get(i)));
             }
@@ -128,11 +124,7 @@ public class InterfaceUnpacker {
             sb.append('{');
             for (var i = 0; i < transmitList.length; ++i) {
                 if (i > 0) {
-                    if (i < transmitList.length - 1) {
-                        sb.append(", ");
-                    } else {
-                        sb.append(",");
-                    }
+                    sb.append(", ");
                 }
                 sb.append(Unpacker.format(transmitType, transmitList[i]));
             }
