@@ -79,6 +79,7 @@ public class Symbols {
         dumpConstant(Type.INT_RGB, path.resolve("constant/rgb.sym"));
         dumpConstant(Type.INT_OPKIND, path.resolve("constant/opkind.sym"));
         dumpConstant(Type.INT_OPMODE, path.resolve("constant/opmode.sym"));
+        dumpConstant(Type.INT_OVERLAYTYPE, path.resolve("constant/overlaytype.sym"));
     }
 
     private static void dumpType(Type type, Path output) throws IOException {
