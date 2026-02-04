@@ -219,10 +219,13 @@ public class SeqUnpacker {
 
             case 17 -> {
                 var count = packet.g1();
+                var result = new ArrayList<String>();
 
                 for (var i = 0; i < count; i++) {
-                    lines.add("keyframewalkmerge=" + packet.g1());
+                    result.add("label_" + packet.g1());
                 }
+
+                lines.add("keyframewalkmerge=" + String.join(",", result));
             }
 
             case 18 -> packet.gjstr(); // debugname, only exists in 230, removed in 231
