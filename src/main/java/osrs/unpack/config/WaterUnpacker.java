@@ -113,7 +113,7 @@ public class WaterUnpacker {
 
             // DecodeExtinctionParams
             case 97 -> lines.add("extinction_rgb_depth_metres=" + packet.gFloat() + "," + packet.gFloat() + "," + packet.gFloat());
-            case 98 -> lines.add("extinction_opaque_water_colour =" + packet.g4s());
+            case 98 -> lines.add("extinction_opaque_water_colour=" + packet.g4s());
             case 99 -> lines.add("extinction_visibility_metres=" + packet.gFloat());
 
             // DecodeCausticsParams
