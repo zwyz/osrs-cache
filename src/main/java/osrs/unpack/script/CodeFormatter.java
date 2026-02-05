@@ -495,6 +495,7 @@ public class CodeFormatter {
 
     private static String escape(String s) {
         return s.replace("\\", "\\\\")
+                .replace("\\\\<", "\\\\\\<") // fix for a Jagex bug that makes "\<" compile as literally that
                 .replace("\"", "\\\"");
     }
 }
