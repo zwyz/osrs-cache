@@ -1,15 +1,15 @@
-7060 [command,unknown_command_7060]todo
-7061 [command,unknown_command_7061]todo
-7062 [command,unknown_command_7062]todo
-7063 [command,unknown_command_7063]todo
-7064 [command,unknown_command_7064]todo
-7065 [command,unknown_command_7065]todo
-7066 [command,unknown_command_7066]todo
-7067 [command,unknown_command_7067]todo
-7068 [command,unknown_command_7068]todo
-7069 [command,unknown_command_7069]todo
-7070 [command,unknown_command_7070]todo
-7071 [command,unknown_command_7071]todo
-7072 [command,unknown_command_7072]todo
-7073 [command,unknown_command_7073]todo
-7074 [command,unknown_command_7074]todo
+7060 [command,objtag_add](obj $obj, int $group, string $tag)
+7061 [command,objtag_del](int $group, string $tag)(boolean)
+7062 [command,objtag_remove](obj $obj, int $group, string $x3)(boolean)
+7063 [command,objtag_findtags_byobj](obj $obj, int $group)(boolean)
+7064 [command,objtag_findtags_bygroup](int $group)(boolean)
+7065 [command,objtag_findtags_next]()(string)
+7066 [command,objtag_findtags_reset]
+7067 [command,objtag_findobjs_bytag](int $group, string $tag)(boolean)
+7068 [command,objtag_findobjs_bygroup](int $group)(boolean)
+7069 [command,objtag_findobjs_next]()(obj)
+7070 [command,objtag_findobjs_reset]
+7071 [command,objtag_has](obj $obj, int $group, string $tag)(boolean)
+7072 [command,objtag_allempty]()(boolean)
+7073 [command,objtag_delall]
+7074 [command,objtag_delgroup](int $group)

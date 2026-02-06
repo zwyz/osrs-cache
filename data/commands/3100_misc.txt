@@ -45,37 +45,37 @@
 3143 [command,setrememberusername](boolean $x1)
 3144 [command,getrememberusername]()(boolean)
 3145 [command,show_ios_review]
-3146 [command,setmutetitlescreen]todo
-3147 [command,getmutetitlescreen]todo
-3148 [command,settermsandprivacy]todo
-3149 [command,gettermsandprivacy]todo
-3150 [command,unknown_command_3150]todo
-3151 [command,unknown_command_3151]todo
-3152 [command,unknown_command_3152]todo
-3153 [command,unknown_command_3153]todo
-3154 [command,unknown_command_3154]todo
-3155 [command,shop_purchaseitem]todo
-3156 [command,shop_requestdata]todo
+3146 [command,settitlescreensound](boolean $x1)
+3147 [command,gettitlescreensound]()(boolean)
+3148 [command,settermsandprivacy]
+3149 [command,gettermsandprivacy]()(boolean)
+3150 [command,iseligibleforfreetrial]()(boolean)
+3151 [command,iseligibleforintroductoryprice]()(boolean)
+3152 [command,getpuchasehistorystatus]()(int)
+3153 [command,getloadingprogress]()(int)
+3154 [command,getpreloadprogress]()(int)
+3155 [command,shop_purchaseitem](string $x1)
+3156 [command,shop_requestdata]
 3157 [command,shop_opencategories](int $x1, int $x2)
-3158 [command,shop_purchaseitemstatus]todo
-3159 [command,shop_requestdatastatus]todo
-3160 [command,shop_getcategorycount]todo
-3161 [command,shop_getcategoryid]todo
-3162 [command,shop_getindexforcategoryid]todo
-3163 [command,shop_getindexforcategoryname]todo
-3164 [command,shop_getcategorydescription]todo
-3165 [command,shop_getproductcount]todo
-3166 [command,shop_isproductavailable]todo
-3167 [command,shop_isproductrecommended]todo
-3168 [command,shop_getproductdetails]todo
-3169 [command,unknown_command_3169]todo
+3158 [command,shop_purchaseitemstatus]()(int)
+3159 [command,shop_requestdatastatus]()(int)
+3160 [command,shop_getcategorycount]()(int)
+3161 [command,shop_getcategoryid](int $x1)(int)
+3162 [command,shop_getindexforcategoryid](int $x1)(int)
+3163 [command,shop_getindexforcategoryname](string $x1)(int)
+3164 [command,shop_getcategorydescription](int $x1)(string)
+3165 [command,shop_getproductcount](int $x1)(int)
+3166 [command,shop_isproductavailable](int $x1)(boolean)
+3167 [command,shop_isproductrecommended](int $x1, int $x2)(boolean)
+3168 [command,shop_getproductdetails](int $x1, int $x2)(string, string, string, string, string, string, string, string, string)
+3169 [command,unknown_command_3169]
 3170 [command,notifications_sendlocal](string $x1, string $x2, int $x3, int $x4)(int)
-3171 [command,notifications_sendgroupedlocal]todo
-3172 [command,notifications_cancellocal]todo
-3173 [command,notifications_islocalscheduled]todo
-3174 [command,unknown_command_3174]todo
-3175 [command,notifications_getenabled]todo
-3176 [command,unknown_command_3176]todo
+3171 [command,notifications_sendgroupedlocal](string $x1, string $x2, string $x3, int $x4, int $x5, int $x6)(int)
+3172 [command,notifications_cancellocal](int $x1)
+3173 [command,notifications_islocalscheduled](int $x1)(boolean)
+3174 [command,unknown_command_3174](int $x1)
+3175 [command,notifications_getenabled]()(boolean)
+3176 [command,unknown_command_3176]
 3177 [command,marketing_initanalytics]
 3178 [command,marketing_sendanalyticsevent](string $x1)
 3179 [command,marketing_initattribution]
@@ -86,8 +86,8 @@
 3184 [command,getantidrag]()(boolean)
 3185 [command,setdrawdistance](int $x1)
 3186 [command,getdrawdistance]()(int)
-3187 [command,unknown_command_3187]todo
-3188 [command,unknown_command_3188]todo
+3187 [command,unknown_command_3187](string $x1, string $x2)
+3188 [command,unknown_command_3188]
 3189 [command,seq_prefetch](seq $x1)
 
 // Misc 2
