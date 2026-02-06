@@ -191,8 +191,8 @@ public class ScriptUnpacker {
             if (type == Type.UNKNOWN_INT_NOTBOOLEAN) return Type.INT_INT;
             if (type == Type.UNKNOWN_OBJECT) return Type.STRING;
             if (type == Type.INT) return Type.INT_INT;
-            if (type == Type.UNKNOWN_INTARRAY) return Type.INTARRAY;
-            if (type == Type.UNKNOWNARRAY) return Type.INTARRAY;
+            if (type == Type.COMPONENT) return Type.COMPONENT_COMPONENT;
+            if (type.element() != null) return chooseDisplayType(type.element()).array();
         }
 
         return type;
