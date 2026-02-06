@@ -56,7 +56,7 @@ public class Symbols {
         dumpIfScript(path.resolve("if_script.sym"));
         dumpArchive(Js5Archive.JS5_FONTMETRICS, Type.FONTMETRICS, path.resolve("fontmetrics.sym"));
 
-        dumpConstant(Type.INT, path.resolve("constant/int.sym"));
+        dumpConstant(Type.INT_INT, path.resolve("constant/int.sym"));
         dumpConstant(Type.INT_IFTYPE, path.resolve("constant/iftype.sym"));
         dumpConstant(Type.INT_BOOLEAN, path.resolve("constant/boolean.sym"));
         dumpConstant(Type.INT_CLAN, path.resolve("constant/clantype.sym"));
@@ -204,12 +204,15 @@ public class Symbols {
                 var name = Unpacker.format(Type.DBCOLUMN, basePackedId, false);
 
                 var typesJoined = types.stream().map(t -> t.name).collect(Collectors.joining(","));
-                builder.append(basePackedId).append('\t').append(name).append('\t').append(typesJoined).append('\n');
+                builder.append(tableId).append(':').append(columnId).append('\t').
+                        append(name).append('\t').
+                        append(typesJoined).append('\n');
 
                 for (int i = 0; i < Math.min(types.size(), 14); i++) {
                     var typeAtIndex = types.get(i);
-                    var columnTupleId = basePackedId | (i + 1);
-                    builder.append(columnTupleId).append('\t').append(name).append(":").append(i).append('\t').append(typeAtIndex.name).append('\n');
+                    builder.append(tableId).append(':').append(columnId).append(':').append(i).append('\t').
+                            append(name).append(":").append(i).append('\t').
+                            append(typeAtIndex.name).append('\n');
                 }
             }
         }
