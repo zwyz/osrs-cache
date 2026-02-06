@@ -19,7 +19,7 @@ public class CodeFormatter {
     public static String formatScript(String name, List<Type> parameterTypes, List<Type> returnTypes, Map<LocalReference, Type> localTypes, List<Expression> script) {
         CodeFormatter.localTypes = localTypes;
 
-        if (Unpack.INFER_COMPONENT_ALIASES) {
+        if (!Unpack.APPEND_LOCAL_VAR_INDEX) {
             usageCount.clear();
             if (localTypes != null) {
                 for (var type : localTypes.values()) {
