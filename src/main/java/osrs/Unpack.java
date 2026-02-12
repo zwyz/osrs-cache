@@ -550,6 +550,9 @@ public class Unpack {
                 var comId = ifTypeEntry.getKey();
                 var ifType = ifTypeEntry.getValue();
                 scripted |= ifType.scripted;
+                if (DUMP_CONFIG_IDS) {
+                    lines.add("// " + ifId + ":" + comId);
+                }
                 lines.addAll(unpack.apply((ifId << 16) | comId, ifType));
                 lines.add("");
             }
