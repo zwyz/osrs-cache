@@ -34,6 +34,8 @@ public class Unpacker {
         ENUM_OUTPUT_TYPE.clear();
         VAR_CLAN_SETTING_TYPE.clear();
         VAR_CLAN_TYPE.clear();
+        VAR_PLAYER_TYPE.clear();
+        VAR_CLIENT_TYPE.clear();
         IF_SCRIPT_TYPE.clear();
         OPTIONAL_COLUMNS.clear();
         LIST_COLUMNS.clear();
