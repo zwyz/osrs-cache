@@ -174,7 +174,8 @@ public class Symbols {
             for (var componentId : componentIds) {
                 var combinedId = (interfaceId << 16) | componentId;
                 var componentName = Unpacker.format(Type.COMPONENT, combinedId, false);
-                componentBuilder.append(combinedId).append('\t').append(componentName).append('\n');
+                componentBuilder.append(interfaceId).append(':').append(componentId).append('\t')
+                        .append(componentName).append('\n');
             }
         }
 
