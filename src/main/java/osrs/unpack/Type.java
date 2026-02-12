@@ -370,7 +370,9 @@ public class Type {
         this.base = alias.base;
         this.array = new Type(this);
         this.element = null;
-        BY_NAME.put(name, this);
+        if (alias != Type.COMPONENT) {
+            BY_NAME.put(name, this);
+        }
         TYPES.add(this);
     }
 
