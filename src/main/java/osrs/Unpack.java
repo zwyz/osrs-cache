@@ -234,6 +234,8 @@ public class Unpack {
                     maxType = archiveIndexConfig.groupMaxFileId[OBJTYPE.id];
                 } else if (trigger.type == Type.MAPELEMENT) {
                     maxType = MELTYPE.id >= archiveIndexConfig.groupMaxFileId.length ? 0 : archiveIndexConfig.groupMaxFileId[MELTYPE.id];
+                } else if (trigger.type == Type.INV) {
+                    maxType = archiveIndexConfig.groupMaxFileId[INVTYPE.id];
                 } else {
                     throw new AssertionError("todo");
                 }

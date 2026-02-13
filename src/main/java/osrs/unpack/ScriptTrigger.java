@@ -10,6 +10,7 @@ public enum ScriptTrigger { // all are official names from 233.2
     WORLDMAPELEMENTMOUSEOVER(15, Type.MAPELEMENT),
     WORLDMAPELEMENTMOUSELEAVE(16, Type.MAPELEMENT),
     WORLDMAPELEMENTMOUSEREPEAT(17, Type.MAPELEMENT),
+    INV_CHANGED(18, Type.INV),
 
     // client ops
     GCLIENTCLICKNPC(30),
