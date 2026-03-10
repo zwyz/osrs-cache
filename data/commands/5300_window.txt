@@ -9,5 +9,5 @@
 5308 [command,getdefaultwindowmode]()(windowmode)
 5309 [command,setdefaultwindowmode](windowmode $x1)
 5310 [command,unknown_command_5310](int $x1)
-5311 [command,unknown_command_5311](int $x1, int $x2)
-5312 [command,unknown_command_5312](boolean $x1)
+5311 [command,setwindowsize](int $x1, int $x2)
+5312 [command,setwindowtopmost](boolean $x1)
