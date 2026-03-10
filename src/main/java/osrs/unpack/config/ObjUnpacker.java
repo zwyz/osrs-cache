@@ -86,6 +86,18 @@ public class ObjUnpacker {
                 }
             }
 
+            case 44 -> lines.add("model=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 45 -> lines.add("manwear=" + Unpacker.format(Type.MODEL, packet.g4s()) + "," + packet.g1());
+            case 46 -> lines.add("manwear2=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 47 -> lines.add("manwear3=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 48 -> lines.add("womanwear=" + Unpacker.format(Type.MODEL, packet.g4s()) + "," + packet.g1());
+            case 49 -> lines.add("womanwear2=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 50 -> lines.add("womanwear3=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 51 -> lines.add("manhead=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 52 -> lines.add("manhead2=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 53 -> lines.add("womanhead=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 54 -> lines.add("womanhead2=" + Unpacker.format(Type.MODEL, packet.g4s()));
+
             case 65 -> lines.add("stockmarket=yes");
 
             case 75 -> { // https://twitter.com/JagexAsh/status/570235510691487744
@@ -139,19 +151,38 @@ public class ObjUnpacker {
             case 140 -> lines.add("boughttemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 148 -> lines.add("placeholderlink=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 149 -> lines.add("placeholdertemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
+            case 200 -> lines.add("subop" + packet.g1() + "=" + packet.g1() + "," + packet.gjstr());
 
-            case 249 -> {
-                var count = packet.g1();
+            case 201 -> {
+                var op = packet.g1();
+                var varp = packet.g2null();
+                var varbit = packet.g2null();
+                var min = packet.g4s();
+                var max = packet.g4s();
 
-                for (var i = 0; i < count; i++) {
-                    if (packet.g1() == 1) {
-                        lines.add("param=" + Unpacker.format(Type.PARAM, packet.g3()) + "," + packet.gjstr());
-                    } else {
-                        var param = packet.g3();
-                        lines.add("param=" + Unpacker.format(Type.PARAM, param) + "," + Unpacker.format(Unpacker.getParamType(param), packet.g4s()));
-                    }
+                if (varbit == -1) {
+                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                } else {
+                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
                 }
             }
+
+            case 202 -> {
+                var op = packet.g1();
+                var subop = packet.g2();
+                var varp = packet.g2null();
+                var varbit = packet.g2null();
+                var min = packet.g4s();
+                var max = packet.g4s();
+
+                if (varbit == -1) {
+                    lines.add("multisubop" + op + "=" + subop + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                } else {
+                    lines.add("multisubop" + op + "=" + subop + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
+                }
+            }
+
+            case 249 -> ParamUnpackHelper.unpack(lines, packet);
 
             default -> throw new IllegalStateException("unknown opcode");
         }

@@ -19,7 +19,7 @@ public class CodeFormatter {
     public static String formatScript(String name, List<Type> parameterTypes, List<Type> returnTypes, Map<LocalReference, Type> localTypes, List<Expression> script) {
         CodeFormatter.localTypes = localTypes;
 
-        if (!Unpack.APPEND_LOCAL_VAR_INDEX) {
+        if (Unpack.INFER_COMPONENT_ALIASES) {
             usageCount.clear();
             if (localTypes != null) {
                 for (var type : localTypes.values()) {
@@ -32,6 +32,7 @@ public class CodeFormatter {
         var parameters = new ArrayList<String>();
         var returns = new ArrayList<String>();
         var indexInt = 0;
+        var indexLong = 0;
         var indexObject = 0;
         var declaredLocals = new HashSet<LocalReference>();
 
@@ -43,9 +44,12 @@ public class CodeFormatter {
             } else if (Type.LATTICE.test(type, Type.UNKNOWN_INT)) {
                 declaredLocals.add(new LocalReference(LocalDomain.INTEGER, indexInt));
                 parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.INTEGER, indexInt++)));
+            } else if (Type.LATTICE.test(type, Type.UNKNOWN_LONG)) {
+                declaredLocals.add(new LocalReference(LocalDomain.LONG, indexLong));
+                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.LONG, indexLong++)));
             } else if (Type.LATTICE.test(type, Type.UNKNOWN_OBJECT)) {
-                declaredLocals.add(new LocalReference(LocalDomain.STRING, indexObject));
-                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.STRING, indexObject++)));
+                declaredLocals.add(new LocalReference(LocalDomain.OBJECT, indexObject));
+                parameters.add(formatType(type, true) + " " + formatLocal(new LocalReference(LocalDomain.OBJECT, indexObject++)));
             } else {
                 throw new IllegalStateException("unknown parameter local");
             }
@@ -101,9 +105,7 @@ public class CodeFormatter {
     private static String formatNoIndent(Expression expression, int prec, int indent, Set<LocalReference> declaredLocals) {
         var command = expression.command;
 
-        if (command == PUSH_CONSTANT_INT) {
-            return formatConstant(expression.type.get(0), expression.operand);
-        } else if (command == PUSH_CONSTANT_STRING) {
+        if (command == PUSH_CONSTANT_INT || command == PUSH_CONSTANT_STRING || command == PUSH_CONSTANT_LONG) {
             return formatConstant(expression.type.get(0), expression.operand);
         } else if (command == PUSH_CONSTANT_NULL) {
             return "null";
@@ -159,35 +161,35 @@ public class CodeFormatter {
         } else if (command == DEFINE_ARRAY) {
             var index = (int) expression.operand >> 16;
             var type = Type.byChar((int) expression.operand & 0xffff);
-            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.OBJECT, index);
             return "def_" + formatType(type, true) + " " + formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
         } else if (command == PUSH_ARRAY_INT) {
             var index = (int) expression.operand;
-            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.OBJECT, index);
             return formatLocal(local) + "(" + format(expression.arguments.get(0)) + ")";
         } else if (command == POP_ARRAY_INT && expression.arguments.size() == 2) {
             var index = (int) expression.operand;
-            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.STRING, index);
+            var local = new LocalReference(Unpack.VERSION < 231 ? LocalDomain.ARRAY : LocalDomain.OBJECT, index);
             return formatLocal(local) + "(" + format(expression.arguments.get(0)) + ") = " + format(expression.arguments.get(1));
-        } else if (command == OR && expression.arguments.size() == 2) {
+        } else if ((command == OR || command == LONG_OR) && expression.arguments.size() == 2) {
             var s = formatBinary(prec, 50, " | ", expression.arguments.get(0), expression.arguments.get(1));
             return prec < 50 ? "calc(" + s + ")" : s;
-        } else if (command == AND && expression.arguments.size() == 2) {
+        } else if ((command == AND || command == LONG_AND) && expression.arguments.size() == 2) {
             var s = formatBinary(prec, 60, " & ", expression.arguments.get(0), expression.arguments.get(1));
             return prec < 50 ? "calc(" + s + ")" : s;
-        } else if (command == ADD && expression.arguments.size() == 2) {
+        } else if ((command == ADD || command == LONG_ADD) && expression.arguments.size() == 2) {
             var s = formatBinary(prec, 70, " + ", expression.arguments.get(0), expression.arguments.get(1));
             return prec < 50 ? "calc(" + s + ")" : s;
-        } else if (command == SUB && expression.arguments.size() == 2) {
+        } else if ((command == SUB | command == LONG_SUB) && expression.arguments.size() == 2) {
             var s = formatBinary(prec, 70, " - ", expression.arguments.get(0), expression.arguments.get(1));
             return prec < 50 ? "calc(" + s + ")" : s;
-        } else if (command == MULTIPLY && expression.arguments.size() == 2) {
+        } else if ((command == MULTIPLY || command == LONG_MULTIPLY) && expression.arguments.size() == 2) {
             var s = formatBinary(prec, 80, " * ", expression.arguments.get(0), expression.arguments.get(1));
             return prec < 50 ? "calc(" + s + ")" : s;
-        } else if (command == DIVIDE && expression.arguments.size() == 2) {
+        } else if ((command == DIVIDE || command == LONG_DIVIDE) && expression.arguments.size() == 2) {
             var s = formatBinary(prec, 80, " / ", expression.arguments.get(0), expression.arguments.get(1));
             return prec < 50 ? "calc(" + s + ")" : s;
-        } else if (command == MODULO && expression.arguments.size() == 2) {
+        } else if ((command == MODULO || command == LONG_MODULO) && expression.arguments.size() == 2) {
             var s = formatBinary(prec, 80, " % ", expression.arguments.get(0), expression.arguments.get(1));
             return prec < 50 ? "calc(" + s + ")" : s;
         } else if (command == JOIN_STRING) {
@@ -442,6 +444,7 @@ public class CodeFormatter {
         }
 
         if (value instanceof Integer i) return Unpacker.format(type, i);
+        if (value instanceof Long l) return Unpacker.format(type, l);
         if (value instanceof String s) return s;
         throw new IllegalStateException("invalid constant");
     }

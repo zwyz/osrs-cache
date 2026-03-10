@@ -207,17 +207,17 @@ public class TypePropagator {
 
         // arrays
         if (expression.command == PUSH_ARRAY_INT) {
-            emitIsArray(local(script, Unpack.VERSION >= 231 ? LocalDomain.STRING : LocalDomain.ARRAY, (int) expression.operand), type(expression, 0));
+            emitIsArray(local(script, Unpack.VERSION >= 231 ? LocalDomain.OBJECT : LocalDomain.ARRAY, (int) expression.operand), type(expression, 0));
         }
 
         if (expression.command == POP_ARRAY_INT) {
-            emitArrayStore(arg(expression, 1), local(script, Unpack.VERSION >= 231 ? LocalDomain.STRING : LocalDomain.ARRAY, (int) expression.operand));
+            emitArrayStore(arg(expression, 1), local(script, Unpack.VERSION >= 231 ? LocalDomain.OBJECT : LocalDomain.ARRAY, (int) expression.operand));
         }
 
         if (expression.command == DEFINE_ARRAY) {
             var index = (int) expression.operand >> 16;
             var type = Type.byChar((int) expression.operand & 0xffff);
-            emitEqual(local(script, Unpack.VERSION >= 231 ? LocalDomain.STRING : LocalDomain.ARRAY, index), type.array());
+            emitEqual(local(script, Unpack.VERSION >= 231 ? LocalDomain.OBJECT : LocalDomain.ARRAY, index), type.array());
         }
 
         if (expression.command == ARRAY_COMPARE) {
@@ -303,7 +303,7 @@ public class TypePropagator {
 
                 // basic check for if the override is out of date. does not catch all cases.
                 if (ScriptUnpacker.getParameterCount(script) != overrides.parameters().size()
-                    || ScriptUnpacker.getReturnTypes(script).size() != overrides.results().size()) {
+                        || ScriptUnpacker.getReturnTypes(script).size() != overrides.results().size()) {
                     System.out.println("WARNING: " + name + " override is outdated. CLIENTSCRIPTS_VERSION=" + Unpack.CLIENTSCRIPTS_VERSION);
                     continue;
                 }
@@ -328,16 +328,18 @@ public class TypePropagator {
         // merge parameters with locals
         for (var script : scripts) {
             var parameterCountInt = ScriptUnpacker.getParameterCount(script, LocalDomain.INTEGER);
-            var parameterCountString = ScriptUnpacker.getParameterCount(script, LocalDomain.STRING);
-            var parameterCount = parameterCountInt + parameterCountString;
+            var parameterCountLong = ScriptUnpacker.getParameterCount(script, LocalDomain.LONG);
+            var parameterCountObject = ScriptUnpacker.getParameterCount(script, LocalDomain.OBJECT);
+            var parameterCount = parameterCountInt + parameterCountLong + parameterCountObject;
 
             var indexInt = 0;
-            var indexString = 0;
+            var indexLong = 0;
+            var indexObject = 0;
 
             for (var i = 0; i < parameterCount; i++) {
                 var parameter = parameter(script, i);
 
-                if (indexString == parameterCountString) { // only ints left, it's an int
+                if (indexLong == parameterCountLong && indexObject == parameterCountObject) { // only ints left, it's an int
                     if (Unpack.VERSION < 231 && ScriptUnpacker.SCRIPT_LEGACY_ARRAY_PARAMETER.getOrDefault(script, -1) == indexInt) {
                         emitEqual(parameter, local(script, LocalDomain.ARRAY, 0));
                         emitEqual(parameter, Type.UNKNOWNARRAY);
@@ -345,8 +347,11 @@ public class TypePropagator {
 
                     emitEqual(parameter, local(script, LocalDomain.INTEGER, indexInt++));
                     emitEqual(parameter, Type.UNKNOWN_INT);
-                } else if (indexInt == parameterCountInt) { // only strings left, it's a string
-                    emitEqual(parameter, local(script, LocalDomain.STRING, indexString++));
+                } else if (indexInt == parameterCountInt && indexObject == parameterCountObject) { // only longs left, it's a long
+                    emitEqual(parameter, local(script, LocalDomain.LONG, indexLong++));
+                    emitEqual(parameter, Type.UNKNOWN_LONG);
+                } else if (indexInt == parameterCountInt && indexLong == parameterCountLong) { // only objects left, it's an object
+                    emitEqual(parameter, local(script, LocalDomain.OBJECT, indexObject++));
                     emitEqual(parameter, Type.UNKNOWN_OBJECT);
                 } else {
                     var type = typeof(parameter);
@@ -359,17 +364,28 @@ public class TypePropagator {
 
                         emitEqual(parameter, local(script, LocalDomain.INTEGER, indexInt++));
                         emitEqual(parameter, Type.UNKNOWN_INT);
+                    } else if (Type.LATTICE.test(type, Type.UNKNOWN_LONG)) { // inferred it's a long
+                        emitEqual(parameter, local(script, LocalDomain.LONG, indexLong++));
+                        emitEqual(parameter, Type.UNKNOWN_LONG);
                     } else if (Type.LATTICE.test(type, Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING)) { // inferred it's a string
-                        emitEqual(parameter, local(script, LocalDomain.STRING, indexString++));
+                        emitEqual(parameter, local(script, LocalDomain.OBJECT, indexObject++));
                         emitEqual(parameter, Type.UNKNOWN_OBJECT);
-                    } else { // not enough info (script not called, guess int)
-                        if (Unpack.VERSION < 231 && ScriptUnpacker.SCRIPT_LEGACY_ARRAY_PARAMETER.getOrDefault(script, -1) == indexInt) {
-                            emitEqual(parameter, local(script, LocalDomain.ARRAY, 0));
-                            emitEqual(parameter, Type.UNKNOWNARRAY);
-                        }
+                    } else { // not enough info (script not called, guess the order as ints,longs,objects)
+                        if (indexInt < parameterCountInt) {
+                            if (Unpack.VERSION < 231 && ScriptUnpacker.SCRIPT_LEGACY_ARRAY_PARAMETER.getOrDefault(script, -1) == indexInt) {
+                                emitEqual(parameter, local(script, LocalDomain.ARRAY, 0));
+                                emitEqual(parameter, Type.UNKNOWNARRAY);
+                            }
 
-                        emitEqual(parameter, local(script, LocalDomain.INTEGER, indexInt++));
-                        emitEqual(parameter, Type.UNKNOWN_INT);
+                            emitEqual(parameter, local(script, LocalDomain.INTEGER, indexInt++));
+                            emitEqual(parameter, Type.UNKNOWN_INT);
+                        } else if (indexLong < parameterCountLong) {
+                            emitEqual(parameter, local(script, LocalDomain.LONG, indexLong++));
+                            emitEqual(parameter, Type.UNKNOWN_LONG);
+                        } else if (indexObject < parameterCountObject) {
+                            emitEqual(parameter, local(script, LocalDomain.OBJECT, indexObject++));
+                            emitEqual(parameter, Type.UNKNOWN_OBJECT);
+                        }
                     }
                 }
             }
@@ -377,11 +393,10 @@ public class TypePropagator {
 
         // propagate again with newly generated constraints
         propagateUntilStable();
-//        printConnectedComponent(local(969, LocalDomain.STRING, 0));
+
         if (Unpack.INFER_COMPONENT_ALIASES) {
             assignComponentAliases(scripts);
-            pruneComponentAliases();
-            // propagate again with generated aliases from hooks
+            disconnectHighDegreeNodes(2);
             propagateUntilStable();
         }
 
@@ -421,31 +436,34 @@ public class TypePropagator {
     }
 
     private void assignComponentAliases(Set<Integer> scripts) {
-        Unpacker.IF_TYPES
-                .entrySet()
-                .stream()
-                .flatMap(e -> e.getValue().values().stream())
-                .flatMap(ifType -> ifType.hooks().stream())
-                .forEach(this::assignParameterComponentAliases);
         for (var script : scripts) {
-            for (var e : ScriptUnpacker.SCRIPTS_DECOMPILED.get(script))
-                assignImmediateComponentAliases(e);
+            for (var expression : ScriptUnpacker.SCRIPTS_DECOMPILED.get(script)) {
+                assignComponentAliasesScript(expression);
+            }
         }
-    }
 
-    private void assignImmediateComponentAliases(Expression expression) {
-        if (expression.command == PUSH_CONSTANT_INT) {
-            if (typeof(type(expression, 0)) == Type.COMPONENT) {
-                var id = (int) expression.operand;
-                if (id != -1) {
-                    emitEqual(type(expression, 0), findComponentAlias(id, ""));
+        for (var itf : Unpacker.IF_TYPES.values()) {
+            for (var com : itf.values()) {
+                for (var hook : com.hooks()) {
+                    assignComponentAliasesHook(hook);
                 }
             }
         }
-        expression.visitChildren(this::assignImmediateComponentAliases);
     }
 
-    private void assignParameterComponentAliases(IfType.IfTypeHook hook) {
+    private void assignComponentAliasesScript(Expression expression) {
+        if (expression.command == PUSH_CONSTANT_INT) {
+            if (typeof(type(expression, 0)) == Type.COMPONENT) {
+                if ((int) expression.operand != -1) {
+                    emitEqual(type(expression, 0), findComponentAlias((int) expression.operand, ""));
+                }
+            }
+        }
+
+        expression.visitChildren(this::assignComponentAliasesScript);
+    }
+
+    private void assignComponentAliasesHook(IfType.IfTypeHook hook) {
         var script = hook.id();
         for (var i = 0; i < hook.args().size(); ++i) {
             var parameter = parameter(script, i);
@@ -453,6 +471,7 @@ public class TypePropagator {
             if (type != Type.COMPONENT) continue;
             var value = (int) hook.args().get(i);
             if (value == -1) continue;
+
             var aliasedType = switch (value) {
                 case Integer.MIN_VALUE + 3 -> findComponentAlias(hook.ifType().id, "");
                 case Integer.MIN_VALUE + 6 -> findComponentAlias(hook.ifType().id, "_drop");
@@ -464,31 +483,39 @@ public class TypePropagator {
 
     private Type findComponentAlias(int id, String suffix) {
         var name = Unpacker.formatComponentShort(id);
+
         if (name.isBlank() || name.startsWith("\"") || name.contains(" ")) {
             return Type.COMPONENT;
         }
 
         name += suffix;
+        return Type.getComponentAlias(name);
+    }
 
-        var type = Type.componentAliases.get(name);
-        if (type != null) {
-            return type;
+    private void disconnectHighDegreeNodes(int limit) {
+        var incident = new HashMap<Node, Set<Constraint>>();
+
+        for (var constraint : constraints) {
+            var param1 = constraint.a() instanceof Node.ParameterType;
+            var param2 = constraint.b() instanceof Node.ParameterType;
+            var const1 = constraint.a() instanceof Node.ConstantType;
+            var const2 = constraint.b() instanceof Node.ConstantType;
+
+            if (!const1 && !const2 && (param1 || param2)) {
+                incident.computeIfAbsent(constraint.a(), _ -> new HashSet<>()).add(constraint);
+                incident.computeIfAbsent(constraint.b(), _ -> new HashSet<>()).add(constraint);
+            }
         }
 
-        type = new Type(name, Type.COMPONENT);
+        var removed = new HashSet<Constraint>();
 
-        Type.LATTICE.add(type, Type.COMPONENT);
-        Type.LATTICE.add(Type.COMPONENT_COMPONENT, type);
+        for (var edges : incident.values()) {
+            if (edges.size() > limit) {
+                removed.addAll(edges);
+            }
+        }
 
-        Type.LATTICE.add(type.array(), Type.COMPONENT.array());
-        Type.LATTICE.add(Type.COMPONENT_COMPONENT.array(), type.array());
-
-        // for better error handling
-        Type.LATTICE.add(Type.CONFLICT, type);
-        Type.LATTICE.add(Type.CONFLICT, type.array());
-
-        Type.componentAliases.put(name, type);
-        return type;
+        constraints.removeAll(removed);
     }
 
     private Type typeof(Node node) {
@@ -665,24 +692,6 @@ public class TypePropagator {
                 remaining.addAll(incident.get(b));
             }
         }
-    }
-
-    private void pruneComponentAliases() {
-        var incident = new HashMap<Node, Set<Constraint>>();
-        for (var c : constraints) {
-            if (c.a() instanceof Node.ConstantType || c.b() instanceof Node.ConstantType) {
-                continue;
-            }
-            incident.computeIfAbsent(c.a(), _ -> new HashSet<>()).add(c);
-            incident.computeIfAbsent(c.b(), _ -> new HashSet<>()).add(c);
-        }
-        var removeSet = new HashSet<Constraint>();
-        for (var edges : incident.values()) {
-            if (edges.stream().filter(c -> c.a() instanceof Node.ParameterType
-                    || c.b() instanceof Node.ParameterType).count() <= 2) continue;
-            removeSet.addAll(edges);
-        }
-        constraints.removeAll(removeSet);
     }
 
     private void printConnectedComponent(Node start) { // export to graphviz for debugging

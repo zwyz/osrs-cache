@@ -23,3 +23,4 @@
 4122 [command,uppercase](string $x1)(string)
 4123 [command,text_pronoun](string $x1, string $x2, string $x3)(string)
 4124 [command,pronoun]()(int)
+4125 [command,tostring_long](long $x1)(string)

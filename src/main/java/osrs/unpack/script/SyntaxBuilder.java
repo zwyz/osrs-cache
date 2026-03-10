@@ -56,11 +56,16 @@ public class SyntaxBuilder {
         }
 
         if (command == POP_STRING_LOCAL) {
-            pops.add(new LocalReference(LocalDomain.STRING, (int) operand));
+            pops.add(new LocalReference(LocalDomain.OBJECT, (int) operand));
             return;
         }
 
-        if (command == POP_INT_DISCARD || command == POP_STRING_DISCARD) {
+        if (command == POP_LONG_LOCAL) {
+            pops.add(new LocalReference(LocalDomain.LONG, (int) operand));
+            return;
+        }
+
+        if (command == POP_INT_DISCARD || command == POP_STRING_DISCARD || command == POP_LONG_DISCARD) {
             pops.add(null);
             return;
         }
@@ -76,7 +81,7 @@ public class SyntaxBuilder {
         }
 
         if (command == POP_VARC_INT) {
-            pops.add(new VarClientReference((int) operand, false));
+            pops.add(new VarClientReference((int) operand, Type.UNKNOWN_INT));
             return;
         }
 
@@ -86,7 +91,12 @@ public class SyntaxBuilder {
         }
 
         if (command == POP_VARC_STRING) {
-            pops.add(new VarClientReference((int) operand, true));
+            pops.add(new VarClientReference((int) operand, Type.STRING));
+            return;
+        }
+
+        if (command == POP_VARC_LONG) {
+            pops.add(new VarClientReference((int) operand, Type.UNKNOWN_LONG));
             return;
         }
 
@@ -97,12 +107,13 @@ public class SyntaxBuilder {
                 switch (pop) {
                     case VarPlayerReference(var var) -> argumentTypes.add(Type.UNKNOWN_INT);
                     case VarPlayerBitReference(var var) -> argumentTypes.add(Type.INT);
-                    case VarClientReference(var var, var string) -> argumentTypes.add(string ? Type.STRING : Type.UNKNOWN_INT);
+                    case VarClientReference(var var, var hint) -> argumentTypes.add(hint);
                     case VarClientStringReference(var var) -> argumentTypes.add(Type.STRING);
 
                     case LocalReference local -> argumentTypes.add(switch (local.domain()) {
                         case INTEGER -> Type.UNKNOWN_INT;
-                        case STRING -> Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING;
+                        case LONG -> Type.UNKNOWN_LONG;
+                        case OBJECT -> Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING;
                         case ARRAY -> throw new AssertionError();
                     });
 
@@ -134,7 +145,12 @@ public class SyntaxBuilder {
         }
 
         if (command == PUSH_STRING_LOCAL) {
-            buildCommand(code, index, FLOW_LOAD, new LocalReference(LocalDomain.STRING, (int) operand), List.of(), List.of(Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING));
+            buildCommand(code, index, FLOW_LOAD, new LocalReference(LocalDomain.OBJECT, (int) operand), List.of(), List.of(Unpack.VERSION >= 231 ? Type.UNKNOWN_OBJECT : Type.STRING));
+            return;
+        }
+
+        if (command == PUSH_LONG_LOCAL) {
+            buildCommand(code, index, FLOW_LOAD, new LocalReference(LocalDomain.LONG, (int) operand), List.of(), List.of(Type.UNKNOWN_LONG));
             return;
         }
 
@@ -155,7 +171,7 @@ public class SyntaxBuilder {
         if (command == PUSH_VARC_INT) {
             var var = (int) operand;
             var type = Type.UNKNOWN_INT;
-            buildCommand(code, index, FLOW_LOAD, new VarClientReference(var, false), List.of(), List.of(type));
+            buildCommand(code, index, FLOW_LOAD, new VarClientReference(var, type), List.of(), List.of(type));
             return;
         }
 
@@ -169,7 +185,14 @@ public class SyntaxBuilder {
         if (command == PUSH_VARC_STRING) {
             var var = (int) operand;
             var type = Type.STRING;
-            buildCommand(code, index, FLOW_LOAD, new VarClientReference(var, true), List.of(), List.of(type));
+            buildCommand(code, index, FLOW_LOAD, new VarClientReference(var, type), List.of(), List.of(type));
+            return;
+        }
+
+        if (command == PUSH_VARC_LONG) {
+            var var = (int) operand;
+            var type = Type.UNKNOWN_LONG;
+            buildCommand(code, index, FLOW_LOAD, new VarClientReference(var, type), List.of(), List.of(type));
             return;
         }
 
@@ -449,12 +472,12 @@ public class SyntaxBuilder {
         var command1 = stack.get(stack.size() - 1);
 
         var condition = switch (command1.command.name) {
-            case "branch_not" -> new Expression(FLOW_NE, null, List.of(Type.CONDITION), command1.arguments);
-            case "branch_equals" -> new Expression(FLOW_EQ, null, List.of(Type.CONDITION), command1.arguments);
-            case "branch_less_than" -> new Expression(FLOW_LT, null, List.of(Type.CONDITION), command1.arguments);
-            case "branch_greater_than" -> new Expression(FLOW_GT, null, List.of(Type.CONDITION), command1.arguments);
-            case "branch_less_than_or_equals" -> new Expression(FLOW_LE, null, List.of(Type.CONDITION), command1.arguments);
-            case "branch_greater_than_or_equals" -> new Expression(FLOW_GE, null, List.of(Type.CONDITION), command1.arguments);
+            case "branch_not", "long_branch_not" -> new Expression(FLOW_NE, null, List.of(Type.CONDITION), command1.arguments);
+            case "branch_equals", "long_branch_equals" -> new Expression(FLOW_EQ, null, List.of(Type.CONDITION), command1.arguments);
+            case "branch_less_than", "long_branch_less_than" -> new Expression(FLOW_LT, null, List.of(Type.CONDITION), command1.arguments);
+            case "branch_greater_than", "long_branch_greater_than" -> new Expression(FLOW_GT, null, List.of(Type.CONDITION), command1.arguments);
+            case "branch_less_than_or_equals", "long_branch_less_than_or_equals" -> new Expression(FLOW_LE, null, List.of(Type.CONDITION), command1.arguments);
+            case "branch_greater_than_or_equals", "long_branch_greater_than_or_equals" -> new Expression(FLOW_GE, null, List.of(Type.CONDITION), command1.arguments);
             default -> null;
         };
 
@@ -796,6 +819,12 @@ public class SyntaxBuilder {
         if (command == BRANCH_GREATER_THAN) return true;
         if (command == BRANCH_LESS_THAN_OR_EQUALS) return true;
         if (command == BRANCH_GREATER_THAN_OR_EQUALS) return true;
+        if (command == LONG_BRANCH_NOT) return true;
+        if (command == LONG_BRANCH_EQUALS) return true;
+        if (command == LONG_BRANCH_LESS_THAN) return true;
+        if (command == LONG_BRANCH_GREATER_THAN) return true;
+        if (command == LONG_BRANCH_LESS_THAN_OR_EQUALS) return true;
+        if (command == LONG_BRANCH_GREATER_THAN_OR_EQUALS) return true;
         return false;
     }
 }

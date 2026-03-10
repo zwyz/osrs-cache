@@ -22,7 +22,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.StructuredTaskScope;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
@@ -39,6 +38,7 @@ public class Unpack {
     public static final boolean DUMP_SERVERSIDE_COLUMNS = true;
     public static final boolean INFER_COMPONENT_ALIASES = true;
     public static final boolean APPEND_LOCAL_VAR_INDEX = false;
+    public static final boolean INFER_AUTOINT = false;
     public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     public static int VERSION;
     public static Js5ResourceProvider PROVIDER;
@@ -145,7 +145,7 @@ public class Unpack {
         unpackConfigGroup(NPCTYPE, NpcUnpacker::unpack, path + "/config/dump.npc");
         unpackConfigGroup(OBJTYPE, ObjUnpacker::unpack, path + "/config/dump.obj");
         unpackConfigGroup(SEQTYPE, SeqUnpacker::unpack, path + "/config/dump.seq");
-        unpackConfigGroup(SPOTTYPE, EffectAnimUnpacker::unpack, path + "/config/dump.spot");
+        unpackConfigGroup(SPOTTYPE, SpotUnpacker::unpack, path + "/config/dump.spot");
         unpackConfigGroup(AREATYPE, AreaUnpacker::unpack, path + "/config/dump.area");
         unpackConfigGroup(ITEMCODETYPE, ItemCodeUnpacker::unpack, path + "/config/dump.itemcode"); // https://twitter.com/JagexAsh/status/1663851152310452225
         unpackConfigGroup(CONTROLLERTYPE, ControllerUnpacker::unpack, path + "/config/dump.controller"); // https://twitter.com/JagexAsh/status/1600154097742553088

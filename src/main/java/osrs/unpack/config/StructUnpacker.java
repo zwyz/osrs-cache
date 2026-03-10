@@ -22,18 +22,7 @@ public class StructUnpacker {
                 return lines;
             }
 
-            case 249 -> {
-                var count = packet.g1();
-
-                for (var i = 0; i < count; i++) {
-                    if (packet.g1() == 1) {
-                        lines.add("param=" + Unpacker.format(Type.PARAM, packet.g3()) + "," + packet.gjstr());
-                    } else {
-                        var param = packet.g3();
-                        lines.add("param=" + Unpacker.format(Type.PARAM, param) + "," + Unpacker.format(Unpacker.getParamType(param), packet.g4s()));
-                    }
-                }
-            }
+            case 249 -> ParamUnpackHelper.unpack(lines, packet);
 
             default -> throw new IllegalStateException("unknown opcode");
         }

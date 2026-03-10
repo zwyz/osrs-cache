@@ -63,6 +63,17 @@ public class IDKUnpacker {
             case 67 -> lines.add("head8=" + Unpacker.format(Type.MODEL, packet.g2()));
             case 68 -> lines.add("head9=" + Unpacker.format(Type.MODEL, packet.g2()));
             case 69 -> lines.add("head10=" + Unpacker.format(Type.MODEL, packet.g2()));
+
+            case 70 -> lines.add("head1=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 71 -> lines.add("head2=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 72 -> lines.add("head3=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 73 -> lines.add("head4=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 74 -> lines.add("head5=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 75 -> lines.add("head6=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 76 -> lines.add("head7=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 77 -> lines.add("head8=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 78 -> lines.add("head9=" + Unpacker.format(Type.MODEL, packet.g4s()));
+            case 79 -> lines.add("head10=" + Unpacker.format(Type.MODEL, packet.g4s()));
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

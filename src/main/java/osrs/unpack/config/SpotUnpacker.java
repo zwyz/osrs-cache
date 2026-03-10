@@ -8,7 +8,7 @@ import osrs.util.Packet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EffectAnimUnpacker {
+public class SpotUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
@@ -25,6 +25,7 @@ public class EffectAnimUnpacker {
 
             case 1 -> lines.add("model=" + Unpacker.format(Type.MODEL, packet.g2()));
             case 2 -> lines.add("anim=" + Unpacker.format(Type.SEQ, packet.g2()));
+            case 3 -> lines.add("model=" + Unpacker.format(Type.MODEL, packet.g4s()));
             case 4 -> lines.add("resizeh=" + packet.g2());
             case 5 -> lines.add("resizev=" + packet.g2());
             case 6 -> lines.add("rotation=" + packet.g2());

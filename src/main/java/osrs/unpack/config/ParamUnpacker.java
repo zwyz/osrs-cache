@@ -23,14 +23,22 @@ public class ParamUnpacker {
             }
 
             case 1 -> {
-                var type = packet.g1();
-                Unpacker.setParamType(id, Type.byChar(type));
-                lines.add("type=" + Unpacker.format(Type.TYPE, type));
+                var type = Type.byChar(packet.g1());
+                Unpacker.setParamType(id, type);
+                lines.add("type=" + type.name);
             }
 
             case 2 -> lines.add("default=" + Unpacker.format(Unpacker.getParamType(id), packet.g4s()));
             case 4 -> lines.add("autodisable=no");
             case 5 -> lines.add("default=" + packet.gjstr());
+            case 7 -> lines.add("default=" + packet.g8s());
+
+            case 8 -> {
+                var type = Type.byID(packet.g1());
+                Unpacker.setParamType(id, type);
+                lines.add("type=" + type.name);
+            }
+
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

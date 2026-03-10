@@ -36,10 +36,27 @@ public class LocUnpacker {
 
             case 5 -> { // https://www.youtube.com/watch?v=vZ7oG1IDz1w 5:05:36
                 var count = packet.g1();
-
                 lines.add("model=" + Unpacker.format(Type.MODEL, packet.g2()));
+
                 for (var i = 1; i < count; ++i) {
                     lines.add("model" + (i + 1) + "=" + Unpacker.format(Type.MODEL, packet.g2()));
+                }
+            }
+
+            case 6 -> {
+                var count = packet.g1();
+
+                for (var i = 0; i < count; ++i) {
+                    lines.add("model=" + Unpacker.format(Type.MODEL, packet.g4s()) + "," + Unpacker.format(Type.LOC_SHAPE, packet.g1()));
+                }
+            }
+
+            case 7 -> {
+                var count = packet.g1();
+                lines.add("model=" + Unpacker.format(Type.MODEL, packet.g4s()));
+
+                for (var i = 1; i < count; ++i) {
+                    lines.add("model" + (i + 1) + "=" + Unpacker.format(Type.MODEL, packet.g4s()));
                 }
             }
 
@@ -214,19 +231,38 @@ public class LocUnpacker {
             });
 
             case 96 -> lines.add("thickness=" + packet.g1()); // thickness of this ground decor (to offset entities so they don't clip into it)
+            case 100 -> lines.add("subop" + packet.g1() + "=" + packet.g1() + "," + packet.gjstr());
 
-            case 249 -> {
-                var count = packet.g1();
+            case 101 -> {
+                var op = packet.g1();
+                var varp = packet.g2null();
+                var varbit = packet.g2null();
+                var min = packet.g4s();
+                var max = packet.g4s();
 
-                for (var i = 0; i < count; i++) {
-                    if (packet.g1() == 1) {
-                        lines.add("param=" + Unpacker.format(Type.PARAM, packet.g3()) + "," + packet.gjstr());
-                    } else {
-                        var param = packet.g3();
-                        lines.add("param=" + Unpacker.format(Type.PARAM, param) + "," + Unpacker.format(Unpacker.getParamType(param), packet.g4s()));
-                    }
+                if (varbit == -1) {
+                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                } else {
+                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
                 }
             }
+
+            case 102 -> {
+                var op = packet.g1();
+                var subop = packet.g2();
+                var varp = packet.g2null();
+                var varbit = packet.g2null();
+                var min = packet.g4s();
+                var max = packet.g4s();
+
+                if (varbit == -1) {
+                    lines.add("multisubop" + op + "=" + subop + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                } else {
+                    lines.add("multisubop" + op + "=" + subop + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
+                }
+            }
+
+            case 249 -> ParamUnpackHelper.unpack(lines, packet);
 
             default -> throw new IllegalStateException("unknown opcode");
         }

@@ -488,6 +488,10 @@ public class Unpacker {
         }
     }
 
+    public static String format(Type type, long value) {
+        return Long.toString(value);
+    }
+
     private static String quote(String name, boolean safe) {
         if (safe && !name.matches("\\^?[a-zA-Z0-9_.:]+")) {
             return "\"" + name + "\"";

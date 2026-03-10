@@ -31,7 +31,19 @@
 48 [command,pop_varc_string_old]
 49 [command,push_varc_string]
 50 [command,pop_varc_string]
+51 [command,push_varc_long]
+52 [command,pop_varc_long]
 60 [command,switch](unknown_int $x1)
+61 [command,push_constant_long]()(unknown_long)
+62 [command,pop_long_discard]
 63 [command,push_constant_null]()(unknownarray)
+66 [command,push_long_local]()(unknown_long)
+67 [command,pop_long_local](unknown_long $x1)
+68 [command,long_branch_not](unknown_long $x1, unknown_long $x2)
+69 [command,long_branch_equals](unknown_long $x1, unknown_long $x2)
+70 [command,long_branch_less_than](long $x1, long $x2)
+71 [command,long_branch_greater_than](long $x1, long $x2)
+72 [command,long_branch_less_than_or_equals](long $x1, long $x2)
+73 [command,long_branch_greater_than_or_equals](long $x1, long $x2)
 74 [command,push_varclansetting]
 76 [command,push_varclan]

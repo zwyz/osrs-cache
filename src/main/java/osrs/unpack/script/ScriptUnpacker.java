@@ -97,7 +97,8 @@ public class ScriptUnpacker {
     public static int getParameterCount(int script, LocalDomain domain) {
         return switch (domain) {
             case INTEGER -> SCRIPTS.get(script).argumentCountInt;
-            case STRING -> SCRIPTS.get(script).argumentCountObject;
+            case LONG -> SCRIPTS.get(script).argumentCountLong;
+            case OBJECT -> SCRIPTS.get(script).argumentCountObject;
             case ARRAY -> 0;
         };
     }
@@ -128,6 +129,8 @@ public class ScriptUnpacker {
                     }
                 } else if (command == PUSH_CONSTANT_STRING) {
                     returnTypes.addFirst(Type.STRING);
+                } else if (command == PUSH_CONSTANT_LONG) {
+                    returnTypes.addFirst(Type.UNKNOWN_LONG);
                 } else if (command == PUSH_CONSTANT_NULL) {
                     returnTypes.addFirst(Type.UNKNOWNARRAY);
                 } else {

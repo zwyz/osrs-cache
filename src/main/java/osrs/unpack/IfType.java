@@ -194,7 +194,7 @@ public class IfType {
     }
 
     private void decodeModel(Packet packet, int version) {
-        model = packet.g2null();
+        model = Unpack.VERSION >= 237 ? packet.g4s() : packet.g2null();
         modeloriginx = packet.g2s();
         modeloriginy = packet.g2s();
         modelanglex = packet.g2();

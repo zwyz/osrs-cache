@@ -72,6 +72,23 @@ public class NpcUnpacker {
                 }
             }
 
+
+            case 61 -> {
+                var count = packet.g1();
+
+                for (var i = 0; i < count; i++) {
+                    lines.add("model" + (i + 1) + "=" + Unpacker.format(Type.MODEL, packet.g4s()));
+                }
+            }
+
+            case 62 -> {
+                var length = packet.g1();
+
+                for (var i = 0; i < length; i++) {
+                    lines.add("head" + (i + 1) + "=" + Unpacker.format(Type.MODEL, packet.g4s()));
+                }
+            }
+
             case 74 -> lines.add("attack=" + packet.g2());
             case 75 -> lines.add("defence=" + packet.g2());
             case 76 -> lines.add("strength=" + packet.g2());
@@ -184,16 +201,35 @@ public class NpcUnpacker {
                 }
             }
 
-            case 249 -> {
-                var count = packet.g1();
+            case 249 -> ParamUnpackHelper.unpack(lines, packet);
+            case 251 -> lines.add("subop" + packet.g1() + "=" + packet.g1() + "," + packet.gjstr());
 
-                for (var i = 0; i < count; i++) {
-                    if (packet.g1() == 1) {
-                        lines.add("param=" + Unpacker.format(Type.PARAM, packet.g3()) + "," + packet.gjstr());
-                    } else {
-                        var param = packet.g3();
-                        lines.add("param=" + Unpacker.format(Type.PARAM, param) + "," + Unpacker.format(Unpacker.getParamType(param), packet.g4s()));
-                    }
+            case 252 -> {
+                var op = packet.g1();
+                var varp = packet.g2null();
+                var varbit = packet.g2null();
+                var min = packet.g4s();
+                var max = packet.g4s();
+
+                if (varbit == -1) {
+                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                } else {
+                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
+                }
+            }
+
+            case 253 -> {
+                var op = packet.g1();
+                var subop = packet.g2();
+                var varp = packet.g2null();
+                var varbit = packet.g2null();
+                var min = packet.g4s();
+                var max = packet.g4s();
+
+                if (varbit == -1) {
+                    lines.add("multisubop" + op + "=" + subop + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                } else {
+                    lines.add("multisubop" + op + "=" + subop + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
                 }
             }
 

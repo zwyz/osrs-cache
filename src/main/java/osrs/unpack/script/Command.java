@@ -103,10 +103,25 @@ public class Command {
     public static Command POP_VARC_STRING_OLD;
     public static Command PUSH_VARC_STRING;
     public static Command POP_VARC_STRING;
+    public static Command PUSH_VARC_LONG;
+    public static Command POP_VARC_LONG;
     public static Command SWITCH;
+    public static Command PUSH_CONSTANT_LONG;
+    public static Command POP_LONG_DISCARD;
     public static Command PUSH_CONSTANT_NULL;
+
+    public static Command PUSH_LONG_LOCAL;
+    public static Command POP_LONG_LOCAL;
+    public static Command LONG_BRANCH_NOT;
+    public static Command LONG_BRANCH_EQUALS;
+    public static Command LONG_BRANCH_LESS_THAN;
+    public static Command LONG_BRANCH_GREATER_THAN;
+    public static Command LONG_BRANCH_LESS_THAN_OR_EQUALS;
+    public static Command LONG_BRANCH_GREATER_THAN_OR_EQUALS;
+
     public static Command PUSH_VARCLANSETTING;
     public static Command PUSH_VARCLAN;
+
 
     // commands with special behavior
     public static Command ADD;
@@ -116,6 +131,14 @@ public class Command {
     public static Command MODULO;
     public static Command OR;
     public static Command AND;
+
+    public static Command LONG_ADD;
+    public static Command LONG_SUB;
+    public static Command LONG_MULTIPLY;
+    public static Command LONG_DIVIDE;
+    public static Command LONG_MODULO;
+    public static Command LONG_OR;
+    public static Command LONG_AND;
 
     public static Command ENUM;
     public static Command ENUM_STRING;
@@ -241,8 +264,20 @@ public class Command {
         POP_VARC_STRING_OLD = findCommand("pop_varc_string_old");
         PUSH_VARC_STRING = findCommand("push_varc_string");
         POP_VARC_STRING = findCommand("pop_varc_string");
+        PUSH_VARC_LONG = findCommand("push_varc_long");
+        POP_VARC_LONG = findCommand("pop_varc_long");
         SWITCH = findCommand("switch");
+        PUSH_CONSTANT_LONG = findCommand("push_constant_long");
+        POP_LONG_DISCARD = findCommand("pop_long_discard");
         PUSH_CONSTANT_NULL = findCommand("push_constant_null");
+        PUSH_LONG_LOCAL = findCommand("push_long_local");
+        POP_LONG_LOCAL = findCommand("pop_long_local");
+        LONG_BRANCH_NOT = findCommand("long_branch_not");
+        LONG_BRANCH_EQUALS = findCommand("long_branch_equals");
+        LONG_BRANCH_LESS_THAN = findCommand("long_branch_less_than");
+        LONG_BRANCH_GREATER_THAN = findCommand("long_branch_greater_than");
+        LONG_BRANCH_LESS_THAN_OR_EQUALS = findCommand("long_branch_less_than_or_equals");
+        LONG_BRANCH_GREATER_THAN_OR_EQUALS = findCommand("long_branch_greater_than_or_equals");
         PUSH_VARCLANSETTING = findCommand("push_varclansetting");
         PUSH_VARCLAN = findCommand("push_varclan");
 
@@ -254,6 +289,14 @@ public class Command {
         MODULO = findCommand("modulo");
         AND = findCommand("and");
         OR = findCommand("or");
+
+        LONG_ADD = findCommand("long_add");
+        LONG_SUB = findCommand("long_sub");
+        LONG_MULTIPLY = findCommand("long_multiply");
+        LONG_DIVIDE = findCommand("long_divide");
+        LONG_MODULO = findCommand("long_modulo");
+        LONG_AND = findCommand("long_and");
+        LONG_OR = findCommand("long_or");
 
         ENUM = findCommand("enum");
         ENUM_STRING = findCommand("enum_string");
@@ -335,8 +378,8 @@ public class Command {
 
     }
 
-    // todo: refactor pops handling to get rid of string boolean
-    public record VarClientReference(int var, boolean string) {
+    // todo: refactor pops handling to get rid of type hint
+    public record VarClientReference(int var, Type hint) {
 
     }
 
@@ -357,6 +400,6 @@ public class Command {
     }
 
     public enum LocalDomain {
-        INTEGER, STRING, ARRAY
+        INTEGER, LONG, OBJECT, ARRAY
     }
 }

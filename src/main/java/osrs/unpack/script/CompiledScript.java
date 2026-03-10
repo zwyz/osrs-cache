@@ -11,8 +11,10 @@ public class CompiledScript {
     public String name;
     public int localCountInt;
     public int localCountObject;
+    public int localCountLong;
     public int argumentCountInt;
     public int argumentCountObject;
+    public int argumentCountLong;
     public Instruction[] code;
 
     public static CompiledScript decode(byte[] data) {
@@ -24,6 +26,10 @@ public class CompiledScript {
             headerSize += 2 + packet.g2();
         }
 
+        if (Unpack.VERSION >= 237) {
+            headerSize += 4;
+        }
+
         var headerPos = packet.arr.length - headerSize;
         packet.pos = headerPos;
         var script = new CompiledScript();
@@ -32,9 +38,11 @@ public class CompiledScript {
 
         script.localCountInt = packet.g2();
         script.localCountObject = packet.g2();
+        if (Unpack.VERSION >= 237) script.localCountLong = packet.g2();
 
         script.argumentCountInt = packet.g2();
         script.argumentCountObject = packet.g2();
+        if (Unpack.VERSION >= 237) script.argumentCountLong = packet.g2();
 
         int[][] switchValue = null;
         int[][] switchOffset = null;
@@ -69,14 +77,13 @@ public class CompiledScript {
     }
 
     private static Object decodeOperand(Command command, Packet packet, int index, int[][] switchValue, int[][] switchOffset) {
-        // (command < 100 && command != 21 && command != 38 && command != 39) {
         if (command == PUSH_CONSTANT_INT) {
             return packet.g4s(); // int
         } else if (command == PUSH_VAR || command == POP_VAR) {
             return packet.g4s(); // varplayer
         } else if (command == PUSH_VARBIT || command == POP_VARBIT) {
             return packet.g4s(); // varplayerbit
-        } else if (command == PUSH_VARC_INT || command == POP_VARC_INT || command == PUSH_VARC_STRING || command == POP_VARC_STRING) {
+        } else if (command == PUSH_VARC_INT || command == POP_VARC_INT || command == PUSH_VARC_STRING || command == POP_VARC_STRING || command == PUSH_VARC_LONG || command == POP_VARC_LONG) {
             return packet.g4s(); // varclient
         } else if (command == PUSH_VARC_STRING_OLD || command == POP_VARC_STRING_OLD) {
             return packet.g4s(); // varclientstring
@@ -86,9 +93,11 @@ public class CompiledScript {
             return packet.g4s(); // varclan
         } else if (command == PUSH_CONSTANT_STRING) {
             return packet.gjstr();
-        } else if (command == BRANCH || command == BRANCH_NOT || command == BRANCH_EQUALS || command == BRANCH_LESS_THAN || command == BRANCH_GREATER_THAN || command == BRANCH_LESS_THAN_OR_EQUALS || command == BRANCH_GREATER_THAN_OR_EQUALS) {
+        } else if (command == PUSH_CONSTANT_LONG) {
+            return packet.g8s();
+        } else if (command == BRANCH || command == BRANCH_NOT || command == BRANCH_EQUALS || command == BRANCH_LESS_THAN || command == BRANCH_GREATER_THAN || command == BRANCH_LESS_THAN_OR_EQUALS || command == BRANCH_GREATER_THAN_OR_EQUALS || command == LONG_BRANCH_NOT || command == LONG_BRANCH_EQUALS || command == LONG_BRANCH_LESS_THAN || command == LONG_BRANCH_GREATER_THAN || command == LONG_BRANCH_LESS_THAN_OR_EQUALS || command == LONG_BRANCH_GREATER_THAN_OR_EQUALS) {
             return index + packet.g4s(); // branch
-        } else if (command == PUSH_INT_LOCAL || command == POP_INT_LOCAL || command == PUSH_STRING_LOCAL || command == POP_STRING_LOCAL) {
+        } else if (command == PUSH_INT_LOCAL || command == POP_INT_LOCAL || command == PUSH_STRING_LOCAL || command == POP_STRING_LOCAL || command == PUSH_LONG_LOCAL || command == POP_LONG_LOCAL) {
             return packet.g4s(); // local
         } else if (command == JOIN_STRING) {
             return packet.g4s(); // count

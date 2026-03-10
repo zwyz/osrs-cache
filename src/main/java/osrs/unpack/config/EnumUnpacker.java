@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
@@ -20,7 +21,7 @@ public class EnumUnpacker {
                     throw new IllegalStateException("end of file not reached");
                 }
 
-                if (nextAutoIntIndex != -1 && false) {
+                if (nextAutoIntIndex != -1 && Unpack.INFER_AUTOINT) {
                     for (var i = 0; i < lines.size(); i++) {
                         var line = lines.get(i);
 
@@ -87,6 +88,24 @@ public class EnumUnpacker {
                     }
                 }
             }
+
+            case 7 -> {
+                var count = packet.g2();
+
+                for (var i = 0; i < count; ++i) {
+                    var key = packet.g4s();
+                    var value = packet.g8s();
+                    lines.add("val=" + Unpacker.format(Unpacker.getEnumInputType(id), key) + "," + Unpacker.format(Unpacker.getEnumOutputType(id), value));
+
+                    if (nextAutoIntIndex != -1 && key == nextAutoIntIndex) {
+                        nextAutoIntIndex++;
+                    } else {
+                        nextAutoIntIndex = -1;
+                    }
+                }
+            }
+
+            case 8 -> lines.add("default=" + Unpacker.format(Unpacker.getEnumOutputType(id), packet.g8s()));
 
             default -> throw new IllegalStateException("unknown opcode");
         }

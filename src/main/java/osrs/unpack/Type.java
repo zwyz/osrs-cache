@@ -9,6 +9,7 @@ import java.util.*;
 public class Type {
     private static final List<Type> TYPES = new ArrayList<>();
     private static final Map<String, Type> BY_NAME = new HashMap<>();
+    private static final Map<String, Type> BY_COMPONENT_NAME = new HashMap<>();
 
     public static final Type INT = new Type("int", BaseVarType.INTEGER);
     public static final Type BOOLEAN = new Type("boolean", BaseVarType.INTEGER);
@@ -278,9 +279,6 @@ public class Type {
     // is more specific than objarray, but not a subtype)
     public static final Lattice<Type> LATTICE = new Lattice<>();
 
-    // hash map of unique name literal to its type (e.g. "universe" -> Type("universe", Type.COMPONENT))
-    public static final Map<String, Type> componentAliases = new HashMap<>();
-
     static {
         BY_NAME.put("component", Type.COMPONENT);
         LATTICE.add(COMPONENT_COMPONENT, Type.COMPONENT);
@@ -405,6 +403,22 @@ public class Type {
 
         return byName(name);
     }
+
+    public static Type getComponentAlias(String name) {
+        var type = BY_COMPONENT_NAME.get(name);
+
+        if (type == null) {
+            type = new Type(name, COMPONENT);
+            LATTICE.add(type, COMPONENT);
+            LATTICE.add(COMPONENT_COMPONENT, type);
+            LATTICE.add(type.array(), COMPONENT.array());
+            LATTICE.add(COMPONENT_COMPONENT.array(), type.array());
+            BY_COMPONENT_NAME.put(name, type);
+        }
+
+        return type;
+    }
+
 
     public static Type byID(int id) {
         return switch (id) {
