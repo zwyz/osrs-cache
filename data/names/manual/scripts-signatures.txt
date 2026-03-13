@@ -97,6 +97,7 @@
 [clientscript,hp_hud_fade_out](component $component0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, int $int14) 2329
 [clientscript,hp_hud_pos](int $int0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, int $int14, component $component15, component $component16, component $component17) 2329
 [clientscript,hp_hud_update](component $component0, component $component1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, boolean $boolean11) 2329
+[clientscript,interface_dodger_review](component $component0, component $component1, int $int2, int $setposh3, int $setposv4, boolean $boolean5, int $int6, int $int7, int $int8, int $int9, int $int10) 2329
 [clientscript,interface_invother_update_big](component $component0, inv $inv1, int $int2, int $int3, int $int4, component $component5, string $string0, string $string1, string $string2, string $string3, string $string4, string $string5, string $string6, string $string7, string $string8, boolean $boolean6) 2329
 [clientscript,inventory_build](component $component0, int $int1, boolean $boolean2, boolean $boolean3) 2329
 [clientscript,inventory_key](component $component0, int $int1, boolean $boolean2, int $key3, boolean $boolean4) 2329
@@ -240,7 +241,6 @@
 [clientscript,script4207](boolean $boolean0, component $component1, component $component2, component $component3, int $int4, component $component5) 2329
 [clientscript,script4212](string $string0, component $component0) 1427
 [clientscript,script4520](component $component0, int $int1, boolean $boolean2) 2329
-[clientscript,script4730](component $component0, component $component1, int $int2, int $setposh3, int $setposv4, boolean $boolean5, int $int6, int $int7, int $int8, int $int9, int $int10) 2329
 [clientscript,script4878](boolean $boolean0, component $component1, int $int2, int $int3, int $int4) 2329
 [clientscript,script4888](boolean $boolean0, component $component1) 2329
 [clientscript,script4911](boolean $boolean0, component $component1, int $int2, graphic $graphic3, int $int4, int $int5) 2329
