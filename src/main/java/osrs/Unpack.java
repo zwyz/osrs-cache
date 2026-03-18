@@ -5,7 +5,8 @@ import com.google.gson.GsonBuilder;
 import osrs.js5.*;
 import osrs.unpack.*;
 import osrs.unpack.config.*;
-import osrs.unpack.map.Environment;
+import osrs.unpack.map.MapSquare;
+import osrs.unpack.XteaKeyProvider;
 import osrs.unpack.script.Command;
 import osrs.unpack.script.ScriptUnpacker;
 import osrs.util.Packet;
@@ -34,39 +35,46 @@ import static osrs.unpack.Js5WorldMapGroup.DETAILS;
 // todo: clean this up
 public class Unpack {
     public static final boolean DUMP_CONFIG_IDS = false;
-    public static final boolean DUMP_SYMBOLS = false;
+    public static final boolean DUMP_SYMBOLS = true;
     public static final boolean DUMP_SERVERSIDE_COLUMNS = true;
     public static final boolean INFER_COMPONENT_ALIASES = true;
     public static final boolean APPEND_LOCAL_VAR_INDEX = false;
     public static final boolean INFER_AUTOINT = false;
-    public static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    public static final boolean UNPACK_MAPS = false;
+    public static final Gson GSON = new GsonBuilder().create();
     public static int VERSION;
+    public static int ID;
     public static Js5ResourceProvider PROVIDER;
     public static Js5MasterIndex MASTER_INDEX;
     public static int CONFIGS_VERSION;
     public static int CLIENTSCRIPTS_VERSION;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 235, "oldschool1.runescape.com", 43594, null);
-//        unpackOpenRS2("unpacked/beta", 223, "runescape", 1826);
+        unpackLive("unpacked/live", 236, "oldschool1.runescape.com", 43594, null);
+//        unpackOpenRS2("unpacked/2026-03-11", 236, "runescape", 2490);
     }
 
     public static void unpackOpenRS2(String path, int version, String scope, int id) throws IOException {
-        unpack(path, version, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
+        VERSION = version;
+        ID = id;
+
+        unpack(path, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
                 Path.of(System.getProperty("user.home") + "/.rscache/osrs"),
                 new OpenRS2Js5ResourceProvider(scope, id))
         ));
     }
 
     public static void unpackLive(String path, int version, String host, int port, int[] key) throws IOException {
-        unpack(path, version, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
+        VERSION = version;
+        ID = -1;
+
+        unpack(path, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
                 Path.of(System.getProperty("user.home") + "/.rscache/osrs"),
                 new TcpJs5ResourceProvider(host, port, version, key))
         ));
     }
 
-    public static void unpack(String path, int version, Js5ResourceProvider provider) throws IOException {
-        VERSION = version;
+    public static void unpack(String path, Js5ResourceProvider provider) throws IOException {
         PROVIDER = provider;
         MASTER_INDEX = new Js5MasterIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, 255, false)));
         CONFIGS_VERSION = MASTER_INDEX.getArchiveData(JS5_CONFIG.id).getVersion();
@@ -82,7 +90,7 @@ public class Unpack {
         Files.createDirectories(Path.of(path + "/config"));
         Files.createDirectories(Path.of(path + "/script"));
         Files.createDirectories(Path.of(path + "/interface"));
-//        Files.createDirectories(Path.of(path + "/maps"));
+        if (UNPACK_MAPS) Files.createDirectories(Path.of(path + "/maps"));
 
         // generate {type}_{id} default names for assets
         generateDefaultNames(JS5_MODELS, Type.MODEL);
@@ -180,7 +188,7 @@ public class Unpack {
         unpackBinaries(Path.of(path + "/binary"));
 
         // maps
-//        unpackMaps(Path.of(path + "/maps"), path);
+        if (UNPACK_MAPS) unpackMaps(path);
 
         if (DUMP_SYMBOLS) {
             Path symbolsPath = Path.of(path + "/symbols");
@@ -271,143 +279,152 @@ public class Unpack {
         }
     }
 
-    private static void unpackMaps(Path path, String rootPath) throws IOException {
-        var names = new HashSet<String>();
+    private static void unpackMaps(String rootPath) throws IOException {
+        if (Unpack.VERSION < 237) {
+            unpackMapsV1(rootPath);
+        } else {
+            unpackMapsV2(rootPath);
+        }
+    }
 
-        for (var x = 0; x < 128; x++) {
-            for (var z = 0; z < 256; z++) {
-                names.add("m" + x + "_" + z);
-                names.add("l" + x + "_" + z);
-                names.add("e" + x + "_" + z);
-                names.add("wm" + x + "_" + z);
-                names.add("t" + x + "_" + z);
-                names.add("w" + x + "_" + z);
+    private static void unpackMapsV1(String rootPath) throws IOException {
+        var files = new HashMap<Integer, byte[]>();
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_MAPS.id, false)));
+        var groups = preloadGroups(JS5_MAPS.id);
+        var keys = ID == -1 ? Map.<Integer, int[]>of() : XteaKeyProvider.load(ID);
+
+        for (var group : archiveIndex.groupId) {
+            try {
+                var unpacked = Js5Util.unpackGroup(archiveIndex, group, groups[group], keys.get(group));
+                files.put(archiveIndex.groupNameHash[group], unpacked.get(0));
+            } catch (UncheckedIOException e) {
+                System.out.println("skipping group with missing xtea: " + group);
             }
         }
 
-        for (var id = -1; id < 0xffff; id++) {
-            names.add("wa" + id);
-        }
+        // squares
+        for (var squareX = 0; squareX < 100; squareX++) {
+            for (var squareZ = 0; squareZ < 200; squareZ++) {
+                var m = files.remove(("m" + squareX + "_" + squareZ).hashCode());
+                var l = files.remove(("l" + squareX + "_" + squareZ).hashCode());
+                var e = files.remove(("e" + squareX + "_" + squareZ).hashCode());
+                var t = files.remove(("t" + squareX + "_" + squareZ).hashCode());
+                var w = files.remove(("w" + squareX + "_" + squareZ).hashCode());
 
-        var namesByHash = new HashMap<Integer, String>();
-
-        for (var name : names) {
-            if (namesByHash.containsKey(name.hashCode())) {
-                System.err.println("duplicate: " + name + " " + namesByHash.get(name.hashCode()));
+                if (m != null || l != null || e != null || t != null || w != null) {
+                    saveMapSquare(Path.of(rootPath + "/maps/" + squareX + "_" + squareZ + ".jm2"), new MapSquare(m, l, e, t, w));
+                }
             }
-
-            namesByHash.put(name.hashCode(), name);
         }
 
-        var width = 128 * 8;
-        var height = 256 * 8;
+        // worldarea
+        var lines = new ArrayList<String>();
+
+        for (var id = -1; id <= 0xFFFF; id++) {
+            var data = files.remove(("wa" + id).hashCode());
+
+            if (data != null) {
+                lines.addAll(WorldAreaUnpacker.unpack(id, data));
+                lines.add("");
+            }
+        }
+
+        Files.write(Path.of(rootPath + "/config/dump.worldarea"), lines);
+
+        // worldarea map
+        var width = 100 * 8;
+        var height = 200 * 8;
         var image = new int[width * height];
 
-        var wa = new HashMap<Integer, List<String>>();
+        for (var squareX = 0; squareX < 100; squareX++) {
+            for (var squareZ = 0; squareZ < 200; squareZ++) {
+                var data = files.remove(("wm" + squareX + "_" + squareZ).hashCode());
 
-        iterateArchiveNamed(JS5_MAPS, (nameHash, data) -> {
-            var name = namesByHash.get(nameHash);
+                if (data != null) {
+                    var colors = decodeWorldMapColor(data);
 
-            if (name == null) {
-                System.err.println("missing name: " + nameHash);
-            } else if (name.startsWith("l")) {
-                var parts = name.substring(1).split("_");
-                var squareX = Integer.parseInt(parts[0]);
-                var squareZ = Integer.parseInt(parts[1]);
-//                    System.out.println();
-            } else if (name.startsWith("m")) {
-                var parts = name.substring(1).split("_");
-                var squareX = Integer.parseInt(parts[0]);
-                var squareZ = Integer.parseInt(parts[1]);
-//                    System.out.println();
-            } else if (name.startsWith("e")) {
-                var parts = name.substring(1).split("_");
-                var squareX = Integer.parseInt(parts[0]);
-                var squareZ = Integer.parseInt(parts[1]);
-                var packet = new Packet(data);
-
-                if (packet.g1() != 0) {
-                    var environment = new Environment(packet);
-                    packet.g4s(); // todo: osrs-only
-
-                    try {
-                        Files.writeString(path.resolve(name + ".json"), GSON.toJson(environment));
-                    } catch (IOException e) {
-                        throw new UncheckedIOException(e);
+                    for (var zoneX = 0; zoneX < 8; zoneX++) {
+                        for (var zoneZ = 0; zoneZ < 8; zoneZ++) {
+                            var x = 8 * squareX + zoneX;
+                            var z = 8 * squareZ + zoneZ;
+                            image[width * (height - 1 - z) + x] = colors[8 * zoneX + zoneZ];
+                        }
                     }
                 }
-
-                if (packet.pos < packet.arr.length) {
-                    throw new IllegalStateException("end of file not reached");
-                }
-
-            } else if (name.startsWith("t")) {
-                var parts = name.substring(1).split("_");
-                var squareX = Integer.parseInt(parts[0]);
-                var squareZ = Integer.parseInt(parts[1]);
-                var packet = new Packet(data);
-
-                if (packet.g1() != 0) {
-                    throw new IllegalStateException("todo");
-                }
-
-                if (packet.g1() != 0) {
-                    throw new IllegalStateException("todo");
-                }
-
-                if (packet.pos < packet.arr.length) {
-                    throw new IllegalStateException("end of file not reached");
-                }
-            } else if (name.startsWith("w") && !name.startsWith("wm") && !name.startsWith("wa")) {
-                var parts = name.substring(1).split("_");
-                var squareX = Integer.parseInt(parts[0]);
-                var squareZ = Integer.parseInt(parts[1]);
-                var packet = new Packet(data);
-
-                if (packet.g1() != 0) {
-                    throw new IllegalStateException("todo");
-                }
-
-                if (packet.pos < packet.arr.length) {
-                    throw new IllegalStateException("end of file not reached");
-                }
-            } else if (name.startsWith("wm")) {
-                var parts = name.substring(2).split("_");
-                var squareX = Integer.parseInt(parts[0]);
-                var squareZ = Integer.parseInt(parts[1]);
-
-                var colors = decodeWorldMapColor(data);
-
-                for (var zoneX = 0; zoneX < 8; zoneX++) {
-                    for (var zoneZ = 0; zoneZ < 8; zoneZ++) {
-                        var x = 8 * squareX + zoneX;
-                        var z = 8 * squareZ + zoneZ;
-                        image[width * (height - 1 - z) + x] = colors[8 * zoneX + zoneZ];
-                    }
-                }
-            } else if (name.startsWith("wa")) {
-                var id = Integer.parseInt(name.substring(2));
-                var lines = WorldAreaUnpacker.unpack(id, data);
-                lines.add("");
-                wa.put(id, lines);
-            } else {
-                throw new IllegalStateException("unexpected name: " + name);
             }
-        });
+        }
 
-        var waLines = wa.entrySet().stream()
-                .sorted(Map.Entry.comparingByKey())
-                .map(Map.Entry::getValue)
-                .flatMap(Collection::stream)
-                .toList();
+        saveImage(new File(rootPath + "/areas.png"), image, width, height);
 
-        Files.write(Path.of(rootPath + "/config/dump.worldarea"), waLines);
+        if (!files.isEmpty()) {
+            throw new IllegalStateException("not all files were unpacked");
+        }
+    }
 
-        var rgbData = new DataBufferInt(image, image.length);
+    private static void unpackMapsV2(String rootPath) throws IOException {
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_CLIENTSCRIPTS.id, false)));
+        var groups = preloadGroups(JS5_MAPS.id);
+
+        // main archive
+        for (var group : archiveIndex.groupId) {
+            var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
+            var squareX = group & 0xFF;
+            var squareZ = group >> 8;
+
+            if (squareX == 199 && squareZ == 98) {
+                var lines = new ArrayList<String>();
+
+                for (var file : files.keySet()) {
+                    lines.addAll(WorldAreaUnpacker.unpack(file, files.get(file)));
+                    lines.add("");
+                }
+
+                Files.write(Path.of(rootPath + "/config/dump.worldarea"), lines);
+            } else {
+                var m = files.get(0);
+                var l = files.get(1);
+                var e = files.get(2);
+                var t = files.get(3);
+                saveMapSquare(Path.of(rootPath + "/maps/" + squareX + "_" + squareZ + ".jm2"), new MapSquare(m, l, e, t, null));
+            }
+        }
+
+        // defaults archive
+        var files = loadGroupFiles(JS5_DEFAULTS, 1);
+        var width = 100 * 8;
+        var height = 200 * 8;
+        var image = new int[width * height];
+
+        for (var file : files.keySet()) {
+            var squareX = file >> 8;
+            var squareZ = file & 0xFF;
+            var colors = decodeWorldMapColor(files.get(file));
+
+            for (var zoneX = 0; zoneX < 8; zoneX++) {
+                for (var zoneZ = 0; zoneZ < 8; zoneZ++) {
+                    var x = 8 * squareX + zoneX;
+                    var z = 8 * squareZ + zoneZ;
+                    image[width * (height - 1 - z) + x] = colors[8 * zoneX + zoneZ];
+                }
+            }
+        }
+
+        saveImage(new File(rootPath + "/areas.png"), image, width, height);
+    }
+
+    private static void saveMapSquare(Path path, MapSquare square) {
+        try {
+            Files.writeString(path, GSON.toJson(square)); // todo: use a better format
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    private static void saveImage(File path, int[] pixels, int width, int height) throws IOException {
+        var rgbData = new DataBufferInt(pixels, pixels.length);
         var raster = Raster.createPackedRaster(rgbData, width, height, width, new int[]{0xff0000, 0xff00, 0xff}, null);
         var colorModel = new DirectColorModel(24, 0xff0000, 0xff00, 0xff);
-
-        ImageIO.write(new BufferedImage(colorModel, raster, false, null), "png", new File(rootPath + "/areas.png"));
+        ImageIO.write(new BufferedImage(colorModel, raster, false, null), "png", path);
     }
 
     private static int[] decodeWorldMapColor(byte[] data) {
@@ -489,25 +506,6 @@ public class Unpack {
         }
 
         return groups;
-    }
-
-    private static void iterateArchiveNamed(Js5Archive archive, BiConsumer<Integer, byte[]> unpack) throws IOException {
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, archive.id, false)));
-        var groups = preloadGroups(archive.id);
-
-        for (var group : archiveIndex.groupId) {
-            try {
-                var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
-
-                if (files.size() == 1 && files.containsKey(0)) {
-                    unpack.accept(archiveIndex.groupNameHash[group], files.get(0));
-                } else {
-                    throw new IllegalStateException();
-                }
-            } catch (UncheckedIOException ignored) {
-
-            }
-        }
     }
 
     private static void unpackConfigArchive(Js5Archive archive, int bits, BiFunction<Integer, byte[], List<String>> unpack, Path result) throws IOException {
