@@ -35,6 +35,14 @@ public class IDKUnpacker {
 
             case 3 -> lines.add("disable=yes");
 
+            case 5 -> {
+                var modelCount = packet.g1();
+
+                for (var i = 0; i < modelCount; ++i) {
+                    lines.add("model=" + Unpacker.format(Type.MODEL, packet.g4s()));
+                }
+            }
+
             case 40 -> {
                 var count = packet.g1();
 
