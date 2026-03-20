@@ -155,7 +155,7 @@ public class Command {
     public static Command DB_GETFIELD;
     public static Command CC_CREATE;
     public static Command CC_FIND_PARAM;
-    public static Command IF_RUNSCRIPT;
+    public static Command IF_SCRIPT_TRIGGER;
     public static Command CC_PARAM;
     public static Command CC_SETPARAM;
     public static Command IF_PARAM;
@@ -313,7 +313,7 @@ public class Command {
         DB_GETFIELD = findCommand("db_getfield");
         CC_CREATE = findCommand("cc_create");
         CC_FIND_PARAM = findCommand("cc_find_param");
-        IF_RUNSCRIPT = findCommand("if_runscript");
+        IF_SCRIPT_TRIGGER = findCommand("if_script_trigger");
         CC_PARAM = findCommand("cc_param");
         CC_SETPARAM = findCommand("cc_setparam");
         IF_PARAM = findCommand("if_param");

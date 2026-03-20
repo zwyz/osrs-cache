@@ -430,4 +430,4 @@
 
 2927 [command,if_callonresize](component $x1)
 2928 [command,if_triggerop](component $x1, int $x2, int $x3)
-2929 [command,if_runscript](if_script $script, component $com, int $sub, argument_list $args)
+2929 [command,if_script_trigger](int $unknown, component $com, int $sub, argument_list $args)

@@ -17,7 +17,6 @@ public class Unpacker {
     public static final Map<Integer, Type> VAR_CLAN_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_PLAYER_TYPE = new HashMap<>();
     public static final Map<Integer, Type> VAR_CLIENT_TYPE = new HashMap<>();
-    public static final Map<Integer, List<Type>> IF_SCRIPT_TYPE = new HashMap<>();
     public static final Set<Integer> OPTIONAL_COLUMNS = new HashSet<>();
     public static final Set<Integer> LIST_COLUMNS = new HashSet<>();
     public static final Set<Integer> INDEXED_COLUMNS = new HashSet<>();
@@ -36,7 +35,6 @@ public class Unpacker {
         VAR_CLAN_TYPE.clear();
         VAR_PLAYER_TYPE.clear();
         VAR_CLIENT_TYPE.clear();
-        IF_SCRIPT_TYPE.clear();
         OPTIONAL_COLUMNS.clear();
         LIST_COLUMNS.clear();
         INDEXED_COLUMNS.clear();

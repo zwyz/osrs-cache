@@ -250,15 +250,15 @@ public class TypePropagator {
         }
 
         // if_script
-        if (expression.command == IF_RUNSCRIPT) {
-            var otherScript = (int) expression.arguments.get(0).operand;
+        if (expression.command == IF_SCRIPT_TRIGGER) {
+            var component = (int) expression.arguments.get(1).operand;
             var index = 0;
 
             for (var i = 3; i < expression.arguments.size() - 1; i++) {
                 var arg = expression.arguments.get(i);
 
                 for (var j = 0; j < arg.type.size(); j++) {
-                    emitAssign(type(arg, j), serverParameter(otherScript, index++));
+                    emitAssign(type(arg, j), scriptTriggerParameter(component, index++));
                 }
             }
         }
@@ -580,8 +580,8 @@ public class TypePropagator {
         return new Node.ParameterType(script, index);
     }
 
-    private Node serverParameter(int script, int index) {
-        return new Node.ServerParameterType(script, index);
+    private Node scriptTriggerParameter(int component, int index) {
+        return new Node.ScriptTriggerParameter(component, index);
     }
 
     private Node result(int script, int index) {
@@ -734,7 +734,7 @@ public class TypePropagator {
                 case Node.ExpressionType(var e, var i) -> "[shape=box,label=\"" + e.toString().replace("\\", "\\\\").replace("\"", "\\\"") + " #" + i + "\\n" + typeof(node) + "\"]";
                 case Node.LocalType(var s, var d, var i) -> "[shape=box,label=\"script_" + s + ".local" + d.name().toLowerCase() + i + "\\n" + typeof(node) + "\"]";
                 case Node.ParameterType(var s, var i) -> "[shape=box,label=\"script_" + s + ".param" + i + "\\n" + typeof(node) + "\"]";
-                case Node.ServerParameterType(var s, var i) -> "[shape=box,label=\"serverscript_" + s + ".param" + i + "\\n" + typeof(node) + "\"]";
+                case Node.ScriptTriggerParameter(var s, var i) -> "[shape=box,label=\"if_script_trigger:" + s + ".param" + i + "\\n" + typeof(node) + "\"]";
                 case Node.ReturnType(var s, var i) -> "[shape=box,label=\"script_" + s + ".result" + i + "\\n" + typeof(node) + "\"]";
                 case Node.VarPlayerType(var i) -> "[shape=box,label=\"varplayer_" + i + "\\n" + typeof(node) + "\"]";
                 case Node.VarPlayerBitType(var i) -> "[shape=box,label=\"varplayerbit_" + i + "\\n" + typeof(node) + "\"]";
@@ -771,7 +771,7 @@ public class TypePropagator {
         record ExpressionType(Expression expression, int index) implements Node {}
         record LocalType(int script, Command.LocalDomain domain, int index) implements Node {}
         record ParameterType(int script, int index) implements Node {}
-        record ServerParameterType(int script, int index) implements Node {}
+        record ScriptTriggerParameter(int component, int index) implements Node {}
         record ReturnType(int script, int index) implements Node {}
         record VarPlayerType(int id) implements Node {}
         record VarPlayerBitType(int id) implements Node {}

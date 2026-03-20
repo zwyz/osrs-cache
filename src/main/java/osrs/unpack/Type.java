@@ -209,7 +209,6 @@ public class Type {
     public static final Type GCLIENTCLICKOBJ = new Type("gclientclickobj", BaseVarType.INTEGER);
     public static final Type GCLIENTCLICKPLAYER = new Type("gclientclickplayer", BaseVarType.INTEGER);
     public static final Type GCLIENTCLICKTILE = new Type("gclientclicktile", BaseVarType.INTEGER);
-    public static final Type IF_SCRIPT = new Type("if_script", BaseVarType.INTEGER);
     public static final Type DBCOLUMN = new Type("dbcolumn", BaseVarType.INTEGER);
     public static final Type VAR_PLAYER = new Type("var_player", BaseVarType.INTEGER);
     public static final Type VAR_PLAYER_BIT = new Type("var_player_bit", BaseVarType.INTEGER);

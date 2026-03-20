@@ -53,7 +53,6 @@ public class Symbols {
         dumpInterface(path);
         dumpDBColumn(path.resolve("dbcolumn.sym"));
         dumpClientScript(path.resolve("clientscript.sym"));
-        dumpIfScript(path.resolve("if_script.sym"));
         dumpArchive(Js5Archive.JS5_FONTMETRICS, Type.FONTMETRICS, path.resolve("fontmetrics.sym"));
 
         dumpConstant(Type.INT_INT, path.resolve("constant/int.sym"));
@@ -226,18 +225,6 @@ public class Symbols {
         for (var entry : sorted.entrySet()) {
             var name = Unpacker.getScriptName(entry.getKey());
             builder.append(entry.getKey()).append('\t').append(name).append('\n');
-        }
-        Files.writeString(output, builder.toString(), OPEN_OPTIONS);
-    }
-
-    private static void dumpIfScript(Path output) throws IOException {
-        var builder = new StringBuilder();
-        var sorted = new TreeMap<>(Unpacker.IF_SCRIPT_TYPE);
-        for (var entry : sorted.entrySet()) {
-            var name = Unpacker.format(Type.IF_SCRIPT, entry.getKey());
-            var types = entry.getValue();
-            var typesJoined = types.stream().map(t -> ScriptUnpacker.chooseDisplayType(t).name).collect(Collectors.joining(","));
-            builder.append(entry.getKey()).append('\t').append(name).append('\t').append(typesJoined).append('\n');
         }
         Files.writeString(output, builder.toString(), OPEN_OPTIONS);
     }

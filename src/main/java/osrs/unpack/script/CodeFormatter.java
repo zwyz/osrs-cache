@@ -248,11 +248,13 @@ public class CodeFormatter {
             }
 
             return (dot ? "." : "") + "cc_create(" + args.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
-        } else if (command == IF_RUNSCRIPT) {
+        } else if (command == IF_SCRIPT_TRIGGER) {
             var dot = expression.operand instanceof Integer i && i == 1;
-            var args1 = expression.arguments.subList(0, 3);
+            var arg2 = expression.arguments.get(2);
+            var defaultSubID = arg2.command == PUSH_CONSTANT_INT && Objects.equals(arg2.operand, -1);
+            var args1 = expression.arguments.subList(1, defaultSubID ? 2 : 3);
             var args2 = expression.arguments.subList(3, expression.arguments.size() - 1);
-            return (dot ? "." : "") + "if_runscript*(" + args1.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")(" + args2.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
+            return (dot ? "." : "") + "if_script_trigger*(" + args1.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")(" + args2.stream().map(CodeFormatter::format).collect(Collectors.joining(", ")) + ")";
         } else if (command == FLOW_NE) {
             return formatBinary(prec, 40, " ! ", expression.arguments.get(0), expression.arguments.get(1));
         } else if (command == FLOW_EQ) {

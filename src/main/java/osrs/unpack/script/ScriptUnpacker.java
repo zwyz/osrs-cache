@@ -37,6 +37,10 @@ public class ScriptUnpacker {
     public static final Map<String, ScriptOverride> SCRIPT_OVERRIDES = new HashMap<>();
     public static final Set<Integer> CALLED = new LinkedHashSet<>();
     public static final Map<Integer, ScriptTrigger> SCRIPT_TRIGGERS = new LinkedHashMap<>();
+    public static final Map<Integer, ScriptTriggerInfo> IF_SCRIPT_TRIGGERS = new TreeMap<>();
+
+    public record ScriptTriggerInfo(int component, int unknown, List<Type> signature) {
+    }
 
     private static final Pattern OVERRIDE_PATTERN = Pattern.compile("\\[(?<trigger>[a-zA-Z0-9_]+),(?<name>[a-zA-Z0-9_]+)](?:\\((?<arguments>[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+(?:\\s*,\\s*[a-zA-Z0-9_]+\\s+\\$[a-zA-Z0-9_]+)*)?\\))?(?:\\((?<returns>[a-zA-Z0-9_]+(?:\\s*, ?\\s*[a-zA-Z0-9_]+)*)?\\))?(?: (?<version>[0-9]+))?");
 
@@ -185,6 +189,28 @@ public class ScriptUnpacker {
 
         return CodeFormatter.formatScript(Unpacker.getScriptName(id), SCRIPT_PARAMETERS.get(id), SCRIPT_RETURNS.get(id), SCRIPT_LOCALS.get(id), script).lines().toList();
     }
+
+    public static List<String> outputScriptTriggerDefinitions() {
+        var lines = new ArrayList<String>();
+
+        for (var trigger : IF_SCRIPT_TRIGGERS.values()) {
+            if (Unpack.DUMP_SYMBOLS) lines.add("#[crc(0x" + Integer.toHexString(trigger.unknown) + ")]");
+            var line = "[if_script_trigger," + Unpacker.format(Type.COMPONENT, trigger.component) + "](";
+            var index = 0;
+
+            for (var type : trigger.signature) {
+                if (index > 0) line += ", ";
+                line += chooseDisplayType(type).name + " $x" + index++;
+            }
+
+            line += ")";
+            lines.add(line);
+            lines.add("");
+        }
+
+        return lines;
+    }
+
 
     public static Type chooseDisplayType(Type type) {
         if (ASSUME_UNKNOWN_TYPES_ARE_BASE) {

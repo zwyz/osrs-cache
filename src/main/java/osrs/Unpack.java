@@ -483,9 +483,12 @@ public class Unpack {
             }
 
             var lines = new ArrayList<>(ScriptUnpacker.unpack(group));
-            lines.addFirst("// " + group);
+            if (DUMP_CONFIG_IDS) lines.addFirst("// " + group);
             Files.write(path.resolve(Unpacker.getScriptName(group) + ".cs2"), lines);
         }
+
+        var lines = ScriptUnpacker.outputScriptTriggerDefinitions();
+        Files.write(path.resolve("if_script_triggers.rs2"), lines);
     }
 
     private static byte[][] preloadGroups(int id) {
