@@ -23,6 +23,7 @@ public class InvUnpacker {
             }
 
             case 2 -> lines.add("size=" + packet.g2()); // https://twitter.com/JagexAsh/status/1087312806435794945
+            case 249 -> ParamUnpackHelper.unpack(lines, packet);
 
             default -> throw new IllegalStateException("unknown opcode");
         }

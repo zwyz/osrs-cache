@@ -5,7 +5,7 @@ import osrs.util.Packet;
 import java.util.ArrayList;
 
 public class MapLocations {
-    private final ArrayList<Location> locations;
+    public final ArrayList<Location> locations;
 
     public MapLocations(Packet packet) {
         this.locations = new ArrayList<>();
@@ -28,5 +28,5 @@ public class MapLocations {
         }
     }
 
-    private record Location(int level, int x, int z, int type, int angle, int shape) {}
+    public record Location(int level, int x, int z, int type, int angle, int shape) {}
 }

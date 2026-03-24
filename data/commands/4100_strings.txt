@@ -24,3 +24,4 @@
 4123 [command,text_pronoun](string $x1, string $x2, string $x3)(string)
 4124 [command,pronoun]()(int)
 4125 [command,tostring_long](long $x1)(string)
+4126 [command,tostring_spacer_long](long $value, string $separator)(string)

@@ -13,7 +13,7 @@
 3111 [command,getremoveroofs]()(boolean)
 3112 [command,setremoveroofs](boolean $x1)
 3113 [command,openurl](string $x1, boolean $x2)
-3114 (gap)
+3114 [command,resume_countdialog_long](string $x1)
 3115 [command,resume_objdialog](obj $x1)
 3116 [command,bug_report](bugtemplate $x1, string $x2, string $x3)
 3117 [command,setshiftclickenabled](boolean $x1)

@@ -147,6 +147,7 @@ public class Command {
     public static Command NC_PARAM;
     public static Command OC_PARAM;
     public static Command STRUCT_PARAM;
+    public static Command INV_PARAM;
 
     public static Command DB_FIND;
     public static Command DB_FIND_WITH_COUNT;
@@ -305,6 +306,7 @@ public class Command {
         NC_PARAM = findCommand("nc_param");
         OC_PARAM = findCommand("oc_param");
         STRUCT_PARAM = findCommand("struct_param");
+        INV_PARAM = findCommand("inv_param");
 
         DB_FIND = findCommand("db_find");
         DB_FIND_WITH_COUNT = findCommand("db_find_with_count");

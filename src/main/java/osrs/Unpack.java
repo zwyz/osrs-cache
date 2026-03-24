@@ -368,10 +368,10 @@ public class Unpack {
         // main archive
         for (var group : archiveIndex.groupId) {
             var files = Js5Util.unpackGroup(archiveIndex, group, groups[group]);
-            var squareX = group & 0xFF;
-            var squareZ = group >> 8;
+            var squareX = group >> 8;
+            var squareZ = group & 0xFF;
 
-            if (squareX == 199 && squareZ == 98) {
+            if (squareX == 98 && squareZ == 199) {
                 var lines = new ArrayList<String>();
 
                 for (var file : files.keySet()) {

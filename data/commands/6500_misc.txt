@@ -26,7 +26,7 @@
 6525 [command,mobile_batterycharging]()(boolean)
 6526 [command,mobile_wifiavailable]()(boolean)
 6527 [command,platformtype]()(platformtype)
-6528 (gap)
+6528 [command,inv_param](inv $x1, param $x2)(unknown)
 6529 (gap)
 6530 [command,haptic](int $x1)
 6531 [command,client_version]()(int,int)

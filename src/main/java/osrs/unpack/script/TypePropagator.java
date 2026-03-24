@@ -176,7 +176,7 @@ public class TypePropagator {
         }
 
         // params todo: can use a node to allow alias propagation through params
-        if (expression.command == NC_PARAM || expression.command == LC_PARAM || expression.command == OC_PARAM || expression.command == STRUCT_PARAM) {
+        if (expression.command == NC_PARAM || expression.command == LC_PARAM || expression.command == OC_PARAM || expression.command == STRUCT_PARAM || expression.command == INV_PARAM) {
             var param = expression.arguments.get(1);
             emitEqual(type(expression, 0), Unpacker.getParamType((int) param.operand));
         }

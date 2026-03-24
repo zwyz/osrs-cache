@@ -46,6 +46,7 @@ public class GraphicsDefaultsUnpacker {
             }
 
             case 4 -> lines.add("headingindicator=" + Unpacker.format(Type.MODEL, packet.gSmart2or4null()) + "," + Unpacker.format(Type.MODEL, packet.gSmart2or4null()));
+            case 5 -> lines.add("headingindicator=" + Unpacker.format(Type.MODEL, packet.g4s()) + "," + Unpacker.format(Type.MODEL, packet.g4s()));
             default -> throw new IllegalStateException("unknown opcode");
         }
     }
