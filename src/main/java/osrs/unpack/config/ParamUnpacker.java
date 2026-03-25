@@ -1,5 +1,6 @@
 package osrs.unpack.config;
 
+import osrs.Unpack;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
 import osrs.util.Packet;
@@ -24,8 +25,11 @@ public class ParamUnpacker {
 
             case 1 -> {
                 var type = Type.byChar(packet.g1());
-                Unpacker.setParamType(id, type);
-                lines.add("type=" + type.name);
+
+                if (Unpack.VERSION < 237) { // both char and type ID packed in 237
+                    Unpacker.setParamType(id, type);
+                    lines.add("type=" + type.name);
+                }
             }
 
             case 2 -> lines.add("default=" + Unpacker.format(Unpacker.getParamType(id), packet.g4s()));
