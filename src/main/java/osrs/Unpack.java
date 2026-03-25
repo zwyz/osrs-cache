@@ -50,7 +50,7 @@ public class Unpack {
     public static int CLIENTSCRIPTS_VERSION;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 236, "oldschool1.runescape.com", 43594, null);
+        unpackLive("unpacked/live", 237, "oldschool1.runescape.com", 43594, null);
 //        unpackOpenRS2("unpacked/2026-03-11", 236, "runescape", 2490);
     }
 
@@ -362,7 +362,7 @@ public class Unpack {
     }
 
     private static void unpackMapsV2(String rootPath) throws IOException {
-        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_CLIENTSCRIPTS.id, false)));
+        var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(PROVIDER.get(255, JS5_MAPS.id, false)));
         var groups = preloadGroups(JS5_MAPS.id);
 
         // main archive
@@ -385,7 +385,8 @@ public class Unpack {
                 var l = files.get(1);
                 var e = files.get(2);
                 var t = files.get(3);
-                saveMapSquare(Path.of(rootPath + "/maps/" + squareX + "_" + squareZ + ".jm2"), new MapSquare(m, l, e, t, null));
+                var w = files.get(4);
+                saveMapSquare(Path.of(rootPath + "/maps/" + squareX + "_" + squareZ + ".jm2"), new MapSquare(m, l, e, t, w));
             }
         }
 
