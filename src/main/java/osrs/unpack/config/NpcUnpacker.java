@@ -202,24 +202,24 @@ public class NpcUnpacker {
             }
 
             case 249 -> ParamUnpackHelper.unpack(lines, packet);
-            case 251 -> lines.add("subop" + packet.g1() + "=" + packet.g1() + "," + packet.gjstr());
+            case 251 -> lines.add("subop" + (packet.g1() + 1) + "=" + packet.g1() + "," + packet.gjstr());
 
             case 252 -> {
-                var op = packet.g1();
+                var op = packet.g1() + 1;
                 var varp = packet.g2null();
                 var varbit = packet.g2null();
                 var min = packet.g4s();
                 var max = packet.g4s();
 
                 if (varbit == -1) {
-                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                    lines.add("multiop" + op + "=" + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
                 } else {
-                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
+                    lines.add("multiop" + op + "=" + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
                 }
             }
 
             case 253 -> {
-                var op = packet.g1();
+                var op = packet.g1() + 1;
                 var subop = packet.g2();
                 var varp = packet.g2null();
                 var varbit = packet.g2null();

@@ -231,24 +231,24 @@ public class LocUnpacker {
             });
 
             case 96 -> lines.add("thickness=" + packet.g1()); // thickness of this ground decor (to offset entities so they don't clip into it)
-            case 100 -> lines.add("subop" + packet.g1() + "=" + packet.g1() + "," + packet.gjstr());
+            case 100 -> lines.add("subop" + (packet.g1() + 1) + "=" + packet.g1() + "," + packet.gjstr());
 
             case 101 -> {
-                var op = packet.g1();
+                var op = packet.g1() + 1;
                 var varp = packet.g2null();
                 var varbit = packet.g2null();
                 var min = packet.g4s();
                 var max = packet.g4s();
 
                 if (varbit == -1) {
-                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                    lines.add("multiop" + op + "=" + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
                 } else {
-                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
+                    lines.add("multiop" + op + "=" + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
                 }
             }
 
             case 102 -> {
-                var op = packet.g1();
+                var op = packet.g1() + 1;
                 var subop = packet.g2();
                 var varp = packet.g2null();
                 var varbit = packet.g2null();

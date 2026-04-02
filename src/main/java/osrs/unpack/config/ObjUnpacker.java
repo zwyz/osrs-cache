@@ -151,24 +151,24 @@ public class ObjUnpacker {
             case 140 -> lines.add("boughttemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 148 -> lines.add("placeholderlink=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 149 -> lines.add("placeholdertemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
-            case 200 -> lines.add("subop" + packet.g1() + "=" + packet.g1() + "," + packet.gjstr());
+            case 200 -> lines.add("subop" + (packet.g1() + 1) + "=" + packet.g1() + "," + packet.gjstr());
 
             case 201 -> {
-                var op = packet.g1();
+                var op = packet.g1() + 1;
                 var varp = packet.g2null();
                 var varbit = packet.g2null();
                 var min = packet.g4s();
                 var max = packet.g4s();
 
                 if (varbit == -1) {
-                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
+                    lines.add("multiop" + op + "=" + Unpacker.format(Type.VAR_PLAYER, varp) + "," + min + "," + max + "," + packet.gjstr());
                 } else {
-                    lines.add("multiop" + op + "=" + "," + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
+                    lines.add("multiop" + op + "=" + Unpacker.format(Type.VAR_PLAYER_BIT, varbit) + "," + min + "," + max + "," + packet.gjstr());
                 }
             }
 
             case 202 -> {
-                var op = packet.g1();
+                var op = packet.g1() + 1;
                 var subop = packet.g2();
                 var varp = packet.g2null();
                 var varbit = packet.g2null();
