@@ -396,13 +396,15 @@ public class SyntaxBuilder {
     // match: [$x = $x + 1, $x]
     // replace: [++$x]
     private boolean buildPreIncrement() {
+        if (!ScriptUnpacker.INC_DEC_FOLDING) return false;
         if (stack.size() < 2) return false;
         var command1 = stack.get(stack.size() - 2);
         var command2 = stack.get(stack.size() - 1);
         if (command1.command != FLOW_ASSIGN) return false;
         if (command1.arguments.get(0).command != ADD) return false;
         if (command1.arguments.get(0).arguments.get(0).command != FLOW_LOAD) return false;
-        if (command1.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_STRING) return false;
+        if (command1.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_INT) return false;
+        if (!Objects.equals(command1.arguments.get(0).arguments.get(1).operand, 1)) return false;
         if (command2.command != FLOW_LOAD) return false;
         if (!Objects.equals(command1.arguments.get(0).arguments.get(0).operand, command2.operand)) return false;
         if (!Objects.equals(command1.operand, List.of(command2.operand))) return false;
@@ -414,13 +416,15 @@ public class SyntaxBuilder {
     // match: [$x = $x - 1, $x]
     // replace: [--$x]
     private boolean buildPreDecrement() {
+        if (!ScriptUnpacker.INC_DEC_FOLDING) return false;
         if (stack.size() < 2) return false;
         var command1 = stack.get(stack.size() - 2);
         var command2 = stack.get(stack.size() - 1);
         if (command1.command != FLOW_ASSIGN) return false;
         if (command1.arguments.get(0).command != SUB) return false;
         if (command1.arguments.get(0).arguments.get(0).command != FLOW_LOAD) return false;
-        if (command1.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_STRING) return false;
+        if (command1.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_INT) return false;
+        if (!Objects.equals(command1.arguments.get(0).arguments.get(1).operand, 1)) return false;
         if (command2.command != FLOW_LOAD) return false;
         if (!Objects.equals(command1.arguments.get(0).arguments.get(0).operand, command2.operand)) return false;
         if (!Objects.equals(command1.operand, List.of(command2.operand))) return false;
@@ -432,13 +436,15 @@ public class SyntaxBuilder {
     // match: [$x = $x + 1, $x]
     // replace: [$x++]
     private boolean buildPostIncrement() {
+        if (!ScriptUnpacker.INC_DEC_FOLDING) return false;
         if (stack.size() < 2) return false;
         var command1 = stack.get(stack.size() - 2);
         var command2 = stack.get(stack.size() - 1);
         if (command2.command != FLOW_ASSIGN) return false;
         if (command2.arguments.get(0).command != ADD) return false;
         if (command2.arguments.get(0).arguments.get(0).command != FLOW_LOAD) return false;
-        if (command2.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_STRING) return false;
+        if (command2.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_INT) return false;
+        if (!Objects.equals(command2.arguments.get(0).arguments.get(1).operand, 1)) return false;
         if (command1.command != FLOW_LOAD) return false;
         if (!Objects.equals(command2.arguments.get(0).arguments.get(0).operand, command1.operand)) return false;
         if (!Objects.equals(command2.operand, List.of(command1.operand))) return false;
@@ -450,13 +456,15 @@ public class SyntaxBuilder {
     // match: [$x = $x - 1, $x]
     // replace: [$x++]
     private boolean buildPostDecrement() {
+        if (!ScriptUnpacker.INC_DEC_FOLDING) return false;
         if (stack.size() < 2) return false;
         var command1 = stack.get(stack.size() - 2);
         var command2 = stack.get(stack.size() - 1);
         if (command2.command != FLOW_ASSIGN) return false;
         if (command2.arguments.get(0).command != SUB) return false;
         if (command2.arguments.get(0).arguments.get(0).command != FLOW_LOAD) return false;
-        if (command2.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_STRING) return false;
+        if (command2.arguments.get(0).arguments.get(1).command != PUSH_CONSTANT_INT) return false;
+        if (!Objects.equals(command2.arguments.get(0).arguments.get(1).operand, 1)) return false;
         if (command1.command != FLOW_LOAD) return false;
         if (!Objects.equals(command2.arguments.get(0).arguments.get(0).operand, command1.operand)) return false;
         if (!Objects.equals(command2.operand, List.of(command1.operand))) return false;

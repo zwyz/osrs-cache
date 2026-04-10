@@ -26,6 +26,7 @@ public class ScriptUnpacker {
     public static final boolean IGNORE_HOOK_TYPE_INFO = false;
     public static final boolean ERROR_ON_TYPE_CONFLICT = true;
     public static final boolean OVERRIDE_SIGNATURES = true;
+    public static final boolean INC_DEC_FOLDING = false;
     public static final Map<Integer, CompiledScript> SCRIPTS = new HashMap<>();
     public static final Map<Integer, List<Expression>> SCRIPTS_DECOMPILED = new HashMap<>();
     public static final Map<Integer, Integer> SCRIPT_PARAMETER_COUNT = new HashMap<>();
