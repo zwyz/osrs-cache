@@ -47,7 +47,7 @@
 3145 [command,show_ios_review]
 3146 [command,settitlescreensound](boolean $x1)
 3147 [command,gettitlescreensound]()(boolean)
-3148 [command,settermsandprivacy]
+3148 [command,settermsandprivacy](boolean $x1)
 3149 [command,gettermsandprivacy]()(boolean)
 3150 [command,eligibleforfreetrial]()(boolean)
 3151 [command,eligibleforintroductoryprice]()(boolean)
