@@ -128,7 +128,7 @@ public class Unpack {
         unpackConfigGroup(VARBIT, VarPlayerBitUnpacker::unpack, path + "/config/dump.varbit");
         unpackConfigGroup(VARPLAYER, VarPlayerUnpacker::unpack, path + "/config/dump.varp");
         unpackConfigGroup(VARCLIENT, VarClientUnpacker::unpack, path + "/config/dump.varc");
-        unpackConfigGroup(VARCLIENTSTR, VarClientStringUnpacker::unpack, path + "/config/dump.varcstr");
+        if (Unpack.VERSION < 238) unpackConfigGroup(VARCLIENTSTR, VarClientStringUnpacker::unpack, path + "/config/dump.varcstr");
         unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, path + "/config/dump.varobj"); // increased with treasure trail expansion
         unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, path + "/config/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
         unpackConfigGroup(VARSHAREDSTR, VarSharedStringUnpacker::unpack, path + "/config/dump.varsstr");
@@ -171,6 +171,7 @@ public class Unpack {
         unpackConfigGroup(WORLDENTITY, WorldEntityUnpacker::unpack, path + "/config/dump.worldentity");
         unpackConfigGroup(CONFIG71, Config71Unpacker::unpack, path + "/config/dump.config71");
         unpackConfigGroup(WATERTYPE, WaterUnpacker::unpack, path + "/config/dump.water");
+        if (Unpack.VERSION >= 238) unpackConfigGroup(VARCLIENTSTR, AmbienceUnpacker::unpack, path + "/config/dump.ambience");
 
         // defaults
         unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");

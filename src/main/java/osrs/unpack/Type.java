@@ -198,6 +198,7 @@ public class Type {
     public static final Type OVERLAY = new Type("overlay", BaseVarType.INTEGER);
     public static final Type WORLD_AREA = new Type("world_area", BaseVarType.INTEGER);
     public static final Type WATER = new Type("water", BaseVarType.INTEGER);
+    public static final Type AMBIENCE = new Type("ambience", BaseVarType.INTEGER);
 
     // special
     public static final Type TYPE = new Type("type", BaseVarType.INTEGER);

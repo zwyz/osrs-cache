@@ -170,6 +170,27 @@ public class NpcUnpacker {
             case 145 -> lines.add("worldoverlaphide=yes"); // flattens to a colored shadow
             case 146 -> lines.add("worldoverlaphidecolour=" + Unpacker.formatColour(packet.g2()));
             case 147 -> lines.add("unknown147=no");
+            case 148 -> lines.add("bgsound=" + packet.g2() + "," + packet.g1() + "," + packet.g1());
+            case 149 -> lines.add("bgsounddropoffeasing=" + packet.g1());
+            case 150 -> lines.add("bgsoundfade=" + packet.g1() + "," + packet.g2() + "," + packet.g1() + "," + packet.g2()); // easeintype,easeinduration,easeouttype,easeoutduration
+
+            case 151 -> lines.add("crossworldsound=" + switch (packet.g1()) {
+                case 0 -> "yes";
+                case 1 -> "no";
+                case 2 -> "default"; // root world -> world entity only
+                default -> throw new IllegalStateException("unknown mode");
+            });
+
+            case 152 -> {
+                var line = "randomsound=" + packet.g2() + "," + packet.g2() + "," + packet.g1() + "," + packet.g1();
+                var count = packet.g1();
+
+                for (var i = 0; i < count; ++i) {
+                    line += "," + Unpacker.format(Type.SYNTH, packet.g2());
+                }
+
+                lines.add(line);
+            }
 
             case 118 -> {
                 var multivarbit = packet.g2null();

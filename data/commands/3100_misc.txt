@@ -89,6 +89,8 @@
 3187 [command,unknown_command_3187](string $x1, string $x2)
 3188 [command,unknown_command_3188]
 3189 [command,seq_prefetch](seq $x1)
+3197 [command,unknown_command_3197]()(int)
+3198 [command,unknown_command_3198](int $x1)()
 
 // Misc 2
 3200 [command,sound_synth](synth $x1, int $x2, int $x3)

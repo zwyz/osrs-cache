@@ -32,6 +32,7 @@ public class SpotUnpacker {
             case 7 -> lines.add("ambient=" + packet.g1());
             case 8 -> lines.add("contrast=" + packet.g1());
             case 9 -> packet.gjstr(); // debugname, only exists in 230, removed in 231
+            case 10 -> lines.add("rotate=no");
 
             case 40 -> {
                 var count = packet.g1();
