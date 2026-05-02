@@ -39,6 +39,7 @@ public class ObjUnpacker {
             case 12 -> lines.add("cost=" + packet.g4s());
             case 13 -> lines.add("wearpos=" + formatWearPos(packet.g1())); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 14 -> lines.add("wearpos2=" + formatWearPos(packet.g1()));
+            case 15 -> lines.add("tradeable=no");
             case 16 -> lines.add("members=yes");
             case 23 -> lines.add("manwear=" + Unpacker.format(Type.MODEL, packet.g2()) + "," + packet.g1()); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 24 -> lines.add("manwear2=" + Unpacker.format(Type.MODEL, packet.g2()));
