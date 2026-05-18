@@ -95,6 +95,7 @@
 // Misc 2
 3200 [command,sound_synth](synth $x1, int $x2, int $x3)
 3201 [command,sound_song](midi $x1)
+3221 [command,sound_song](midi $song, int $fade_out_delay, int $fade_out_duration, int $fade_in_delay, int $fade_in_duration) 215
 3202 [command,sound_jingle](midi $x1, int $x2)
 3203 [command,setvolumemusic](int $x1)
 3204 [command,getvolumemusic]()(int)
@@ -113,9 +114,9 @@
 3217 [command,deviceoption_getrange](deviceoption $x1)(int, int)
 3218 [command,gameoption_exists](gameoption $x1)(boolean)
 3219 [command,gameoption_getrange](gameoption $x1)(int, int)
-3220 [command,midi_stop](int $fade_out_delay, int $fade_out_speed)
-3221 [command,midi_song_withsecondary](midi $song, midi $secondary, int $fade_out_delay, int $fade_out_speed, int $fade_in_delay)
-3222 [command,midi_song](midi $song, int $fade_out_delay, int $fade_out_speed, int $fade_in_delay)
+3220 [command,sound_song_stop](int $fade_out_delay, int $fade_out_duration)
+3221 [command,sound_song_withsecondary](midi $song, midi $secondary, int $fade_out_delay, int $fade_out_duration, int $fade_in_delay, int $fade_in_duration)
+3222 [command,sound_song_swap](int $fade_out_delay, int $fade_out_duration, int $fade_in_delay, int $fade_in_duration)
 3223 [command,rt7_setenabled](boolean $x1)
 3224 [command,rt7_sd]
 3225 [command,rt7_hd]
