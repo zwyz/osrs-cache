@@ -25,3 +25,4 @@
 4124 [command,pronoun]()(int)
 4125 [command,tostring_long](long $x1)(string)
 4126 [command,tostring_spacer_long](long $value, string $separator)(string)
+4127 [command,safeparseint](string $x1)(int,boolean)

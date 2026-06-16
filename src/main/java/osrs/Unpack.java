@@ -50,7 +50,7 @@ public class Unpack {
     public static int CLIENTSCRIPTS_VERSION;
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 237, "oldschool1.runescape.com", 43594, null);
+        unpackLive("unpacked/live", 239, "oldschool1.runescape.com", 43594, null);
 //        unpackOpenRS2("unpacked/2026-03-11", 236, "runescape", 2490);
     }
 
@@ -172,6 +172,7 @@ public class Unpack {
         unpackConfigGroup(CONFIG71, Config71Unpacker::unpack, path + "/config/dump.config71");
         unpackConfigGroup(WATERTYPE, WaterUnpacker::unpack, path + "/config/dump.water");
         if (Unpack.VERSION >= 238) unpackConfigGroup(VARCLIENTSTR, AmbienceUnpacker::unpack, path + "/config/dump.ambience");
+        unpackConfigGroup(VARDBTABLE, VarDBTableUnpacker::unpack, path + "/config/dump.vardbtable");
 
         // defaults
         unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");

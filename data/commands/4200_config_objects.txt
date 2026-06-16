@@ -21,3 +21,5 @@
 4220 [command,oc_tradeable](obj $x1)(boolean)
 4221 (gap)
 4222 [command,oc_isubop](obj $x1,int $x2,int $x3)(string)
+4223 [command,oc_id](obj $x1)(int)
+4224 [command,oc_byid](int $x1)(obj)
