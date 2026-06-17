@@ -23,6 +23,11 @@ public class VarClientUnpacker {
             }
 
             case 2 -> lines.add("scope=perm");
+            case 3 -> {
+                var type = Type.byID(packet.g2());
+                Unpacker.setVarClientType(id, type.array());
+                lines.add("arraytype=" + type.name);
+            }
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

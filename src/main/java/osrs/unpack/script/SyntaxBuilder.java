@@ -91,7 +91,11 @@ public class SyntaxBuilder {
         }
 
         if (command == POP_VARC_STRING) {
-            pops.add(new VarClientReference((int) operand, Type.STRING));
+            var type = Unpacker.getVarClientType((int) operand);
+            if (type == null) {
+                type = Type.STRING;
+            }
+            pops.add(new VarClientReference((int) operand, type));
             return;
         }
 
@@ -184,7 +188,10 @@ public class SyntaxBuilder {
 
         if (command == PUSH_VARC_STRING) {
             var var = (int) operand;
-            var type = Type.STRING;
+            var type = Unpacker.getVarClientType(var);
+            if (type == null) {
+                type = Type.STRING;
+            }
             buildCommand(code, index, FLOW_LOAD, new VarClientReference(var, type), List.of(), List.of(type));
             return;
         }
