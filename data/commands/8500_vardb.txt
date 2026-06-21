@@ -1,5 +1,0 @@
-8501 [command,vardb_check](vardbrow $row, vardbtable $table)(boolean)
-8520 [command,vardb_getrow](int $index)(vardbrow)
-8521 [command,vardb_getindex](vardbrow $row)(int)
-8560 [command,vardb_getfield](vardbrow $row, vardbcolumn $col)(unknown)
-8561 [command,vardb_getsecondaryfield](vardbrow $row, vardbcolumn $col)(unknown)

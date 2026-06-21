@@ -199,9 +199,9 @@ public class Type {
     public static final Type WORLD_AREA = new Type("world_area", BaseVarType.INTEGER);
     public static final Type WATER = new Type("water", BaseVarType.INTEGER);
     public static final Type AMBIENCE = new Type("ambience", BaseVarType.INTEGER);
-    public static final Type VARDBTABLE = new Type("vardbtable", BaseVarType.INTEGER);
-    public static final Type VARDBROW = new Type("vardbrow", BaseVarType.INTEGER);
-    public static final Type VARDBCOLUMN = new Type("vardbcolumn", BaseVarType.INTEGER);
+    public static final Type GROUP = new Type("group", BaseVarType.INTEGER);
+    public static final Type GROUP_UID = new Type("group_uid", BaseVarType.LONG);
+    public static final Type GROUP_VAR = new Type("group_var", BaseVarType.INTEGER);
 
     // special
     public static final Type TYPE = new Type("type", BaseVarType.INTEGER);

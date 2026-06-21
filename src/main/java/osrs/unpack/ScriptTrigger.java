@@ -48,7 +48,9 @@ public enum ScriptTrigger { // all are official names from 233.2
     ONCLICKNPC(80, Type.NPC),
     ONCLICKPLAYER(81),
     ONMINIMENUOPEN(82),
-    ONMINIMENUCLOSE(83);
+    ONMINIMENUCLOSE(83),
+    GROUPCHANGE(85, Type.GROUP),
+    INTERPOLATE(86);
 
     public final int id;
     public final Type type;

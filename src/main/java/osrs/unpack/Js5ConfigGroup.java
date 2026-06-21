@@ -44,7 +44,7 @@ public enum Js5ConfigGroup {
     CONFIG71(71),
     WORLDENTITY(72),
     WATERTYPE(73),
-    VARDBTABLE(75);
+    GROUPTYPE(75);
 
     public final int id;
 

@@ -7,11 +7,11 @@ import osrs.util.Packet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VarDBTableUnpacker {
+public class GroupUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.VARDBTABLE, id, false) + "]");
+        lines.add("[" + Unpacker.format(Type.GROUP, id, false) + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {
@@ -22,18 +22,18 @@ public class VarDBTableUnpacker {
                 return lines;
             }
 
-            case 7 -> unpackColumnSet(packet, lines, "column", "default");
-            case 8 -> unpackColumnSet(packet, lines, "secondarycolumn", "secondarydefault");
+            case 7 -> unpackVariableSet(packet, lines, "var", "vardefault");
+            case 8 -> unpackVariableSet(packet, lines, "membervar", "membervardefault");
 
             default -> throw new IllegalStateException("unknown opcode");
         }
     }
 
-    private static void unpackColumnSet(Packet packet, ArrayList<String> lines, String fieldLabel, String defaultLabel) {
+    private static void unpackVariableSet(Packet packet, ArrayList<String> lines, String varLabel, String defaultLabel) {
         var count = packet.g2();
 
         for (var i = 0; i < count; i++) {
-            var name = "col" + i;
+            var name = "var" + i;
             var typeID = packet.g1();
 
             if (typeID >= 252) {
@@ -41,7 +41,7 @@ public class VarDBTableUnpacker {
             }
 
             var type = Type.byID(typeID);
-            lines.add(fieldLabel + "=" + name + "," + type);
+            lines.add(varLabel + "=" + name + "," + type);
 
             lines.add(defaultLabel + "=" + name + "," + switch (type.base) {
                 case INTEGER -> Unpacker.format(type, packet.g4s());

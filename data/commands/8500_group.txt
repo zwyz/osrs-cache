@@ -1,0 +1,5 @@
+8501 [command,group_check](group_uid $group, group $type)(boolean)
+8520 [command,group_get](int $index)(group_uid)
+8521 [command,group_getindex](group_uid $group)(int)
+8560 [command,group_getvar](group_uid $group, group_var $var)(unknown)
+8561 [command,group_getmembervar](group_uid $group, group_var $var)(unknown)

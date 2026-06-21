@@ -172,7 +172,7 @@ public class Unpack {
         unpackConfigGroup(CONFIG71, Config71Unpacker::unpack, path + "/config/dump.config71");
         unpackConfigGroup(WATERTYPE, WaterUnpacker::unpack, path + "/config/dump.water");
         if (Unpack.VERSION >= 238) unpackConfigGroup(VARCLIENTSTR, AmbienceUnpacker::unpack, path + "/config/dump.ambience");
-        unpackConfigGroup(VARDBTABLE, VarDBTableUnpacker::unpack, path + "/config/dump.vardbtable");
+        unpackConfigGroup(GROUPTYPE, GroupUnpacker::unpack, path + "/config/dump.group");
 
         // defaults
         unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");
@@ -246,6 +246,8 @@ public class Unpack {
                     maxType = MELTYPE.id >= archiveIndexConfig.groupMaxFileId.length ? 0 : archiveIndexConfig.groupMaxFileId[MELTYPE.id];
                 } else if (trigger.type == Type.INV) {
                     maxType = archiveIndexConfig.groupMaxFileId[INVTYPE.id];
+                } else if (trigger.type == Type.GROUP) {
+                    maxType = GROUPTYPE.id >= archiveIndexConfig.groupMaxFileId.length ? 0 : archiveIndexConfig.groupMaxFileId[GROUPTYPE.id];
                 } else {
                     throw new AssertionError("todo");
                 }
