@@ -31,4 +31,5 @@
 219 [command,cc_find_last_sibling]()(boolean)
 220 [command,cc_find_first_child]()(boolean)
 221 [command,cc_find_last_child]()(boolean)
+222 [command,cc_assert]
 
