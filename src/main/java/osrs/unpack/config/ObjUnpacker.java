@@ -152,6 +152,7 @@ public class ObjUnpacker {
             case 140 -> lines.add("boughttemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 148 -> lines.add("placeholderlink=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 149 -> lines.add("placeholdertemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
+            case 160 -> lines.add("stackable=never");
             case 200 -> lines.add("subop" + (packet.g1() + 1) + "=" + packet.g1() + "," + packet.gjstr());
 
             case 201 -> {
