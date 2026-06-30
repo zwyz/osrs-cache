@@ -101,6 +101,7 @@ box_of_delights
 brain_barrelchest_battle
 breeze
 brew hoo hoo
+bridge_attack
 Brimstail's Scales
 brimstail's scales
 brutus_cow_boss
@@ -115,6 +116,7 @@ Camdozaal_ruins_2021
 camdozaal_ruins_2021
 camdozaal_vault
 camelot
+castle_drakan
 castlewars
 Catacombs and Tombs
 catacombs and tombs
@@ -217,6 +219,11 @@ dragonkin ambience
 Dragonkin Temple
 dragonkin temple
 dragontooth island
+drakan_boss_1
+drakan_boss_3
+drakan_boss_4
+drakan_boss_4_main_part
+drakans_speech
 dream
 dream theatre
 dreamstate
@@ -393,6 +400,12 @@ Hespori
 hespori
 Hespori Cave
 hespori cave
+hideout_cs_layer_01
+hideout_cs_layer_02
+hideout_cs_layer_03
+hideout_cs_layer_04
+hideout_preparation
+hideout_preparation_2
 high seas
 high spirits
 Hoe Down
@@ -401,6 +414,8 @@ home sweet home
 HomeScape
 homescape
 honkytonky_sea_shanty_2
+hopeful_lament
+hopeless_lament
 horizon
 hosidius_outskirts
 HousesOfKourend
@@ -516,6 +531,7 @@ lucid nightmare
 lullaby
 mad eadgar
 mage arena
+maggot_boss
 magic dance
 magic magic magic
 magical journey
@@ -687,6 +703,7 @@ safety in numbers
 saga
 sailing_combat
 sailing_combat_02
+sangvesti
 sarachnis_lair
 sarcophagus
 sarim's vermin
@@ -749,6 +766,7 @@ Sotetseg Ambience
 sotetseg ambience
 Sotetseg Combat
 sotetseg combat
+sotfa_forest
 Soul Wars
 soul wars
 soulfall
@@ -781,6 +799,7 @@ strength of saradomin
 Stuck in the Mire
 stuck in the mire
 subterranea
+sugadintis_hideout
 sunburn
 sunset_coast
 sunset_ocean
@@ -999,6 +1018,7 @@ woodland walk
 work work work
 workshop
 wrath and ruin
+wyrd_boss
 Xamphur
 xamphur
 Xarpus Ambience

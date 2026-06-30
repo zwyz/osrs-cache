@@ -149,6 +149,7 @@
 [clientscript,notification_display_init](string $string0, string $string1, int $rgb0) 1271
 [clientscript,objbox_listener](boolean $boolean0, int $key1, char $char2, int $key3, string $string0, component $component4, int $int5, int $int6, string $string1, component $component7, int $int8) 2329
 [clientscript,omnishop_main_info_setup](dbrow $dbrow0, inv $inv1, int $int2, int $int3, int $int4, int $int5, dbrow $dbrow6, string $string0, boolean $boolean7) 2329
+[clientscript,omnishop_main_info_setup](dbrow $dbrow0, inv $inv1, int $int2, int $int3, int $int4, int $int5, string $string0, boolean $boolean6) 1782506086
 [clientscript,omnishop_main_setup](dbrow $dbrow0, inv $inv1, boolean $boolean2) 2329
 [clientscript,openurl_raw](string $string0, boolean $boolean0, boolean $boolean1) 2329
 [clientscript,overlay_portal_adjust](int $int0, boolean $boolean1, component $component2) 2329
