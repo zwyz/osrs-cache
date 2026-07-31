@@ -347,4 +347,6 @@
 [proc,script6658](dbrow $dbrow0)(dbrow) 1769
 [proc,script8046](npc $npc0)(int) 2379
 [proc,script8047](int $int0)(npc) 2379
+[proc,script8603](loc $loc0)(int) 1783435890
 [proc,script9019](int $int0)(inv) 1762333018
+[proc,script9715](loc $loc0)(int) 1783435890

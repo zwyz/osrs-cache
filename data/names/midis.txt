@@ -530,6 +530,7 @@ Lucid Nightmare
 lucid nightmare
 lullaby
 mad eadgar
+mad_angel_combat
 mage arena
 maggot_boss
 magic dance
