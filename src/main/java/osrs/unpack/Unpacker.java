@@ -322,6 +322,7 @@ public class Unpacker {
         setSymbolName(Type.INT_DEVICEOPTION, 27, "^deviceoption_ui_scaling");
         setSymbolName(Type.INT_DEVICEOPTION, 28, "^deviceoption_vsync_mode");
         setSymbolName(Type.INT_DEVICEOPTION, 29, "^deviceoption_game_scale_factor");
+        setSymbolName(Type.INT_DEVICEOPTION, 30, "^deviceoption_round_robin");
 
         // from c++ client
         setSymbolName(Type.INT_GAMEOPTION, 1, "^gameoption_remove_roof");

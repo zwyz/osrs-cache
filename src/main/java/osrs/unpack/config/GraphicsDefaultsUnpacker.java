@@ -47,6 +47,23 @@ public class GraphicsDefaultsUnpacker {
 
             case 4 -> lines.add("headingindicator=" + Unpacker.format(Type.MODEL, packet.gSmart2or4null()) + "," + Unpacker.format(Type.MODEL, packet.gSmart2or4null()));
             case 5 -> lines.add("headingindicator=" + Unpacker.format(Type.MODEL, packet.g4s()) + "," + Unpacker.format(Type.MODEL, packet.g4s()));
+
+            case 6 -> {
+                var mapcompass = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var maparrow = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var mapscene = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var headiconskull = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var headiconprayer = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var headiconhint = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var mapmarker = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var cross = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var mapdot = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var scrollbar = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var texticon = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                var unknown = Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null());
+                lines.add("sprites=" + mapcompass + "," + maparrow + "," + mapscene + "," + headiconskull + "," + headiconprayer + "," + headiconhint + "," + mapmarker + "," + cross + "," + mapdot + "," + scrollbar + "," + texticon + "," + unknown);
+            }
+
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

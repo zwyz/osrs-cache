@@ -551,6 +551,7 @@ public class Type {
             case 207 -> OBJVAR;
             case 208 -> WALKTRIGGER;
             case 209 -> VARP;
+            case 213 -> GROUP_UID;
             default -> throw new IllegalArgumentException("unknown type id " + id);
         };
     }
