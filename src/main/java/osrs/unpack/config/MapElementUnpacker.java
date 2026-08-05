@@ -22,19 +22,21 @@ public class MapElementUnpacker {
                 return lines;
             }
 
-            case 1 -> lines.add("graphic=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4s()));
-            case 2 -> lines.add("unknown2=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4s()));
-            case 3 -> lines.add("text=" + packet.gjstr());
-            case 4 -> lines.add("colour=" + packet.g3());
-            case 5 -> lines.add("unknown5=" + packet.g3());
-            case 6 -> lines.add("size=" + packet.g1());
-            case 7 -> lines.add("vis=" + switch (packet.g1()) {
+            case 1 -> lines.add("sprite=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null())); // 216 GetSprite
+            case 2 -> lines.add("mouseovergraphic=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null()));
+            case 3 -> lines.add("text=" + packet.gjstr()); // 216 GetText, html5 unobfuscated
+            case 4 -> lines.add("textcolour=" + Unpacker.formatColour(packet.g3())); // 216 GetTextRGBA
+            case 5 -> lines.add("textmouseovercolour=" + Unpacker.formatColour(packet.g3())); // 216 GetTextMouseOverColour
+            case 6 -> lines.add("textsize=" + packet.g1()); // 216 GetTextSize
+
+            case 7 -> lines.add("show=" + switch (packet.g1()) {  // 216 GetShowOnWorldMap, GetShowOnMiniMap
                 case 0 -> "none";
                 case 1 -> "map";
                 case 2 -> "minimap";
                 case 3 -> "both";
                 default -> throw new IllegalStateException();
             });
+
             case 8 -> lines.add("mapfunction=" + Unpacker.formatYesNo(packet.g1()));
             case 10 -> lines.add("op1=" + packet.gjstr());
             case 11 -> lines.add("op2=" + packet.gjstr());
@@ -42,47 +44,53 @@ public class MapElementUnpacker {
             case 13 -> lines.add("op4=" + packet.gjstr());
             case 14 -> lines.add("op5=" + packet.gjstr());
 
-            case 15 -> {
-                var count = packet.g1();
-                var unknown15_a = new int[count * 2];
+            case 15 -> { // 216 GetPolygon
+                var points = packet.g1();
 
-                for (var i = 0; i < count * 2; ++i) {
-                    unknown15_a[i] = packet.g2s();
+                for (var i = 0; i < points; ++i) {
+                    lines.add("polygonpoint" + i + "=" + packet.g2s() + "," + packet.g2s());
                 }
 
-                var unknown15_b = packet.g4s();
-                var unknown15_c = new int[packet.g1()];
+                lines.add("polygonfill=" + Unpacker.formatColour(packet.g4s()));
 
-                for (var i = 0; i < unknown15_c.length; ++i) {
-                    unknown15_c[i] = packet.g4s();
+                var palette = new int[packet.g1()];
+
+                for (var i = 0; i < palette.length; ++i) {
+                    palette[i] = packet.g4s();
                 }
 
-                var unknown15_d = new byte[count];
+                if (palette.length == 1) {
+                    lines.add("polygonoutline=" + Unpacker.formatColour(palette[0]));
 
-                for (var i = 0; i < count; ++i) {
-                    unknown15_d[i] = (byte) packet.g1s();
+                    for (var i = 0; i < points; ++i) {
+                        packet.g1s();
+                    }
+                } else {
+                    for (var i = 0; i < points; ++i) {
+                        lines.add("polygonoutline" + i + "=" + Unpacker.formatColour(palette[packet.g1s()]));
+                    }
                 }
-
-                lines.add("{data}");
             }
 
-            case 16 -> lines.add("unknown16=yes");
+            case 16 -> lines.add("listable=no"); // 216 GetListable
             case 17 -> lines.add("opbase=" + packet.gjstr());
-            case 18 -> lines.add("unknown18=" + packet.gSmart2or4s());
-            case 19 -> lines.add("category=" + Unpacker.format(Type.CATEGORY, packet.g2()));
-            case 21 -> lines.add("unknown21=" + packet.g4s());
-            case 22 -> lines.add("unknown22=" + packet.g4s());
-            case 23 -> lines.add("unknown23=" + packet.g1() + "," + packet.g1() + "," + packet.g1());
-            case 24 -> lines.add("unknown24=" + packet.g2s() + "," + packet.g2s());
-            case 25 -> lines.add("unknown25=" + packet.gSmart2or4s());
-            case 28 -> lines.add("unknown28=" + packet.g1());
-            case 29 -> lines.add("halign=" + switch (packet.g1()) {
+            case 18 -> lines.add("worldmaparrow=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null())); // 216 GetWorldmapArrow
+            case 19 -> lines.add("category=" + Unpacker.format(Type.CATEGORY, packet.g2())); // 216 GetCategory
+            case 21 -> lines.add("textbackgroundoutline=" + Unpacker.formatColour(packet.g4s())); // 216 GetTextBackgroundOutlineRGBA
+            case 22 -> lines.add("textbackgroundfill=" + Unpacker.formatColour(packet.g4s())); // 216 GetTextBackgroundFillRGBA
+            case 23 -> lines.add("polygonoutlinedash=" + packet.g1() + "," + packet.g1() + "," + packet.g1()); // length, gap, phase
+            case 24 -> lines.add("textoffset=" + packet.g2s() + "," + packet.g2s());
+            case 25 -> lines.add("flashsprite=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null())); // 216 GetFlashSpriteID
+            case 28 -> lines.add("minimapiconscale=" + packet.g1()); // 216 GetMinimapIconScale
+
+            case 29 -> lines.add("halign=" + switch (packet.g1()) { // 216 GetHAlign
                 case 0 -> "left";
                 case 1 -> "centre";
                 case 2 -> "right";
                 default -> throw new IllegalStateException();
             });
-            case 30 -> lines.add("valign=" + switch (packet.g1()) {
+
+            case 30 -> lines.add("valign=" + switch (packet.g1()) { // 216 GetVAlign
                 case 0 -> "top";
                 case 1 -> "centre";
                 case 2 -> "bottom";
