@@ -24,6 +24,7 @@ public class GroupUnpacker {
 
             case 7 -> unpackVariableSet(packet, lines, "var", "vardefault");
             case 8 -> unpackVariableSet(packet, lines, "membervar", "membervardefault");
+            case 11 -> unpackVariableSet(packet, lines, "unknownvar", "unknownvardefault");
 
             default -> throw new IllegalStateException("unknown opcode");
         }
