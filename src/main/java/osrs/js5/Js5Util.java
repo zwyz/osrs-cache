@@ -30,7 +30,7 @@ public class Js5Util {
 
         if (fileCount == 1) {
             var result = new HashMap<Integer, byte[]>();
-            result.put(0, groupData);
+            result.put(fileIds != null ? fileIds[0] : 0, groupData);
             return result;
         }
 
