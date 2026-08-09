@@ -13,6 +13,8 @@ import static osrs.unpack.script.Command.*;
 // converts ast to code
 public class CodeFormatter {
     private static final Pattern DIRECT_STRING_PATTERN = Pattern.compile("[a-z_0-9]+");
+    private static final Pattern TAG_STRING_PATTERN = Pattern.compile("<[^<>]*>");
+    private static final Pattern STRING_TEMPLATE_PATTERN = Pattern.compile("<text_pronoun\\([^<>]*\\)>");
     private static Map<LocalReference, Type> localTypes;
     private static final Map<Type, Integer> usageCount = new HashMap<>();
 
@@ -200,14 +202,15 @@ public class CodeFormatter {
                 var arg = expression.arguments.get(i);
 
                 if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
-                    if (s.startsWith("<") && s.endsWith(">")) {
+                    if (Unpack.VERSION < 240 && s.startsWith("<") && s.endsWith(">")) {
                         interpolations.add(i);
                     } else if (i > 0 && !interpolations.contains(i - 1)) {
                         var last = (String) expression.arguments.get(i - 1).operand;
+                        var lastTag = Unpack.VERSION >= 240 && TAG_STRING_PATTERN.matcher(last).matches();
                         var lastSpaced = last.startsWith(" ") || last.endsWith(" ") || last.startsWith(". ") || last.startsWith(", ") || last.startsWith(": ");
                         var currentSpaced = s.startsWith(" ") || s.endsWith(" ") || s.startsWith(". ") || s.startsWith(", ") || s.startsWith(": ");
 
-                        if (!lastSpaced && currentSpaced) {
+                        if (!lastSpaced && currentSpaced || lastTag) {
                             interpolations.add(i - 1);
                         } else {
                             interpolations.add(i);
@@ -224,7 +227,7 @@ public class CodeFormatter {
                 if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
                     if (!interpolations.contains(i)) {
                         result += escape(s);
-                    } else if (s.startsWith("<") && s.endsWith(">")) {
+                    } else if (Unpack.VERSION < 240 && s.startsWith("<") && s.endsWith(">")) {
                         result += s;
                     } else {
                         if (DIRECT_STRING_PATTERN.matcher(s).matches()) {
@@ -499,6 +502,12 @@ public class CodeFormatter {
     }
 
     private static String escape(String s) {
+        // TODO temporary impl that matches specifically the text_pronoun template (as a full, constant string)
+        //      this needs to properly handle other templates once they become used and we have examples.
+        if (Unpack.VERSION >= 240 && STRING_TEMPLATE_PATTERN.matcher(s).matches()) {
+            return s;
+        }
+
         return s.replace("\\", "\\\\")
                 .replace("\\\\<", "\\\\\\<") // fix for a Jagex bug that makes "\<" compile as literally that
                 .replace("\"", "\\\"");
