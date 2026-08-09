@@ -150,6 +150,7 @@
 [clientscript,objbox_listener](boolean $boolean0, int $key1, char $char2, int $key3, string $string0, component $component4, int $int5, int $int6, string $string1, component $component7, int $int8) 2329
 [clientscript,omnishop_main_info_setup](dbrow $dbrow0, inv $inv1, int $int2, int $int3, int $int4, int $int5, dbrow $dbrow6, string $string0, boolean $boolean7) 2329
 [clientscript,omnishop_main_info_setup](dbrow $dbrow0, inv $inv1, int $int2, int $int3, int $int4, int $int5, string $string0, boolean $boolean6) 1782506086
+[clientscript,omnishop_main_info_setup](dbrow $dbrow0, inv $inv1, int $int2, string $string, boolean $boolean3, boolean $boolean4) 1785856905
 [clientscript,omnishop_main_setup](dbrow $dbrow0, inv $inv1, boolean $boolean2) 2329
 [clientscript,openurl_raw](string $string0, boolean $boolean0, boolean $boolean1) 2329
 [clientscript,overlay_portal_adjust](int $int0, boolean $boolean1, component $component2) 2329
@@ -279,6 +280,7 @@
 [clientscript,scrollbar_horizontal_drag](component $component0, component $component1, int $int2, boolean $boolean3) 2329
 [clientscript,scrollbar_vertical_drag](component $component0, component $component1, int $int2, boolean $boolean3) 2329
 [clientscript,settings_side_dropdown_hover](boolean $boolean0, component $component1, int $int2, int $int3) 2329
+[clientscript,settings_side_dropdown_hover](boolean $boolean0, component $component1, int $int2, int $int3, boolean $boolean) 1785856905
 [clientscript,shop_main_init](inv $inv0, string $string0, obj $obj1, int $int2, boolean $boolean3) 2003
 [clientscript,shop_noted_button_redraw](component $component0, boolean $boolean1) 2329
 [clientscript,side_journal_switchtab_onop](int $int0, int $int1, component $component2, component $component3, component $component4, component $component5, component $component6, component $component7, component $component8, component $component9, component $component10, component $component11, component $component12, component $component13, component $component14, component $component15, component $component16, component $component17, component $component18, component $component19, component $component20, component $component21, component $component22, component $component23, component $component24, component $component25, component $component26, component $component27, component $component28, component $component29, component $component30, component $component31, component $component32, component $component33, component $component34, component $component35, component $component36, component $component37, component $component38) 2329
