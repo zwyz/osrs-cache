@@ -52,6 +52,7 @@ public class SpotUnpacker {
                 }
             }
 
+            case 42 -> lines.add("recolall=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

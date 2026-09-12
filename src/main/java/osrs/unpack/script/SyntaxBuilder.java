@@ -71,7 +71,12 @@ public class SyntaxBuilder {
         }
 
         if (command == POP_VAR) {
-            pops.add(new VarPlayerReference((int) operand));
+            pops.add(new VarPlayerReference((int) operand, Type.UNKNOWN_INT));
+            return;
+        }
+
+        if (command == POP_VAR_LONG) {
+            pops.add(new VarPlayerReference((int) operand, Type.UNKNOWN_LONG));
             return;
         }
 
@@ -109,7 +114,7 @@ public class SyntaxBuilder {
 
             for (var pop : pops.reversed()) {
                 switch (pop) {
-                    case VarPlayerReference(var var) -> argumentTypes.add(Type.UNKNOWN_INT);
+                    case VarPlayerReference(var var, var hint) -> argumentTypes.add(hint);
                     case VarPlayerBitReference(var var) -> argumentTypes.add(Type.INT);
                     case VarClientReference(var var, var hint) -> argumentTypes.add(hint);
                     case VarClientStringReference(var var) -> argumentTypes.add(Type.STRING);
@@ -161,7 +166,14 @@ public class SyntaxBuilder {
         if (command == PUSH_VAR) {
             var var = (int) operand;
             var type = Type.UNKNOWN_INT;
-            buildCommand(code, index, FLOW_LOAD, new VarPlayerReference(var), List.of(), List.of(type));
+            buildCommand(code, index, FLOW_LOAD, new VarPlayerReference(var, type), List.of(), List.of(type));
+            return;
+        }
+
+        if (command == PUSH_VAR_LONG) {
+            var var = (int) operand;
+            var type = Type.UNKNOWN_LONG;
+            buildCommand(code, index, FLOW_LOAD, new VarPlayerReference(var, type), List.of(), List.of(type));
             return;
         }
 

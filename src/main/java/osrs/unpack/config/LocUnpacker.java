@@ -97,6 +97,7 @@ public class LocUnpacker {
                 }
             }
 
+            case 42 -> lines.add("recolall=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
             case 60 -> lines.add("mapfunction=" + packet.g2());
             case 61 -> lines.add("category=" + Unpacker.format(Type.CATEGORY, packet.g2()));
             case 62 -> lines.add("mirror=yes");

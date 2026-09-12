@@ -1,0 +1,6 @@
+4250 [command,objunlock_unlockable](obj $x1)(bool)
+4251 [command,objunlock_unlockable_count]()(int)
+4252 [command,objunlock_unlocked](obj $x1)(bool)
+4253 [command,objunlock_unlocked_count]()(int)
+4254 [command,objunlock_unlockable_find](int $x1)(obj)
+4255 [command,objunlock_unlockable_findnext]()(obj)

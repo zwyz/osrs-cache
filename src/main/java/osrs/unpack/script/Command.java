@@ -75,6 +75,8 @@ public class Command {
     public static Command PUSH_CONSTANT_INT;
     public static Command PUSH_VAR;
     public static Command POP_VAR;
+    public static Command PUSH_VAR_LONG;
+    public static Command POP_VAR_LONG;
     public static Command PUSH_CONSTANT_STRING;
     public static Command BRANCH;
     public static Command BRANCH_NOT;
@@ -237,6 +239,8 @@ public class Command {
         PUSH_CONSTANT_INT = findCommand("push_constant_int");
         PUSH_VAR = findCommand("push_var");
         POP_VAR = findCommand("pop_var");
+        PUSH_VAR_LONG = findCommand("push_var_long");
+        POP_VAR_LONG = findCommand("pop_var_long");
         PUSH_CONSTANT_STRING = findCommand("push_constant_string");
         BRANCH = findCommand("branch");
         BRANCH_NOT = findCommand("branch_not");
@@ -372,7 +376,7 @@ public class Command {
     }
 
     // flow_assign, flow_load
-    public record VarPlayerReference(int var) {
+    public record VarPlayerReference(int var, Type hint) {
 
     }
 
@@ -380,7 +384,6 @@ public class Command {
 
     }
 
-    // todo: refactor pops handling to get rid of type hint
     public record VarClientReference(int var, Type hint) {
 
     }

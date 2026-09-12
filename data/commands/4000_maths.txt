@@ -58,3 +58,5 @@
 4059 [command,long_setbit_range_tolong](long $x1, int $x1, int $x2, long $x3)(long)
 4060 [command,long_pack](int $x1,int $x2)(long)
 4061 [command,long_unpack](long $x1)(int,int)
+4062 [command,long_low](long $x1)(int)
+4063 [command,long_high](long $x1)(int)

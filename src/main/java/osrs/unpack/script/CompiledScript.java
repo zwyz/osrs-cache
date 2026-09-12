@@ -79,7 +79,7 @@ public class CompiledScript {
     private static Object decodeOperand(Command command, Packet packet, int index, int[][] switchValue, int[][] switchOffset) {
         if (command == PUSH_CONSTANT_INT) {
             return packet.g4s(); // int
-        } else if (command == PUSH_VAR || command == POP_VAR) {
+        } else if (command == PUSH_VAR || command == POP_VAR || command == PUSH_VAR_LONG || command == POP_VAR_LONG) {
             return packet.g4s(); // varplayer
         } else if (command == PUSH_VARBIT || command == POP_VARBIT) {
             return packet.g4s(); // varplayerbit

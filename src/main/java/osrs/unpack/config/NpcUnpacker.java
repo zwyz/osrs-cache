@@ -64,6 +64,8 @@ public class NpcUnpacker {
                 }
             }
 
+            case 42 -> lines.add("recolall=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
+
             case 60 -> { // https://discord.com/channels/@me/698790755363323904/1203639168836833340
                 var length = packet.g1();
 

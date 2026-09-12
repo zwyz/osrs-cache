@@ -7,6 +7,7 @@ import osrs.util.Packet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 public class ObjUnpacker {
     private static final long OZ_A = 28_349_523_125L; // https://en.wikipedia.org/wiki/Ounce
@@ -132,6 +133,7 @@ public class ObjUnpacker {
             case 95 -> lines.add("2dzan=" + packet.g2()); // https://discord.com/channels/@me/698790755363323904/1057485711214923888
             case 97 -> lines.add("certlink=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 98 -> lines.add("certtemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
+            case 99 -> lines.add("recolall=" + ColourConversion.reverseRGBFromHSL(packet.g2()));
             case 100 -> lines.add("count1=" + Unpacker.format(Type.OBJ, packet.g2()) + "," + packet.g2());
             case 101 -> lines.add("count2=" + Unpacker.format(Type.OBJ, packet.g2()) + "," + packet.g2());
             case 102 -> lines.add("count3=" + Unpacker.format(Type.OBJ, packet.g2()) + "," + packet.g2());
@@ -153,6 +155,18 @@ public class ObjUnpacker {
             case 148 -> lines.add("placeholderlink=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 149 -> lines.add("placeholdertemplate=" + Unpacker.format(Type.OBJ, packet.g2()));
             case 160 -> lines.add("stackable=never");
+
+            case 161 -> {
+                var seqs = new StringJoiner(",");
+                var count = packet.g2();
+
+                for (var i = 0; i < count; i++) {
+                    seqs.add(Unpacker.format(Type.SEQ, packet.g2()));
+                }
+
+                lines.add("keeponlyduringseqs=" + seqs);
+            }
+
             case 200 -> lines.add("subop" + (packet.g1() + 1) + "=" + packet.g1() + "," + packet.gjstr());
 
             case 201 -> {

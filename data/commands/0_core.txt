@@ -37,6 +37,8 @@
 61 [command,push_constant_long]()(unknown_long)
 62 [command,pop_long_discard]
 63 [command,push_constant_null]()(unknownarray)
+64 [command,push_var_long]
+65 [command,pop_var_long]
 66 [command,push_long_local]()(unknown_long)
 67 [command,pop_long_local](unknown_long $x1)
 68 [command,long_branch_not](unknown_long $x1, unknown_long $x2)

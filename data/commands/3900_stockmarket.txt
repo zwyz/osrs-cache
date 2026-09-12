@@ -5,7 +5,9 @@
 3905 [command,stockmarket_getofferprice](int $x1)(int)
 3906 [command,stockmarket_getoffercount](int $x1)(int)
 3907 [command,stockmarket_getoffercompletedcount](int $x1)(int)
+3907 [command,stockmarket_getoffercompletedcount](int $x1)(long) 241
 3908 [command,stockmarket_getoffercompletedgold](int $x1)(int)
+3908 [command,stockmarket_getoffercompletedgold](int $x1)(long) 241
 3909 (gap)
 3910 [command,stockmarket_isofferempty](int $x1)(boolean)
 3911 [command,stockmarket_isofferstable](int $x1)(boolean)
@@ -23,6 +25,7 @@
 3923 [command,tradingpost_getofferage](int $x1)(string)
 3924 [command,tradingpost_getoffercount](int $x1)(int)
 3925 [command,tradingpost_getofferprice](int $x1)(int)
+3925 [command,tradingpost_getofferprice](int $x1)(long) 241
 3926 [command,tradingpost_getofferitem](int $x1)(obj)
 3927 (gap)
 3928 (gap)
@@ -30,6 +33,7 @@
 3930 (gap)
 3931 [command,stockmarket_sellable](obj $x1)(boolean)
 3932 [command,stockmarket_value](obj $x1)(int, int)
+3932 [command,stockmarket_value](obj $x1)(int, long) 241
 3933 (gap)
 3934 (gap)
 3935 (gap)
