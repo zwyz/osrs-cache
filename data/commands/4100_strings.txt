@@ -3,7 +3,8 @@
 4102 [command,append_signnum](string $x1, int $x2)(string)
 4103 [command,lowercase](string $x1)(string)
 4104 [command,fromdate](int $x1)(string)
-4105 [command,text_bodytype](string $x1, string $x2)(string)
+4105 [command,text_gender](string $x1, string $x2)(string)
+4105 [command,text_bodytype](string $x1, string $x2)(string) 209
 4106 [command,tostring](int $x1)(string)
 4107 [command,compare](string $x1, string $x2)(int)
 4108 [command,paraheight](string $x1, int $x2, fontmetrics $x3)(int)
