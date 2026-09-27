@@ -21,7 +21,7 @@ public class Unpacker {
     public static final Set<Integer> LIST_COLUMNS = new HashSet<>();
     public static final Set<Integer> INDEXED_COLUMNS = new HashSet<>();
     public static final Map<Integer, Integer> COLUMN_COUNTS = new HashMap<>();
-    public static final Map<Integer, Map<Integer, IfType>> IF_TYPES = new LinkedHashMap<>();
+    public static final Map<Integer, Map<Integer, Component>> COMPONENT = new LinkedHashMap<>();
 
     public static void reset() {
         NAME.clear();
@@ -39,7 +39,7 @@ public class Unpacker {
         LIST_COLUMNS.clear();
         INDEXED_COLUMNS.clear();
         COLUMN_COUNTS.clear();
-        IF_TYPES.clear();
+        COMPONENT.clear();
 
         setSymbolName(Type.BOOLEAN, 0, "false");
         setSymbolName(Type.BOOLEAN, 1, "true");
@@ -173,10 +173,14 @@ public class Unpacker {
         setSymbolName(Type.INT_PLATFORMTYPE, 5, "^platformtype_jagex");
 
         setSymbolName(Type.INT_IFTYPE, 0, "^iftype_layer");
+        setSymbolName(Type.INT_IFTYPE, 1, "^iftype_inputbox");
+        setSymbolName(Type.INT_IFTYPE, 2, "^iftype_inv");
         setSymbolName(Type.INT_IFTYPE, 3, "^iftype_rectangle");
         setSymbolName(Type.INT_IFTYPE, 4, "^iftype_text");
         setSymbolName(Type.INT_IFTYPE, 5, "^iftype_graphic");
         setSymbolName(Type.INT_IFTYPE, 6, "^iftype_model");
+        setSymbolName(Type.INT_IFTYPE, 7, "^iftype_invtext");
+        setSymbolName(Type.INT_IFTYPE, 8, "^iftype_tooltip");
         setSymbolName(Type.INT_IFTYPE, 9, "^iftype_line");
         setSymbolName(Type.INT_IFTYPE, 10, "^iftype_circle");
         setSymbolName(Type.INT_IFTYPE, 11, "^iftype_crmview");
@@ -454,6 +458,14 @@ public class Unpacker {
             } else {
                 return quote(format(Type.DBTABLE, table, false) + ":col" + column, safe);
             }
+        } else if (type == Type.ANIMFRAME) {
+            if (value == -1) {
+                return "null";
+            } else {
+                var frameset = value >> 16;
+                var frame = value & 0xffff;
+                return "animframe_" + frameset + "_" + frame;
+            }
         } else if (type == Type.CLIENTSCRIPT) {
             if (value == -1) {
                 return "null";
@@ -479,7 +491,7 @@ public class Unpacker {
                 return "null";
             } else if (type == Type.TOPLEVELINTERFACE || type == Type.OVERLAYINTERFACE || type == Type.CLIENTINTERFACE) {
                 name = NAME.getOrDefault(Type.INTERFACE, Map.of()).get(value);
-            } else  {
+            } else {
                 name = type.name.replace("_", "") + "_" + Integer.toUnsignedString(value);
             }
 

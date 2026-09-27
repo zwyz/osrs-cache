@@ -74,7 +74,7 @@ public class DBRowUnpacker {
             }
 
             case 4 -> {
-                table = packet.gvarint2();
+                table = packet.gVarInt();
                 lines.add("table=" + Unpacker.format(Type.DBTABLE, table));
             }
 

@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import osrs.js5.*;
 import osrs.unpack.*;
 import osrs.unpack.config.*;
+import osrs.unpack.defaults.GraphicsDefaultsUnpacker;
 import osrs.unpack.map.MapSquare;
 import osrs.unpack.XteaKeyProvider;
 import osrs.unpack.script.Command;
@@ -19,6 +20,10 @@ import java.awt.image.Raster;
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,6 +31,7 @@ import java.util.*;
 import java.util.concurrent.StructuredTaskScope;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import static osrs.unpack.Js5Archive.*;
 import static osrs.unpack.Js5ConfigGroup.*;
@@ -37,10 +43,11 @@ public class Unpack {
     public static final boolean DUMP_CONFIG_IDS = false;
     public static final boolean DUMP_SYMBOLS = true;
     public static final boolean DUMP_SERVERSIDE_COLUMNS = true;
-    public static final boolean INFER_COMPONENT_ALIASES = true;
+    public static final boolean INFER_COMPONENT_ALIASES = false;
     public static final boolean APPEND_LOCAL_VAR_INDEX = false;
     public static final boolean INFER_AUTOINT = false;
     public static final boolean UNPACK_MAPS = false;
+    public static final HttpClient HTTP = HttpClient.newBuilder().followRedirects(HttpClient.Redirect.NORMAL).build();
     public static final Gson GSON = new GsonBuilder().create();
     public static int VERSION;
     public static int ID;
@@ -48,11 +55,6 @@ public class Unpack {
     public static Js5MasterIndex MASTER_INDEX;
     public static int CONFIGS_VERSION;
     public static int CLIENTSCRIPTS_VERSION;
-
-    public static void main(String[] args) throws IOException, InterruptedException {
-        unpackLive("unpacked/live", 239, "oldschool1.runescape.com", 43594, null);
-//        unpackOpenRS2("unpacked/2026-03-11", 236, "runescape", 2490);
-    }
 
     public static void unpackOpenRS2(String path, int version, String scope, int id) throws IOException {
         VERSION = version;
@@ -64,13 +66,38 @@ public class Unpack {
         ));
     }
 
-    public static void unpackLive(String path, int version, String host, int port, int[] key) throws IOException {
+    public static void unpackLive(String path, String config, int[] key) throws IOException, InterruptedException {
+        var uri = URI.create(config);
+        var host = "";
+        var version = 0;
+
+        var response = HTTP.send(HttpRequest.newBuilder(uri).build(), HttpResponse.BodyHandlers.ofString());
+
+        if (response.statusCode() != 200) {
+            throw new IOException("unexpected http response: " + response.statusCode());
+        }
+
+        for (var line : response.body().lines().toList()) {
+            var tokens = line.split("=", 3);
+
+            if (tokens[0].equals("codebase")) {
+                host = URI.create(tokens[1]).getHost();
+            }
+
+            if (tokens[0].equals("param")) {
+                var param = tokens[1];
+                var value = tokens[2];
+
+                if (param.equals("25")) version = Integer.parseInt(value);
+            }
+        }
+
         VERSION = version;
         ID = -1;
 
         unpack(path, new MemoryCacheResourceProvider(new FileSystemCacheResourceProvider(
                 Path.of(System.getProperty("user.home") + "/.rscache/osrs"),
-                new TcpJs5ResourceProvider(host, port, version, key))
+                new TcpJs5ResourceProvider(host, 43594, version, key))
         ));
     }
 
@@ -88,6 +115,7 @@ public class Unpack {
 
         Files.createDirectories(Path.of(path));
         Files.createDirectories(Path.of(path + "/config"));
+        Files.createDirectories(Path.of(path + "/defaults"));
         Files.createDirectories(Path.of(path + "/script"));
         Files.createDirectories(Path.of(path + "/interface"));
         if (UNPACK_MAPS) Files.createDirectories(Path.of(path + "/maps"));
@@ -130,6 +158,7 @@ public class Unpack {
         unpackConfigGroup(VARCLIENT, VarClientUnpacker::unpack, path + "/config/dump.varc");
         if (Unpack.VERSION < 238) unpackConfigGroup(VARCLIENTSTR, VarClientStringUnpacker::unpack, path + "/config/dump.varcstr");
         unpackConfigGroup(VAROBJ, VarObjUnpacker::unpack, path + "/config/dump.varobj"); // increased with treasure trail expansion
+        unpackConfigGroup(VARPLAYERSTR, VarPlayerStringUnpacker::unpack, path + "/config/dump.varpstr");
         unpackConfigGroup(VARSHARED, VarSharedUnpacker::unpack, path + "/config/dump.vars"); // increased with poh board https://twitter.com/JagexAsh/status/1610606943726456834
         unpackConfigGroup(VARSHAREDSTR, VarSharedStringUnpacker::unpack, path + "/config/dump.varsstr");
         unpackConfigGroup(VARNPC, VarNpcUnpacker::unpack, path + "/config/dump.varn");
@@ -175,13 +204,13 @@ public class Unpack {
         unpackConfigGroup(GROUPTYPE, GroupUnpacker::unpack, path + "/config/dump.group");
 
         // defaults
-        unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/config/graphics.defaults");
+        unpackDefaultsGroup(GRAPHICS, GraphicsDefaultsUnpacker::unpack, path + "/defaults/graphics.defaults");
 
         // scripts
         unpackScripts(Path.of(path + "/script"));
 
         // interface
-        unpackInterfaces(InterfaceUnpacker::unpack, Path.of(path + "/interface"));
+        unpackInterfaces(Path.of(path + "/interface"));
 
         // materials
         unpackConfigArchive(JS5_TEXTURES, 0, TextureUnpacker::unpack, Path.of(path + "/config/dump.texture"));
@@ -542,36 +571,40 @@ public class Unpack {
             for (var file : files.keySet()) {
                 var data = files.get(file);
                 var id = group << 16 | file;
-                var ifType = new IfType(id, data);
-                Unpacker.IF_TYPES.computeIfAbsent(group, _ -> new LinkedHashMap<>()).put(file, ifType);
+                var component = new Component(id, data);
+                Unpacker.COMPONENT.computeIfAbsent(group, _ -> new LinkedHashMap<>()).put(file, component);
             }
         }
     }
 
-    private static void unpackInterfaces(BiFunction<Integer, IfType, List<String>> unpack, Path result) throws IOException {
-        for (var entry : Unpacker.IF_TYPES.entrySet()) {
+    private static void unpackInterfaces(Path result) throws IOException {
+        for (var entry : Unpacker.COMPONENT.entrySet()) {
             var lines = new ArrayList<String>();
-            var ifId = entry.getKey();
-            var ifTypes = entry.getValue();
+            var interfaceID = entry.getKey();
             var scripted = false;
-            for (var ifTypeEntry : ifTypes.entrySet()) {
-                var comId = ifTypeEntry.getKey();
-                var ifType = ifTypeEntry.getValue();
-                scripted |= ifType.scripted;
+
+            for (var component : entry.getValue().values()) {
+                scripted |= component.scripted;
+
                 if (DUMP_CONFIG_IDS) {
-                    lines.add("// " + ifId + ":" + comId);
+                    lines.add("// " + (component.id >> 16) + ":" + (component.id & 0xFFFF));
                 }
-                lines.addAll(unpack.apply((ifId << 16) | comId, ifType));
+
+                lines.addAll(InterfaceUnpacker.unpack(component));
                 lines.add("");
             }
 
             String extension = scripted ? "if3" : "if";
-            Files.write(result.resolve(Unpacker.format(Type.INTERFACE, ifId) + "." + extension), lines);
+            Files.write(result.resolve(Unpacker.format(Type.INTERFACE, interfaceID) + "." + extension), lines);
         }
     }
 
-    private static void unpackDefaultsGroup(Js5DefaultsGroup group, BiFunction<Integer, byte[], List<String>> unpack, String result) throws IOException {
-        unpackGroup(JS5_DEFAULTS, group.id, unpack, result);
+    private static void unpackDefaultsGroup(Js5DefaultsGroup group, Function<byte[], List<String>> unpack, String result) throws IOException {
+        var files = loadGroupFiles(JS5_DEFAULTS, group.id);
+
+        if (files != null) {
+            Files.write(Path.of(result), unpack.apply(files.get(0)));
+        }
     }
 
     private static void unpackConfigGroup(Js5ConfigGroup group, BiFunction<Integer, byte[], List<String>> unpack, String result) throws IOException {

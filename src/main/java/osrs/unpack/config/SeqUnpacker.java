@@ -28,7 +28,7 @@ public class SeqUnpacker {
                 var count = packet.g2();
                 var delay = new int[count];
                 var frame = new int[count];
-                var anim = new int[count];
+                var frameset = new int[count];
 
                 for (var i = 0; i < count; i++) {
                     delay[i] = packet.g2();
@@ -39,16 +39,16 @@ public class SeqUnpacker {
                 }
 
                 for (var i = 0; i < count; i++) {
-                    anim[i] = packet.g2();
+                    frameset[i] = packet.g2();
                 }
 
                 for (var i = 0; i < count; i++) {
-                    lines.add("frame" + (i + 1) + "=anim_" + anim[i] + "_f" + (frame[i] + 1));
+                    lines.add("frame" + (i + 1) + "=" + Unpacker.format(Type.ANIMFRAME, (frameset[i] << 16) + frame[i]));
                     lines.add("delay" + (i + 1) + "=" + delay[i]);
                 }
             }
 
-            case 2 -> lines.add("loops=" + packet.g2());
+            case 2 -> lines.add("loops=" + packet.g2()); // 216 GetLoops
 
             case 3 -> {
                 var count = packet.g1();
@@ -62,35 +62,35 @@ public class SeqUnpacker {
             }
 
             case 4 -> lines.add("stretches=yes");
-            case 5 -> lines.add("priority=" + packet.g1());
+            case 5 -> lines.add("priority=" + packet.g1()); // 216 GetPriority
 
-            case 6 -> {
+            case 6 -> { // 216 GetReplaceHeldLeft
                 var value = packet.g2();
                 lines.add("replaceheldleft=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
             }
 
-            case 7 -> {
+            case 7 -> { // 216 GetReplaceHeldRight
                 var value = packet.g2();
                 lines.add("replaceheldright=" + (value == 0 ? "hide" : Unpacker.format(Type.OBJ, value - 512)));
             }
 
-            case 8 -> lines.add("maxloops=" + packet.g1());
+            case 8 -> lines.add("maxloops=" + packet.g1()); // 216 GetMaxLoops
 
-            case 9 -> lines.add("preanim_move=" + switch (packet.g1()) {
+            case 9 -> lines.add("preanim_move=" + switch (packet.g1()) { // https://twitter.com/JagexAsh/status/1717256842919698915
                 case 0 -> "delaymove";
                 case 1 -> "delayanim";
                 case 2 -> "merge";
                 default -> throw new IllegalStateException("invalid preanim_move");
             });
 
-            case 10 -> lines.add("postanim_move=" + switch (packet.g1()) {
+            case 10 -> lines.add("postanim_move=" + switch (packet.g1()) { // https://twitter.com/JagexAsh/status/1717256842919698915
                 case 0 -> "delaymove";
                 case 1 -> "abortanim";
                 case 2 -> "merge";
                 default -> throw new IllegalStateException("invalid postanim_move");
             });
 
-            case 11 -> lines.add("duplicatebehaviour=" + switch (packet.g1()) {
+            case 11 -> lines.add("duplicatebehaviour=" + switch (packet.g1()) { // 216 GetDuplicateBehaviour
                 case 0 -> "ignore"; // continues the current animation
                 case 1 -> "reset"; // resets frame and loop counter
                 case 2 -> "extend"; // resets loop counter only
@@ -100,18 +100,18 @@ public class SeqUnpacker {
             case 12 -> {
                 var count = packet.g1();
                 var frame = new int[count];
-                var anim = new int[count];
+                var frameset = new int[count];
 
                 for (var i = 0; i < count; i++) {
                     frame[i] = packet.g2();
                 }
 
                 for (var i = 0; i < count; i++) {
-                    anim[i] += packet.g2();
+                    frameset[i] += packet.g2();
                 }
 
                 for (var i = 0; i < count; i++) {
-                    lines.add("iframe" + (i + 1) + "=anim_" + anim[i] + "_f" + (frame[i] + 1));
+                    lines.add("iframe" + (i + 1) + "=" + Unpacker.format(Type.ANIMFRAME, (frameset[i] << 16) + frame[i]));
                 }
             }
 
@@ -157,13 +157,13 @@ public class SeqUnpacker {
                         }
                     }
                 } else {
-                    lines.add("keyframeset=" + packet.g4s());
+                    lines.add("keyframeset=" + Unpacker.format(Type.KEYFRAMESET, packet.g4s()));
                 }
             }
 
             case 14 -> {
                 if (Unpack.VERSION < 226) {
-                    lines.add("keyframeset=" + packet.g4s());
+                    lines.add("keyframeset=" + Unpacker.format(Type.KEYFRAMESET, packet.g4s()));
                 } else {
                     var count = packet.g2();
 

@@ -1,4 +1,4 @@
-package osrs.unpack.config;
+package osrs.unpack.defaults;
 
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
@@ -8,10 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GraphicsDefaultsUnpacker {
-    public static List<String> unpack(int id, byte[] data) {
+    public static List<String> unpack(byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[graphicsdefaults_" + id + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {

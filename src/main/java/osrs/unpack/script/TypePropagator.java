@@ -1,7 +1,7 @@
 package osrs.unpack.script;
 
 import osrs.Unpack;
-import osrs.unpack.IfType;
+import osrs.unpack.Component;
 import osrs.unpack.ScriptTrigger;
 import osrs.unpack.Type;
 import osrs.unpack.Unpacker;
@@ -272,10 +272,11 @@ public class TypePropagator {
         expression.visitChildren(c -> run(script, c));
     }
 
-    public void visitHook(IfType.IfTypeHook hook) {
-        var script = hook.id();
-        for (var i = 0; i < hook.args().size(); i++) {
-            if (hook.args().get(i) instanceof Integer value) {
+    public void visitHook(Object[] hook) {
+        var script = (int) hook[0];
+
+        for (var i = 1; i < hook.length; i++) {
+            if (hook[i] instanceof Integer value) {
                 var type = switch (value) {
                     case Integer.MIN_VALUE + 3 -> Type.COMPONENT;
                     case Integer.MIN_VALUE + 6 -> Type.COMPONENT;
@@ -283,9 +284,12 @@ public class TypePropagator {
                     case Integer.MIN_VALUE + 9 -> Type.CHAR;
                     default -> Type.UNKNOWN_INT;
                 };
-                emitEqual(parameter(script, i), type);
-            } else {
-                emitEqual(parameter(script, i), Type.STRING);
+
+                emitEqual(parameter(script, i - 1), type);
+            } else if (hook[i] instanceof Long) {
+                emitEqual(parameter(script, i - 1), Type.LONG);
+            } else if (hook[i] instanceof String) {
+                emitEqual(parameter(script, i - 1), Type.STRING);
             }
         }
     }
@@ -442,10 +446,10 @@ public class TypePropagator {
             }
         }
 
-        for (var itf : Unpacker.IF_TYPES.values()) {
+        for (var itf : Unpacker.COMPONENT.values()) {
             for (var com : itf.values()) {
-                for (var hook : com.hooks()) {
-                    assignComponentAliasesHook(hook);
+                for (var hook : com.hooks) {
+                    assignComponentAliasesHook(com, hook);
                 }
             }
         }
@@ -463,21 +467,20 @@ public class TypePropagator {
         expression.visitChildren(this::assignComponentAliasesScript);
     }
 
-    private void assignComponentAliasesHook(IfType.IfTypeHook hook) {
-        var script = hook.id();
-        for (var i = 0; i < hook.args().size(); ++i) {
-            var parameter = parameter(script, i);
-            var type = typeof(parameter);
-            if (type != Type.COMPONENT) continue;
-            var value = (int) hook.args().get(i);
-            if (value == -1) continue;
+    private void assignComponentAliasesHook(Component com, Object[] hook) {
+        var script = (int) hook[0];
 
-            var aliasedType = switch (value) {
-                case Integer.MIN_VALUE + 3 -> findComponentAlias(hook.ifType().id, "");
-                case Integer.MIN_VALUE + 6 -> findComponentAlias(hook.ifType().id, "_drop");
-                default -> findComponentAlias(value, "");
-            };
-            emitEqual(parameter, aliasedType);
+        for (var i = 1; i < hook.length; ++i) {
+            var parameter = parameter(script, i - 1);
+            var type = typeof(parameter);
+
+            if (type == Type.COMPONENT && hook[i] instanceof Integer value && value != -1) {
+                emitEqual(parameter, switch (value) {
+                    case Integer.MIN_VALUE + 3 -> findComponentAlias(com.id, "");
+                    case Integer.MIN_VALUE + 6 -> findComponentAlias(com.id, "_drop");
+                    default -> findComponentAlias(value, "");
+                });
+            }
         }
     }
 
@@ -768,14 +771,29 @@ public class TypePropagator {
             }
         }
 
-        record ExpressionType(Expression expression, int index) implements Node {}
-        record LocalType(int script, Command.LocalDomain domain, int index) implements Node {}
-        record ParameterType(int script, int index) implements Node {}
-        record ScriptTriggerParameter(int component, int index) implements Node {}
-        record ReturnType(int script, int index) implements Node {}
-        record VarPlayerType(int id) implements Node {}
-        record VarPlayerBitType(int id) implements Node {}
-        record VarClientType(int id) implements Node {}
+        record ExpressionType(Expression expression, int index) implements Node {
+        }
+
+        record LocalType(int script, Command.LocalDomain domain, int index) implements Node {
+        }
+
+        record ParameterType(int script, int index) implements Node {
+        }
+
+        record ScriptTriggerParameter(int component, int index) implements Node {
+        }
+
+        record ReturnType(int script, int index) implements Node {
+        }
+
+        record VarPlayerType(int id) implements Node {
+        }
+
+        record VarPlayerBitType(int id) implements Node {
+        }
+
+        record VarClientType(int id) implements Node {
+        }
 
         record TemporaryType() implements Node {
             public boolean equals(Object that) {
@@ -788,7 +806,8 @@ public class TypePropagator {
         }
     }
 
-    private record Constraint(ConstraintKind kind, Node a, Node b) {}
+    private record Constraint(ConstraintKind kind, Node a, Node b) {
+    }
 
     enum ConstraintKind {
         ASSIGN, // a < b

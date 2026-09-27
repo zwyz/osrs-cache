@@ -7,11 +7,11 @@ import osrs.util.Packet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class VarSharedStringUnpacker {
+public class VarPlayerStringUnpacker {
     public static List<String> unpack(int id, byte[] data) {
         var lines = new ArrayList<String>();
         var packet = new Packet(data);
-        lines.add("[" + Unpacker.format(Type.VAR_WORLD_STRING, id, false) + "]");
+        lines.add("[" + Unpacker.format(Type.VAR_PLAYER_STRING, id, false) + "]");
 
         while (true) switch (packet.g1()) {
             case 0 -> {

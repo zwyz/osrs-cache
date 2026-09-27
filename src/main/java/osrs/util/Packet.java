@@ -358,7 +358,7 @@ public class Packet {
         if (var1 != 0) {
             throw new IllegalStateException("");
         } else {
-            var var2 = gvarint();
+            var var2 = gMidiVarLen();
             if (pos + var2 > arr.length) {
                 throw new IllegalStateException("");
             } else {
@@ -476,7 +476,7 @@ public class Packet {
         }
     }
 
-    public int gvarint() {
+    public int gMidiVarLen() {
         var var1 = arr[++pos - 1];
 
         int var2;
@@ -487,7 +487,7 @@ public class Packet {
         return var2 | var1;
     }
 
-    public int gvarint2() {
+    public int gVarInt() {
         var var1 = 0;
         var var2 = 0;
 
@@ -685,6 +685,16 @@ public class Packet {
         return ((arr[pos - 1] & 255) << 8) + (arr[pos - 2] - 128 & 255);
     }
 
+    public int g2s_alt1() {
+        pos += 2;
+        var var1 = ((arr[pos - 1] & 255) << 8) + (arr[pos - 2] & 255);
+        if (var1 > 32767) {
+            var1 -= 65536;
+        }
+
+        return var1;
+    }
+
     public int g2s_alt2() {
         pos += 2;
         var var1 = ((arr[pos - 2] & 255) << 8) + (arr[pos - 1] - 128 & 255);
@@ -705,12 +715,6 @@ public class Packet {
         return var1;
     }
 
-    public void p3_altTODO(int var1) {
-        arr[++pos - 1] = (byte) (var1 >> 8);
-        arr[++pos - 1] = (byte) (var1 >> 16);
-        arr[++pos - 1] = (byte) var1;
-    }
-
     public int g3_alt1() {
         pos += 3;
         var b0 = arr[pos - 3] & 255;
@@ -719,23 +723,20 @@ public class Packet {
         return (b2 << 16) + (b1 << 8) + b0;
     }
 
-    public int g3_altTODO2() {
-        pos += 3;
-        var b0 = arr[pos - 3] & 255;
-        var b1 = arr[pos - 2] & 255;
-        var b2 = arr[pos - 1] & 255;
-        return (b1 << 16) + (b0 << 8) + b2;
+    public int g3_alt2() {
+        this.pos += 3;
+        var b0 = this.arr[this.pos - 3] & 255;
+        var b1 = this.arr[this.pos - 2] & 255;
+        var b2 = this.arr[this.pos - 1] & 255;
+        return b1 + (b2 << 8) + (b0 << 16);
     }
 
-    public int g3s_altTODO() {
-        pos += 3;
-
-        var var1 = (arr[pos - 2] & 255) + ((arr[pos - 3] & 255) << 16) + ((arr[pos - 1] & 255) << 8);
-        if (var1 > 8388607) {
-            var1 -= 16777216;
-        }
-
-        return var1;
+    public int g3_alt3() {
+        this.pos += 3;
+        var b0 = this.arr[this.pos - 3] & 255;
+        var b1 = this.arr[this.pos - 2] & 255;
+        var b2 = this.arr[this.pos - 1] & 255;
+        return b2 + (b0 << 8) + (b1 << 16);
     }
 
     public void p4_alt1(int var1) {
@@ -772,13 +773,6 @@ public class Packet {
     public int g4s_alt3() {
         pos += 4;
         return (arr[pos - 2] & 255) + ((arr[pos - 1] & 255) << 8) + ((arr[pos - 4] & 255) << 16) + ((arr[pos - 3] & 255) << 24);
-    }
-
-    public void gdata_altTODO(byte[] var1, int var2, int var3) {
-        for (var var4 = var2 + var3 - 1; var4 >= var2; --var4) {
-            var1[var4] = (byte) (arr[++pos - 1] - 128);
-        }
-
     }
 
     public void clear() {

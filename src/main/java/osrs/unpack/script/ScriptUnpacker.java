@@ -165,12 +165,13 @@ public class ScriptUnpacker {
             propagator.run(id, script);
         }
 
-        Unpacker.IF_TYPES
-                .entrySet()
-                .stream()
-                .flatMap(e -> e.getValue().values().stream())
-                .flatMap(ifType -> ifType.hooks().stream())
-                .forEach(propagator::visitHook);
+        for (var itf : Unpacker.COMPONENT.entrySet()) {
+            for (var com : itf.getValue().values()) {
+                for (var hook : com.hooks) {
+                    propagator.visitHook(hook);
+                }
+            }
+        }
 
         propagator.finish(SCRIPTS_DECOMPILED.keySet());
         var triggerInference = new TriggerInference();

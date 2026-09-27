@@ -13,14 +13,14 @@ public class DBTableIndex {
     public final List<Map<Object, List<Integer>>> tuplesLookup;
 
     public DBTableIndex(Packet data) {
-        int tupleCount = data.gvarint2();
+        int tupleCount = data.gVarInt();
         types = new BaseVarType[tupleCount];
         tuplesLookup = new ArrayList<>(tupleCount);
 
         for (int i = 0; i < tupleCount; ++i) {
             types[i] = BaseVarType.get(data.g1());
 
-            var count = data.gvarint2();
+            var count = data.gVarInt();
             var keyRefs = new HashMap<Object, List<Integer>>(count);
 
             while (count-- > 0) {
@@ -31,11 +31,11 @@ public class DBTableIndex {
                     default -> throw new IllegalStateException();
                 };
 
-                int refCount = data.gvarint2();
+                int refCount = data.gVarInt();
                 var refs = new ArrayList<Integer>(refCount);
 
                 while (refCount-- > 0) {
-                    var rowId = data.gvarint2();
+                    var rowId = data.gVarInt();
                     refs.add(rowId);
                 }
 

@@ -202,6 +202,8 @@ public class Type {
     public static final Type GROUP = new Type("group", BaseVarType.INTEGER);
     public static final Type GROUP_UID = new Type("group_uid", BaseVarType.LONG);
     public static final Type GROUP_VAR = new Type("group_var", BaseVarType.INTEGER);
+    public static final Type KEYFRAMESET = new Type("keyframeset", BaseVarType.INTEGER);
+    public static final Type ANIMFRAME = new Type("animframe", BaseVarType.INTEGER);
 
     // special
     public static final Type TYPE = new Type("type", BaseVarType.INTEGER);
@@ -216,6 +218,7 @@ public class Type {
     public static final Type DBCOLUMN = new Type("dbcolumn", BaseVarType.INTEGER);
     public static final Type VAR_PLAYER = new Type("var_player", BaseVarType.INTEGER);
     public static final Type VAR_PLAYER_BIT = new Type("var_player_bit", BaseVarType.INTEGER);
+    public static final Type VAR_PLAYER_STRING = new Type("var_player_string", BaseVarType.INTEGER);
     public static final Type VAR_CLIENT = new Type("var_client", BaseVarType.INTEGER);
     public static final Type VAR_CLIENT_STRING = new Type("var_client_string", BaseVarType.INTEGER);
     public static final Type VAR_CLAN_SETTING = new Type("var_clan_setting", BaseVarType.INTEGER);
@@ -225,9 +228,9 @@ public class Type {
     public static final Type VAR_GLOBAL = new Type("var_global", BaseVarType.INTEGER);
     public static final Type VAR_NPC = new Type("var_npc", BaseVarType.INTEGER);
     public static final Type VAR_NPC_BIT = new Type("var_npc_bit", BaseVarType.INTEGER);
-    public static final Type VAR_OBJ = new Type("var_obj", BaseVarType.INTEGER);
-    public static final Type VAR_SHARED = new Type("var_shared", BaseVarType.INTEGER);
-    public static final Type VAR_SHARED_STRING = new Type("var_shared_string", BaseVarType.INTEGER);
+    public static final Type VAR_OBJECT = new Type("var_object", BaseVarType.INTEGER);
+    public static final Type VAR_WORLD = new Type("var_world", BaseVarType.INTEGER);
+    public static final Type VAR_WORLD_STRING = new Type("var_world_string", BaseVarType.INTEGER);
 
     // type aliases (act as normal types, except that on conflict they propagate int_int, and type name is formatted as base type)
     public static final Type INT_INT = new Type("int", Type.INT);
@@ -423,7 +426,7 @@ public class Type {
     }
 
 
-    public static Type byID(int id) {
+    public static Type byID(int id) { // todo: missing 52, 82, 119, 210, 211
         return switch (id) {
             case 0 -> INT;
             case 1 -> BOOLEAN;
