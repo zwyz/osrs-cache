@@ -198,6 +198,7 @@ public class ObjUnpacker {
                 }
             }
 
+            case 251 -> lines.add("unlockable=yes");
             case 249 -> ParamUnpackHelper.unpack(lines, packet);
 
             default -> throw new IllegalStateException("unknown opcode");

@@ -63,6 +63,7 @@
 [clientscript,dt2_survival_bar_movement](boolean $boolean0, component $component1, int $int2) 2329
 [clientscript,eaa_shameometer_update](component $component0, component $component1, component $component2, component $component3, boolean $boolean4) 2329
 [clientscript,examine_item](obj $obj0, int $int1, string $string0, boolean $boolean2, int $int3, boolean $boolean4, int $int5, int $int6) 1679
+[clientscript,examine_item](obj $obj0, int $int1, boolean $boolean2, boolean $boolean3, int $int4, int $int5, long $long0, string $string0) 1790690737
 [clientscript,farming_tools_main_recreate](component $component0, obj $obj1, string $string0, int $int2, boolean $boolean3) 2329
 [clientscript,farming_tools_main_update](component $component0, obj $obj1, string $string0, int $int2, int $int3) 2329
 [clientscript,farming_tools_side_recreate](component $component0, obj $obj1, string $string0, boolean $boolean2) 2329

@@ -120,7 +120,7 @@ public class ScriptUnpacker {
         // compute parameter/return counts
         for (var id : SCRIPTS.keySet()) {
             var script = SCRIPTS.get(id);
-            SCRIPT_PARAMETER_COUNT.put(id, script.argumentCountInt + script.argumentCountObject);
+            SCRIPT_PARAMETER_COUNT.put(id, script.argumentCountInt + script.argumentCountLong + script.argumentCountObject);
             var returnTypes = new ArrayList<Type>();
 
             for (var i = script.code.length - 2; i >= 0; i--) {

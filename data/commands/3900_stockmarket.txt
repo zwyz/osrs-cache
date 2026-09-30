@@ -3,9 +3,9 @@
 3903 [command,stockmarket_getoffertype](int $x1)(int)
 3904 [command,stockmarket_getofferitem](int $x1)(obj)
 3905 [command,stockmarket_getofferprice](int $x1)(int)
+3905 [command,stockmarket_getofferprice](int $x1)(long) 241
 3906 [command,stockmarket_getoffercount](int $x1)(int)
 3907 [command,stockmarket_getoffercompletedcount](int $x1)(int)
-3907 [command,stockmarket_getoffercompletedcount](int $x1)(long) 241
 3908 [command,stockmarket_getoffercompletedgold](int $x1)(int)
 3908 [command,stockmarket_getoffercompletedgold](int $x1)(long) 241
 3909 (gap)
