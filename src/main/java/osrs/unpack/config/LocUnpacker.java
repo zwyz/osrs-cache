@@ -232,6 +232,61 @@ public class LocUnpacker {
             });
 
             case 96 -> lines.add("thickness=" + packet.g1()); // thickness of this ground decor (to offset entities so they don't clip into it)
+
+            case 97 -> {
+                var multivarbit = packet.g2null();
+
+                if (multivarbit != -1) {
+                    lines.add("multivar=" + Unpacker.format(Type.VAR_PLAYER_BIT, multivarbit));
+                }
+
+                var multivarp = packet.g2null();
+
+                if (multivarp != -1) {
+                    lines.add("multivar=" + Unpacker.format(Type.VAR_PLAYER, multivarp));
+                }
+
+                var count = packet.g1();
+
+                for (var i = 0; i <= count; ++i) {
+                    var multi = packet.g3s();
+
+                    if (multi != -1) {
+                        lines.add("multiloc=" + i + "," + Unpacker.format(Type.LOC, multi));
+                    }
+                }
+            }
+
+            case 98 -> {
+                var multivarbit = packet.g2null();
+
+                if (multivarbit != -1) {
+                    lines.add("multivar=" + Unpacker.format(Type.VAR_PLAYER_BIT, multivarbit));
+                }
+
+                var multivarp = packet.g2null();
+
+                if (multivarp != -1) {
+                    lines.add("multivar=" + Unpacker.format(Type.VAR_PLAYER, multivarp));
+                }
+
+                var multidefault = packet.g3s();
+
+                if (multidefault != -1) {
+                    lines.add("multiloc=default," + Unpacker.format(Type.LOC, multidefault));
+                }
+
+                var count = packet.g1();
+
+                for (var i = 0; i <= count; ++i) {
+                    var multi = packet.g3s();
+
+                    if (multi != -1) {
+                        lines.add("multiloc=" + i + "," + Unpacker.format(Type.LOC, multi));
+                    }
+                }
+            }
+
             case 100 -> lines.add("subop" + (packet.g1() + 1) + "=" + packet.g1() + "," + packet.gjstr());
 
             case 101 -> {

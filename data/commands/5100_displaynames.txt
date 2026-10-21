@@ -1,0 +1,9 @@
+5100 [command,displaynames_status]
+5101 [command,displaynames_status_result]()(int,int,string,boolean,int,int)
+5102 [command,displaynames_check](string $name)
+5103 [command,displaynames_check_result]()(int,int,string,int,boolean,int,int)
+5104 [command,displaynames_claim](string $name)
+5105 [command,displaynames_claim_result]()(int,int,string,int)
+5106 [command,displaynames_cancel]
+5107 [command,displaynames_cancel_result]()(int,int,string)
+5108 [command,displaynames_openurl]
