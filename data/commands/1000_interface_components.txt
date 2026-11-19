@@ -61,6 +61,8 @@
 1150 [command,cc_crmview_setjson](string $x1)
 1151 [command,cc_crmview_init_v2](string $x1, string $x2, string $x3)
 1152 [command,cc_crmview_dismiss]()(boolean)
+1153 [command,cc_settexttruncate](boolean $x1)
+1154 [command,cc_gettexttruncated]()(boolean)
 
 1200 [command,cc_setobject](obj $x1, int $x2)
 1201 [command,cc_setnpchead](npc $x1)
@@ -291,6 +293,8 @@
 2148 [command,if_input_setkeymode](int $x1, int $x2, component $x3)
 2149 [command,if_input_setcharmode](char $x1, int $x2, component $x3)
 2150 [command,if_crmview_setjson](string $x1, component $x2)
+2153 [command,if_settexttruncate](boolean $x1, component $x2)
+2154 [command,if_gettexttruncated](component $x1)(boolean)
 
 2200 [command,if_setobject](obj $x1, int $x2, component $x3)
 2201 [command,if_setnpchead](npc $x1, component $x2)

@@ -19,8 +19,10 @@
 6518 [command,on_mobile]()(boolean)
 6519 [command,clienttype]()(clienttype)
 6520 [command,mobile_keyboardshow]
+6520 [command,mobile_keyboardshow](int $x1) 243
 6521 [command,mobile_keyboardhide]
 6522 [command,mobile_keyboardshowstring](string $x1, int $x2)
+6522 [command,mobile_keyboardshowstring](string $x1, int $x2, int $x3) 243
 6523 [command,mobile_keyboardshowinteger](string $x1, int $x2)
 6524 [command,mobile_batterylevel]()(int)
 6525 [command,mobile_batterycharging]()(boolean)

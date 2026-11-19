@@ -56,6 +56,7 @@ public class WorldEntityUnpacker {
             case 25 -> lines.add("anim=" + Unpacker.format(Type.SEQ, packet.g2()));
             case 26 -> lines.add("minimapicon=" + Unpacker.format(Type.GRAPHIC, packet.gSmart2or4null()));
             case 27 -> lines.add("worldoverlaphidecolour=" + Unpacker.formatColour(packet.g2()));
+            case 28 -> lines.add("worldoverlaphideself=yes");
             default -> throw new IllegalStateException("unknown opcode");
         }
     }

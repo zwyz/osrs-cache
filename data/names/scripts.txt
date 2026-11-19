@@ -2218,7 +2218,6 @@
 [clientscript,inventory_build]
 [clientscript,inventory_drag]
 [clientscript,inventory_init]
-[clientscript,inventory_items_position_already]
 [clientscript,inventory_key]
 [clientscript,inventory_op]
 [clientscript,inventory_reorder]

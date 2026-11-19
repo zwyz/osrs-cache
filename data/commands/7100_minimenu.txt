@@ -32,3 +32,6 @@
 7469 [command,minimenu_getscrollheight]()(int)
 7470 [command,minimenu_togglescroll]
 7471 [command,minimenu_getscroll]()(int)
+7472 [command,minimenu_swaps_add](string $line)
+7473 [command,minimenu_swaps_del](string $key)
+7474 [command,minimenu_swaps_clear]
