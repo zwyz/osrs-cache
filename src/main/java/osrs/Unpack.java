@@ -137,7 +137,8 @@ public class Unpack {
         loadDebugNames(Js5DebugNamesGroup.SEQTYPES, Type.SEQ);
         loadDebugNames(Js5DebugNamesGroup.SPOTTYPES, Type.SPOTANIM);
         loadDebugNames(Js5DebugNamesGroup.ROWTYPES, Type.DBROW);
-        loadDebugNames(Js5DebugNamesGroup.SPRITETYPES, Type.GRAPHIC);
+        // sprite names prior to 231 were incorrect
+        if (VERSION >= 231) loadDebugNames(Js5DebugNamesGroup.SPRITETYPES, Type.GRAPHIC);
         loadDebugNames(Js5DebugNamesGroup.VARCTYPES, Type.VAR_CLIENT);
         loadDebugNames(Js5DebugNamesGroup.SFXTYPES, Type.SYNTH);
         loadDebugNames(Js5DebugNamesGroup.MIDITYPES, Type.MIDI);
