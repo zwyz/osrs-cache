@@ -40,7 +40,7 @@ public class Js5ArchiveIndex {
         var hasUncompressedChecksums = (flags & 8) != 0;
 
         if (protocol >= 7) {
-            groupCount = packet.gSmart2or4null();
+            groupCount = packet.gSmart2or4s();
         } else {
             groupCount = packet.g2();
         }
@@ -51,7 +51,7 @@ public class Js5ArchiveIndex {
 
         if (protocol >= 7) {
             for (var i = 0; i < groupCount; ++i) {
-                groupId[i] = var9 += packet.gSmart2or4null();
+                groupId[i] = var9 += packet.gSmart2or4s();
                 if (groupId[i] > maxGroupId) {
                     maxGroupId = groupId[i];
                 }
@@ -126,7 +126,7 @@ public class Js5ArchiveIndex {
 
         if (protocol >= 7) {
             for (var i = 0; i < groupCount; ++i) {
-                groupSize[groupId[i]] = packet.gSmart2or4null();
+                groupSize[groupId[i]] = packet.gSmart2or4s();
             }
 
             for (var i = 0; i < groupCount; ++i) {
@@ -137,7 +137,7 @@ public class Js5ArchiveIndex {
                 groupFileIds[group] = new int[size];
 
                 for (var j = 0; j < size; ++j) {
-                    var var28 = groupFileIds[group][j] = var25 += packet.gSmart2or4null();
+                    var var28 = groupFileIds[group][j] = var25 += packet.gSmart2or4s();
 
                     if (var28 > var26) {
                         var26 = var28;
