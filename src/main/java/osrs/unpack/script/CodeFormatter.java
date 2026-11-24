@@ -14,7 +14,6 @@ import static osrs.unpack.script.Command.*;
 public class CodeFormatter {
     private static final Pattern DIRECT_STRING_PATTERN = Pattern.compile("[a-z_0-9]+");
     private static final Pattern TAG_STRING_PATTERN = Pattern.compile("<[^<>]*>");
-    private static final Pattern STRING_TEMPLATE_PATTERN = Pattern.compile("<text_pronoun\\([^<>]*\\)>");
     private static Map<LocalReference, Type> localTypes;
     private static final Map<Type, Integer> usageCount = new HashMap<>();
 
@@ -196,6 +195,7 @@ public class CodeFormatter {
             return prec < 50 ? "calc(" + s + ")" : s;
         } else if (command == JOIN_STRING) {
             var result = "";
+            var escaper = new StringEscaper();
             var interpolations = new HashSet<Integer>();
 
             for (int i = 0; i < expression.arguments.size(); i++) {
@@ -226,7 +226,7 @@ public class CodeFormatter {
 
                 if (arg.command == PUSH_CONSTANT_STRING && arg.operand instanceof String s) {
                     if (!interpolations.contains(i)) {
-                        result += escape(s);
+                        result += escaper.escape(s);
                     } else if (Unpack.VERSION < 240 && s.startsWith("<") && s.endsWith(">")) {
                         result += s;
                     } else {
@@ -502,14 +502,73 @@ public class CodeFormatter {
     }
 
     private static String escape(String s) {
-        // TODO temporary impl that matches specifically the text_pronoun template (as a full, constant string)
-        //      this needs to properly handle other templates once they become used and we have examples.
-        if (Unpack.VERSION >= 240 && STRING_TEMPLATE_PATTERN.matcher(s).matches()) {
-            return s;
+        return new StringEscaper().escape(s);
+    }
+
+    private static class StringEscaper {
+        private static final List<String> TEMPLATE_PREFIXES = List.of(
+                "<switch,",
+                "<text_pronoun(",
+                "<int",
+                "<long",
+                "<str",
+                "<bool"
+        );
+
+        // assignments can span multiple constants in a joined string
+        private int templateDepth;
+
+        private static int templateHeadEnd(String s, int start) {
+            if (s.startsWith("<cond,", start)) {
+                // skip the condition because it can contain comparison operators
+                var comma = s.indexOf(',', start + "<cond,".length());
+                return comma == -1 ? -1 : comma + 1;
+            }
+
+            for (var prefix : TEMPLATE_PREFIXES) {
+                if (s.startsWith(prefix, start)) {
+                    return start + prefix.length();
+                }
+            }
+            return -1;
         }
 
-        return s.replace("\\", "\\\\")
-                .replace("\\\\<", "\\\\\\<") // fix for a Jagex bug that makes "\<" compile as literally that
-                .replace("\"", "\\\"");
+        private String escape(String s) {
+            var result = new StringBuilder();
+
+            for (int i = 0; i < s.length(); i++) {
+                var c = s.charAt(i);
+                var escaped = i > 0 && s.charAt(i - 1) == '\\';
+
+                // consume the whole head so cond's comparison operators do not affect depth
+                var headEnd = templateDepth == 0 && Unpack.VERSION >= 240 && c == '<' && !escaped ? templateHeadEnd(s, i) : -1;
+                if (headEnd != -1) {
+                    result.append(s, i, headEnd);
+                    i = headEnd - 1;
+                    templateDepth = 1;
+                } else if (templateDepth > 0) {
+                    result.append(c);
+                    if (!escaped && c == '<') {
+                        templateDepth++;
+                    }
+                    if (!escaped && c == '>') {
+                        templateDepth--;
+                    }
+                } else {
+                    if (c == '\\' || c == '"') {
+                        result.append('\\');
+                    }
+
+                    // fix for a Jagex bug that makes "\<" compile as literally that
+                    if (c == '<' && escaped) {
+                        result.append('\\');
+                    }
+
+                    result.append(c);
+                }
+            }
+
+            return result.toString();
+        }
     }
 }
