@@ -43,6 +43,7 @@ public class Symbols {
         dumpType(Type.MIDI, path.resolve("midi.sym"));
         dumpType(Type.JINGLE, path.resolve("jingle.sym"));
         dumpType(Type.WORLDENTITY, path.resolve("worldentity.sym"));
+        dumpType(Type.AMBIENTSOUND, path.resolve("ambientsound.sym"));
 
         dumpConfigWithValue(Js5ConfigGroup.PARAMTYPE, Type.PARAM, Unpacker.PARAM_TYPE, path.resolve("param.sym"));
         dumpConfigWithValue(Js5ConfigGroup.VARPLAYER, Type.VAR_PLAYER, Unpacker.VAR_PLAYER_TYPE, path.resolve("varp.sym"));

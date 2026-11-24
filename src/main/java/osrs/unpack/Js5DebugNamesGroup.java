@@ -15,7 +15,11 @@ public enum Js5DebugNamesGroup {
     SPRITETYPES(12),
     IFTYPES(13),
     IFTYPES_V2(14),
-    VARCTYPES(15);
+    VARCTYPES(15),
+    SFXTYPES(16),
+    MIDITYPES(17),
+    JINGLETYPES(18),
+    AMBIENTSOUNDTYPES(19);
 
     public final int id;
 

@@ -137,8 +137,12 @@ public class Unpack {
         loadDebugNames(Js5DebugNamesGroup.SEQTYPES, Type.SEQ);
         loadDebugNames(Js5DebugNamesGroup.SPOTTYPES, Type.SPOTANIM);
         loadDebugNames(Js5DebugNamesGroup.ROWTYPES, Type.DBROW);
-        loadDebugNames(Js5DebugNamesGroup.SOUNDTYPES, Type.JINGLE);
+        loadDebugNames(Js5DebugNamesGroup.SPRITETYPES, Type.GRAPHIC);
         loadDebugNames(Js5DebugNamesGroup.VARCTYPES, Type.VAR_CLIENT);
+        loadDebugNames(Js5DebugNamesGroup.SFXTYPES, Type.SYNTH);
+        loadDebugNames(Js5DebugNamesGroup.MIDITYPES, Type.MIDI);
+        loadDebugNames(Js5DebugNamesGroup.JINGLETYPES, Type.JINGLE);
+        loadDebugNames(Js5DebugNamesGroup.AMBIENTSOUNDTYPES, Type.AMBIENTSOUND);
         loadDebugNamesInterface();
         loadDebugNamesDBTable();
         loadGroupNamesScriptTrigger(JS5_CLIENTSCRIPTS, Unpacker.SCRIPT_NAME);
@@ -200,7 +204,7 @@ public class Unpack {
         unpackConfigGroup(WORLDENTITY, WorldEntityUnpacker::unpack, path + "/config/dump.worldentity");
         unpackConfigGroup(CONFIG71, Config71Unpacker::unpack, path + "/config/dump.config71");
         unpackConfigGroup(WATERTYPE, WaterUnpacker::unpack, path + "/config/dump.water");
-        if (Unpack.VERSION >= 238) unpackConfigGroup(VARCLIENTSTR, AmbienceUnpacker::unpack, path + "/config/dump.ambience");
+        if (Unpack.VERSION >= 238) unpackConfigGroup(VARCLIENTSTR, AmbientSoundUnpacker::unpack, path + "/config/dump.ambientsound");
         unpackConfigGroup(GROUPTYPE, GroupUnpacker::unpack, path + "/config/dump.group");
 
         // defaults

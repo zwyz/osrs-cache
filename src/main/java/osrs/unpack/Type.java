@@ -198,7 +198,7 @@ public class Type {
     public static final Type OVERLAY = new Type("overlay", BaseVarType.INTEGER);
     public static final Type WORLD_AREA = new Type("world_area", BaseVarType.INTEGER);
     public static final Type WATER = new Type("water", BaseVarType.INTEGER);
-    public static final Type AMBIENCE = new Type("ambience", BaseVarType.INTEGER);
+    public static final Type AMBIENTSOUND = new Type("ambientsound", BaseVarType.INTEGER);
     public static final Type GROUP = new Type("group", BaseVarType.INTEGER);
     public static final Type GROUP_UID = new Type("group_uid", BaseVarType.LONG);
     public static final Type GROUP_VAR = new Type("group_var", BaseVarType.INTEGER);
