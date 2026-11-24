@@ -281,6 +281,8 @@ public class Unpack {
                     maxType = archiveIndexConfig.groupMaxFileId[INVTYPE.id];
                 } else if (trigger.type == Type.GROUP) {
                     maxType = GROUPTYPE.id >= archiveIndexConfig.groupMaxFileId.length ? 0 : archiveIndexConfig.groupMaxFileId[GROUPTYPE.id];
+                } else if (trigger.type == Type.CLIENTSCRIPT) {
+                    maxType = archiveIndex.getGroupIdLimit();
                 } else {
                     throw new AssertionError("todo");
                 }
@@ -289,6 +291,10 @@ public class Unpack {
                     var key3 = String.valueOf((type << 8) + trigger.id);
 
                     if (scriptByHash.containsKey(key3.hashCode()) && !collisions.contains(key3.hashCode())) {
+                        if (trigger == ScriptTrigger.INTERPOLATE) {
+                            ScriptUnpacker.SCRIPT_TRIGGERS.put(type, ScriptTrigger.INTERPOLATE);
+                        }
+
                         names.put(scriptByHash.get(key3.hashCode()), "[" + trigger.name().toLowerCase(Locale.ROOT) + "," + Unpacker.format(trigger.type, type) + "]");
                     }
                 }

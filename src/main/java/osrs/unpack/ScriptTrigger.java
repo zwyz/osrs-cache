@@ -50,7 +50,7 @@ public enum ScriptTrigger { // all are official names from 233.2
     ONMINIMENUOPEN(82),
     ONMINIMENUCLOSE(83),
     GROUPCHANGE(85, Type.GROUP),
-    INTERPOLATE(86);
+    INTERPOLATE(86, Type.CLIENTSCRIPT);
 
     public final int id;
     public final Type type;

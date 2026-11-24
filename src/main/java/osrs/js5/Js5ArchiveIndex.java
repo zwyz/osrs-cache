@@ -202,6 +202,17 @@ public class Js5ArchiveIndex {
         }
     }
 
+    public int getGroupIdLimit() {
+        return groupArraySize;
+    }
+
+    public int getFileIdLimit(int groupId) {
+        if (groupMaxFileId != null && groupId < groupMaxFileId.length) {
+            return groupMaxFileId[groupId];
+        }
+        return 0;
+    }
+
     public int[] getGroupFileIDs(int groupID) {
         var fileIds = groupFileIds[groupID];
         if (fileIds == null) {
