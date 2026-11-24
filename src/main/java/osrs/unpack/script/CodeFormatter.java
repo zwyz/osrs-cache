@@ -21,8 +21,8 @@ public class CodeFormatter {
     public static String formatScript(String name, List<Type> parameterTypes, List<Type> returnTypes, Map<LocalReference, Type> localTypes, List<Expression> script) {
         CodeFormatter.localTypes = localTypes;
 
+        usageCount.clear();
         if (Unpack.INFER_COMPONENT_ALIASES) {
-            usageCount.clear();
             if (localTypes != null) {
                 for (var type : localTypes.values()) {
                     type = ScriptUnpacker.chooseDisplayType(type);
