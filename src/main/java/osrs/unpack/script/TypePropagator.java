@@ -104,6 +104,13 @@ public class TypePropagator {
                         emitAssign(type(arg, j), parameter(otherScript, index++));
                     }
                 }
+
+                if (Unpack.VERSION < 231 && !ScriptUnpacker.IGNORE_HOOK_TYPE_INFO) {
+                    for (var i = 0; i < signature.length(); i++) {
+                        var type = Type.byChar(signature.charAt(i));
+                        emitEqual(parameter(otherScript, i), type);
+                    }
+                }
             }
         }
 
