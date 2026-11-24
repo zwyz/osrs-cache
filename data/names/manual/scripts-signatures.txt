@@ -1,4 +1,5 @@
 [clientscript,account_info_update](int $int0, boolean $boolean1, boolean $boolean2) 956
+[clientscript,account_info_update](int $int0, boolean $boolean1, boolean $boolean2, boolean $boolean3) 1794932371
 [clientscript,add_overlaytimer_loc](coord $coord0, loc $loc1, locshape $locshape2, int $int3, int $int4, int $rgb5, int $int6) 1571
 [clientscript,adventurepath_say_item](obj $obj0, int $int1, boolean $boolean2) 2329
 [clientscript,agilityarena_rewards_draw](component $component0, string $string0, int $int1, boolean $boolean2, component $component3) 2329

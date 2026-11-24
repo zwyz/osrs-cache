@@ -823,6 +823,16 @@ temple of tribes
 Tempoross
 tempoross
 terrorbird tussle
+tfa_archive_guardian_combat
+tfa_bork_combat
+tfa_dagonhai_combat
+tfa_ezekiel_combat
+tfa_lobby_room
+tfa_moia_combat
+tfa_ocellus_combat_part_01
+tfa_ocellus_combat_part_02
+tfa_soul_prison_combat
+tfa_xarth_combat
 that_sullen_hall
 the adventurer
 The Angels Fury
