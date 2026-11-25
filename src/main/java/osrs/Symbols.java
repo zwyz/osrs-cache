@@ -146,9 +146,11 @@ public class Symbols {
     }
 
     private static void dumpInterface(Path outputRoot) throws IOException {
+        var interfaceIndex = new Js5ArchiveIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, Js5Archive.JS5_INTERFACES.id, false)));
+
         // 'interface' is last since it is the fallback
         var interfaceTypes = List.of(Type.TOPLEVELINTERFACE, Type.OVERLAYINTERFACE, Type.CLIENTINTERFACE, Type.INTERFACE);
-        var interfaceIds = getIds(Js5Archive.JS5_INTERFACES);
+        var interfaceIds = getIds(interfaceIndex);
 
         var componentBuilder = new StringBuilder();
         var interfaceBuilders = new HashMap<Type, StringBuilder>();
@@ -170,7 +172,7 @@ public class Symbols {
             var interfaceBuilder = interfaceBuilders.get(interfaceType);
             interfaceBuilder.append(interfaceId).append('\t').append(name).append('\n');
 
-            var componentIds = getIds(Js5Archive.JS5_INTERFACES, interfaceId);
+            var componentIds = getIds(interfaceIndex, interfaceId);
             for (var componentId : componentIds) {
                 var combinedId = (interfaceId << 16) | componentId;
                 var componentName = Unpacker.format(Type.COMPONENT, combinedId, false);
@@ -268,6 +270,10 @@ public class Symbols {
         return archiveIndex.groupId;
     }
 
+    private static int[] getIds(Js5ArchiveIndex archiveIndex) {
+        return archiveIndex.groupId;
+    }
+
     private static int[] getIds(Js5Archive archive, int group) {
         if (archive.id >= Unpack.MASTER_INDEX.getArchiveCount()) {
             // archive doesn't exist
@@ -275,6 +281,10 @@ public class Symbols {
         }
 
         var archiveIndex = new Js5ArchiveIndex(Js5Util.decompress(Unpack.PROVIDER.get(255, archive.id, false)));
+        return getIds(archiveIndex, group);
+    }
+
+    private static int[] getIds(Js5ArchiveIndex archiveIndex, int group) {
         if (group >= archiveIndex.groupFileIds.length) {
             // group doesn't exist
             return new int[0];
