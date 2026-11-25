@@ -105,19 +105,19 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
     }
 
     private void sendRequestPrefetch(int archive, int group) throws IOException {
-        var request = Packet.create(4);
+        var request = Packet.create(5);
         request.clear();
         request.p1(0);
         request.p1(archive);
-        request.p2(group);
+        request.p3(group);
         send(request);
     }
 
     private void sendRequestUrgent(int archive, int group) throws IOException {
-        var request = Packet.create(4);
+        var request = Packet.create(5);
         request.p1(1);
         request.p1(archive);
-        request.p2(group);
+        request.p3(group);
         send(request);
     }
 
@@ -125,9 +125,9 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
         var blockPosition = 0;
 
         if (response == null) {
-            var packet = receive(1 + 2);
+            var packet = receive(1 + 3);
             responseArchive = packet.g1();
-            responseGroup = packet.g2();
+            responseGroup = packet.g3();
             System.out.println("receive " + responseArchive + " " + responseGroup);
 
             response = sentRequests.get(new ArchiveGroup(responseArchive, responseGroup));
@@ -146,7 +146,7 @@ public class TcpJs5ResourceProvider implements Js5ResourceProvider, AutoCloseabl
                 response.buffer.putInt(compressedSize);
             }
 
-            blockPosition += 8;
+            blockPosition += 9;
         } else {
             if (receive(1).g1() != 255) {
                 throw new IOException("expected block start byte 255");
